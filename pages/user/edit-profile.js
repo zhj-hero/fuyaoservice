@@ -86,12 +86,15 @@ Page({
                         icon: 'success'
                     })
 
+                    // 更新本地存储的用户信息
+                    wx.setStorageSync('userInfo', app.globalData.userInfo);
+
                     // 返回上一页并刷新数据
                     wx.navigateBack({
                         success: function () {
                             const pages = getCurrentPages();
                             const prevPage = pages[pages.length - 1];
-                            if (prevPage && prevPage.route === 'pages/user/user') {
+                            if (prevPage) {
                                 prevPage.onShow();
                             }
                         }

@@ -40,9 +40,7 @@ exports.main = async (event, context) => {
                 }
             } else {
                 // 使用_openid更新用户信息
-                await db.collection('users').where({
-                    _openid: OPENID
-                }).update({
+                await db.collection('users').doc(userRecord2.data[0]._id).update({
                     data: userInfo
                 })
 
@@ -50,9 +48,7 @@ exports.main = async (event, context) => {
             }
         } else {
             // 用户存在，更新用户信息
-            await db.collection('users').where({
-                openid: OPENID
-            }).update({
+            await db.collection('users').doc(userRecord.data[0]._id).update({
                 data: userInfo
             })
 
