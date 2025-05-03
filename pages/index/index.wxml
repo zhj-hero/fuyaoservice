@@ -1,0 +1,82 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  
+  <view class="banner">
+    <swiper indicator-dots autoplay circular>
+      <swiper-item>
+        <image src="/static/images/banner1.jpg" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/static/images/banner2.jpg" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/static/images/banner3.jpg" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/static/images/banner4.jpg" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
+        <image src="/static/images/banner5.jpg" mode="aspectFill"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <view class="notice-bar" wx:if="{{notice}}">
+    <view class="notice-icon">
+      <image src="/static/images/notice.png"></image>
+    </view>
+    <view class="notice-content">
+      <text>{{notice.content}}</text>
+    </view>
+  </view>
+
+  <view class="quick-actions">
+    <view class="action-item" bindtap="navigateToSeatBooking">
+      <image src="/static/images/booking.png"></image>
+      <text>预订座位</text>
+    </view>
+    <view class="action-item" bindtap="navigateToMyBookings">
+      <image src="/static/images/my-booking.png"></image>
+      <text>我的预订</text>
+    </view>
+    <view class="action-item" bindtap="navigateToSeatMap">
+      <image src="/static/images/seat-map.png"></image>
+      <text>座位地图</text>
+    </view>
+    <view class="action-item" bindtap="navigateToMessage">
+      <image src="/static/images/message.png"></image>
+      <text>留言反馈</text>
+    </view>
+  </view>
+
+  <view class="section-title">自习室状态</view>
+  <view class="status-card">
+    <view class="status-item">
+      <text class="status-label">总座位数</text>
+      <text class="status-value">{{statistics.totalSeats || 0}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">空闲座位</text>
+      <text class="status-value text-success">{{statistics.availableSeats || 0}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">使用中</text>
+      <text class="status-value text-warning">{{statistics.occupiedSeats || 0}}</text>
+    </view>
+  </view>
+
+  <view class="section-title">最新通知</view>
+  <view class="notification-list">
+    <view class="notification-item" wx:for="{{notifications}}" wx:key="index" bindtap="viewNotification" data-id="{{item._id}}">
+      <view class="notification-title">{{item.title}}</view>
+      <view class="notification-time">{{item.createTime}}</view>
+    </view>
+    <view class="no-data" wx:if="{{!notifications.length}}">
+      <text>暂无通知</text>
+    </view>
+  </view>
+
+  <view class="admin-entry" wx:if="{{isAdmin}}" bindtap="navigateToAdmin">
+    <button class="btn-primary">进入管理后台</button>
+  </view>
+</view>

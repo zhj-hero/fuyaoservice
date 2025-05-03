@@ -1,0 +1,113 @@
+<!--pages/seat/seat.wxml-->
+<view class="container">
+  <view class="filter-bar">
+    <view class="search-box">
+      <input type="text" placeholder="搜索座位号" bindinput="onSearchInput" />
+      <image class="search-icon" src="/static/images/search.png"></image>
+    </view>
+    
+    <view class="filter-options">
+      <picker bindchange="onFilterChange" value="{{filterIndex}}" range="{{filterOptions}}">
+        <view class="filter-picker">
+          <text>{{filterOptions[filterIndex]}}</text>
+          <image class="down-icon" src="/static/images/down.png"></image>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="seat-map-container">
+    <view class="seat-map-header">
+      <view class="seat-map-title">座位地图</view>
+      <view class="seat-legend">
+        <view class="legend-item">
+          <view class="legend-color available"></view>
+          <text>空闲</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-color occupied"></view>
+          <text>已占用</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-color booked"></view>
+          <text>已预订</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-color maintenance"></view>
+          <text>维护中</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view scroll-x class="seat-map-scroll">
+      <view class="seat-map">
+        <view class="seat-row" wx:for="{{seatMap}}" wx:for-item="row" wx:for-index="rowIndex" wx:key="rowIndex">
+          <view class="row-label">{{rowIndex + 1}}排</view>
+          <view class="seat-col" wx:for="{{row}}" wx:for-item="seat" wx:key="seatId">
+            <view class="seat {{seat.status}}" bindtap="onSeatTap" data-seat="{{seat}}">
+              <text>{{seat.seatNumber}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="seat-list">
+    <view class="section-title">座位列表</view>
+    <view class="seat-item" wx:for="{{filteredSeats}}" wx:key="seatId" bindtap="onSeatItemTap" data-seat="{{item}}">
+      <view class="seat-info">
+        <view class="seat-number">{{item.seatNumber}}</view>
+        <view class="seat-type">{{item.type}}</view>
+      </view>
+      <view class="seat-status {{item.status}}">
+        <text>{{item.statusText}}</text>
+      </view>
+    </view>
+    <view class="no-data" wx:if="{{!filteredSeats.length}}">
+      <text>暂无座位数据</text>
+    </view>
+  </view>
+
+  <view class="add-seat-btn" wx:if="{{isAdmin}}">
+    <button class="btn-primary" bindtap="navigateToAddSeat">添加座位</button>
+  </view>
+</view>
+
+<!-- 座位详情弹窗 -->
+<view class="seat-detail-modal" wx:if="{{showSeatDetail}}">
+  <view class="modal-mask" bindtap="closeSeatDetail"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">座位详情</text>
+      <image class="close-icon" src="/static/images/close.png" bindtap="closeSeatDetail"></image>
+    </view>
+    <view class="modal-body">
+      <view class="detail-item">
+        <text class="detail-label">座位号：</text>
+        <text class="detail-value">{{selectedSeat.seatNumber}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">类型：</text>
+        <text class="detail-value">{{selectedSeat.type}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">状态：</text>
+        <text class="detail-value {{selectedSeat.status}}">{{selectedSeat.statusText}}</text>
+      </view>
+      <view class="detail-item" wx:if="{{selectedSeat.features && selectedSeat.features.length}}">
+        <text class="detail-label">设施：</text>
+        <text class="detail-value">{{selectedSeat.features.join('、')}}</text>
+      </view>
+      <view class="detail-item" wx:if="{{selectedSeat.description}}">
+        <text class="detail-label">描述：</text>
+        <text class="detail-value">{{selectedSeat.description}}</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="modal-btn btn-cancel" bindtap="closeSeatDetail">关闭</view>
+      <view class="modal-btn btn-book" bindtap="bookSeat" wx:if="{{selectedSeat.status === 'available'}}">预订座位</view>
+      <view class="modal-btn btn-manage" bindtap="manageSeat" wx:if="{{isAdmin}}">管理座位</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,30 @@
+<!--pages/user/edit-profile.wxml-->
+<view class="container">
+  <form bindsubmit="handleSubmit">
+    <view class="form-item">
+      <text>姓名</text>
+      <input 
+        name="name" 
+        value="{{formData.name}}" 
+        placeholder="请输入姓名"
+        bindinput="handleInputChange"
+        data-field="name"
+      />
+    </view>
+    
+    <view class="form-item">
+      <text>手机号</text>
+      <input 
+        name="phone" 
+        value="{{formData.phone}}" 
+        placeholder="请输入手机号"
+        bindinput="handleInputChange"
+        data-field="phone"
+      />
+    </view>
+    
+    
+    
+    <button form-type="submit" type="primary" class="submit-btn">保存修改</button>
+  </form>
+</view>

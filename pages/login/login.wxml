@@ -1,0 +1,33 @@
+<!--pages/login/login.wxml-->
+<view class="container">
+  <view class="logo-container">
+    <image class="logo" src="/static/images/logo.png" mode="aspectFit"></image>
+    <view class="title">扶摇自习室</view>
+    <view class="subtitle">座位管理系统</view>
+  </view>
+
+  <view class="login-form">
+    <view class="form-group">
+      <view class="form-label">手机号</view>
+      <input class="form-input" type="number" placeholder="请输入手机号" bindinput="inputPhone" />
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">密码</view>
+      <input class="form-input" password placeholder="请输入密码" bindinput="inputPassword" />
+    </view>
+
+    <button class="btn-primary" bindtap="handleLogin">登录</button>
+    
+    <view class="login-options">
+      <view class="wechat-login" bindtap="handleWechatLogin">
+        <image class="wechat-icon" src="/static/images/wechat.png"></image>
+        <text>微信一键登录</text>
+      </view>
+      
+      <view class="register-link" bindtap="navigateToRegister">
+        <text>没有账号？立即注册</text>
+      </view>
+    </view>
+  </view>
+</view>
