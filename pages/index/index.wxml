@@ -10,6 +10,9 @@
         <image src="/static/images/banner2.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
+        <image src="/static/images/banner6.jpg" mode="aspectFill"></image>
+      </swiper-item>
+      <swiper-item>
         <image src="/static/images/banner3.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
