@@ -13,9 +13,9 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#3A7FED",
+    "navigationBarBackgroundColor": "#D2B48C",
     "navigationBarTitleText": "扶摇自习室",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "color": "#999999",

@@ -2,8 +2,7 @@
 <view class="container">
   <view class="logo-container">
     <image class="logo" src="/static/images/logo.png" mode="aspectFit"></image>
-    <view class="title">扶摇自习室</view>
-    <view class="subtitle">座位管理系统</view>
+    
   </view>
 
   <view class="login-form">
@@ -19,12 +18,9 @@
 
     <button class="btn-primary" bindtap="handleLogin">登录</button>
     
+    <button class="btn-wechat" bindtap="handleWechatLogin">微信一键登录</button>
+    
     <view class="login-options">
-      <view class="wechat-login" bindtap="handleWechatLogin">
-        <image class="wechat-icon" src="/static/images/wechat.png"></image>
-        <text>微信一键登录</text>
-      </view>
-      
       <view class="register-link" bindtap="navigateToRegister">
         <text>没有账号？立即注册</text>
       </view>

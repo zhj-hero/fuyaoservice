@@ -17,26 +17,8 @@ page {
   color: #3A7FED;
 }
 
-/* 微信登录按钮 */
-.wechat-login-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #07C160;
-  color: #fff;
-  border-radius: 40rpx;
-  padding: 0 30rpx;
-  height: 80rpx;
-  font-size: 28rpx;
-  border: none;
-  box-shadow: 0 4rpx 12rpx rgba(7, 193, 96, 0.3);
-}
 
-.wechat-icon {
-  width: 40rpx;
-  height: 40rpx;
-  margin-right: 10rpx;
-}
+
 
 /* 轮播图样式 */
 .banner {
@@ -92,12 +74,22 @@ page {
 .action-item {
   background-color: #fff;
   border-radius: 12rpx;
-  padding: 24rpx 0;
+  padding: 12rpx 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  height: 80rpx;
+  line-height: 80rpx;
+  position: relative;
+}
+
+.action-item text {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .action-item:active {
@@ -105,9 +97,9 @@ page {
 }
 
 .action-item image {
-  width: 80rpx;
-  height: 80rpx;
-  margin-bottom: 16rpx;
+  width: 60rpx;
+  height: 40rpx;
+  margin-bottom: 6rpx;
 }
 
 .action-item text {
