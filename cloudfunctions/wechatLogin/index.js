@@ -33,26 +33,28 @@ exports.main = async (event, context) => {
         // 如果用户不存在，则创建新用户
         if (user.data.length === 0) {
             try {
-                await userCollection.add({
+                // 创建新用户
+                const newUser = await userCollection.add({
                     data: {
                         openid: openid,
                         userInfo: userInfo,
                         createTime: db.serverDate(),
-                        isAdmin: false // 默认为普通用户
+                        isAdmin: false
                     }
                 })
-            } catch (addErr) {
-                console.error('创建用户失败', addErr)
-                throw new Error('数据库写入失败')
-            }
 
-            try {
+                // 获取新增的用户数据
                 user = await userCollection.where({
                     openid: openid
                 }).get()
-            } catch (queryErr2) {
-                console.error('二次查询用户失败', queryErr2)
-                throw new Error('数据库查询失败')
+
+                if (user.data.length === 0) {
+                    console.error('创建用户后查询失败')
+                    throw new Error('用户创建异常')
+                }
+            } catch (addErr) {
+                console.error('创建用户失败', addErr)
+                throw new Error('数据库写入失败')
             }
         }
 

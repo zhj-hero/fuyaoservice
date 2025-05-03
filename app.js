@@ -83,15 +83,21 @@ App({
 
   // 退出登录
   logout: function () {
+    // 清除本地存储
     wx.removeStorageSync('token')
     wx.removeStorageSync('userInfo')
-    this.globalData.isLoggedIn = false
-    this.globalData.userInfo = null
-    this.globalData.token = null
 
-    // 跳转到登录页
+    // 重置全局数据
+    this.globalData = {
+      userInfo: null,
+      isLoggedIn: false,
+      token: null,
+      isAdmin: false
+    }
+
+    // 清空内存缓存并跳转登录页
     wx.reLaunch({
-      url: '/pages/login/login',
+      url: '/pages/login/login?t=' + Date.now()
     })
   },
 

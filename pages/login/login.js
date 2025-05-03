@@ -17,23 +17,23 @@ Page({
   },
 
   // 输入手机号
-  inputPhone: function(e) {
+  inputPhone: function (e) {
     this.setData({
       phone: e.detail.value
     })
   },
 
   // 输入密码
-  inputPassword: function(e) {
+  inputPassword: function (e) {
     this.setData({
       password: e.detail.value
     })
   },
 
   // 账号密码登录
-  handleLogin: function() {
+  handleLogin: function () {
     const { phone, password } = this.data
-    
+
     // 表单验证
     if (!phone || !password) {
       wx.showToast({
@@ -42,12 +42,12 @@ Page({
       })
       return
     }
-    
+
     // 显示加载中
     wx.showLoading({
       title: '登录中...',
     })
-    
+
     // 调用云函数登录
     wx.cloud.callFunction({
       name: 'userLogin',
@@ -57,25 +57,42 @@ Page({
       },
       success: res => {
         wx.hideLoading()
-        
+
         if (res.result.code === 0) {
           // 登录成功
           const { token, userInfo } = res.result.data
+
+          // 确保userInfo数据存在
+          if (!userInfo) {
+            console.error('登录返回的用户数据为空')
+            wx.showToast({
+              title: '登录异常，请重试',
+              icon: 'none'
+            })
+            return
+          }
           
-          // 存储登录信息
+          // 清除之前可能存在的用户数据
+          wx.removeStorageSync('token')
+          wx.removeStorageSync('userInfo')
+          
+          // 存储新的登录信息
           wx.setStorageSync('token', token)
           wx.setStorageSync('userInfo', userInfo)
           
+          // 更新全局数据
           app.globalData.isLoggedIn = true
           app.globalData.userInfo = userInfo
           app.globalData.token = token
           app.globalData.isAdmin = userInfo.isAdmin || false
           
+          console.log('账号密码登录成功，用户数据已更新', userInfo)
+
           wx.showToast({
             title: '登录成功',
             icon: 'success'
           })
-          
+
           // 跳转到首页
           wx.switchTab({
             url: '/pages/index/index',
@@ -100,17 +117,17 @@ Page({
   },
 
   // 微信一键登录
-  handleWechatLogin: function() {
+  handleWechatLogin: function () {
     wx.getUserProfile({
       desc: '用于完善用户资料',
       success: (res) => {
         const userInfo = res.userInfo
-        
+
         // 显示加载中
         wx.showLoading({
           title: '登录中...',
         })
-        
+
         // 调用云函数微信登录
         wx.cloud.callFunction({
           name: 'wechatLogin',
@@ -119,25 +136,42 @@ Page({
           },
           success: res => {
             wx.hideLoading()
-            
+
             if (res.result.code === 0) {
               // 登录成功
               const { token, userInfo } = res.result.data
-              
-              // 存储登录信息
+
+              // 确保userInfo数据存在
+              if (!userInfo) {
+                console.error('登录返回的用户数据为空')
+                wx.showToast({
+                  title: '登录异常，请重试',
+                  icon: 'none'
+                })
+                return
+              }
+
+              // 清除之前可能存在的用户数据
+              wx.removeStorageSync('token')
+              wx.removeStorageSync('userInfo')
+
+              // 存储新的登录信息
               wx.setStorageSync('token', token)
               wx.setStorageSync('userInfo', userInfo)
-              
+
+              // 更新全局数据
               app.globalData.isLoggedIn = true
               app.globalData.userInfo = userInfo
               app.globalData.token = token
               app.globalData.isAdmin = userInfo.isAdmin || false
-              
+
+              console.log('微信登录成功，用户数据已更新', userInfo)
+
               wx.showToast({
                 title: '登录成功',
                 icon: 'success'
               })
-              
+
               // 跳转到首页
               wx.switchTab({
                 url: '/pages/index/index',
@@ -171,7 +205,7 @@ Page({
   },
 
   // 跳转到注册页面
-  navigateToRegister: function() {
+  navigateToRegister: function () {
     wx.navigateTo({
       url: '/pages/register/register',
     })

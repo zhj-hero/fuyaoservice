@@ -27,22 +27,25 @@ Page({
     },
 
     onShow: function () {
-        // 每次显示页面时刷新数据
+        // 每次显示页面时从本地存储获取最新用户信息
+        const userInfo = wx.getStorageSync('userInfo') || null;
+        const isAdmin = userInfo && userInfo.isAdmin ? true : false;
+        app.globalData.userInfo = userInfo;
+        app.globalData.isAdmin = isAdmin;
         this.setData({
-            userInfo: app.globalData.userInfo,
-            isAdmin: app.globalData.isAdmin
-        })
-        this.fetchUserBookings()
-
+            userInfo: userInfo,
+            isAdmin: isAdmin
+        });
+        this.fetchUserBookings();
         // 添加全局数据监听
         if (!this._userInfoListener) {
             this._userInfoListener = () => {
                 this.setData({
                     userInfo: app.globalData.userInfo,
                     isAdmin: app.globalData.isAdmin
-                })
-            }
-            app.watchUserInfoChange(this._userInfoListener)
+                });
+            };
+            app.watchUserInfoChange(this._userInfoListener);
         }
     },
 
