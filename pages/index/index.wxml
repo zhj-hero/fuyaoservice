@@ -39,15 +39,12 @@
       <text>预订座位</text>
     </view>
     <view class="action-item" bindtap="navigateToMyBookings">
-      <image src="/static/images/my-booking.png"></image>
       <text>我的预订</text>
     </view>
     <view class="action-item" bindtap="navigateToSeatMap">
-      <image src="/static/images/seat-map.png"></image>
       <text>座位地图</text>
     </view>
     <view class="action-item" bindtap="navigateToMessage">
-      <image src="/static/images/message.png"></image>
       <text>留言反馈</text>
     </view>
   </view>

@@ -143,8 +143,8 @@ Page({
 
   // 跳转到座位地图页面
   navigateToSeatMap: function () {
-    wx.switchTab({
-      url: '/pages/seat/seat',
+    wx.navigateTo({
+      url: '/pages/seatmap/seatmap',
     })
   },
 
@@ -159,7 +159,7 @@ Page({
   viewNotification: function (e) {
     const id = e.currentTarget.dataset.id
     wx.navigateTo({
-      url: `/pages/notification/detail?id=${id}`,
+      url: '/pages/notification/detail?id=${id}',
     })
   },
 

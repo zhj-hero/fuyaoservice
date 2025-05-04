@@ -36,6 +36,19 @@ Page({
         })
     },
 
+    // 类型选择变化
+    onTypeChange: function (e) {
+        const value = e.detail.value
+        const typeMap = {
+            '0': '半沉浸',
+            '1': '沉浸桌',
+            '2': '侧进式'
+        }
+        this.setData({
+            'seatInfo.type': typeMap[value] || value
+        })
+    },
+
     // 添加座位
     addSeat: function () {
         const { seatInfo } = this.data
