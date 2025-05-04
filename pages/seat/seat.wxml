@@ -2,11 +2,9 @@
 <view class="container">
   <view class="filter-bar">
     <view class="search-box">
-      <input type="text" placeholder="搜索座位号" bindinput="onSearchInput" />
-      <button class="search-btn" bindtap="onSearchTap">
-        <image class="search-icon" src="/static/images/search.png"></image>
-      </button>
+      <input type="text" placeholder="搜索座位号，如：A01" bindinput="onSearchInput" />
     </view>
+
     
     <view class="filter-options">
       <picker bindchange="onFilterChange" value="{{filterIndex}}" range="{{filterOptions}}">
@@ -18,9 +16,9 @@
     </view>
   </view>
 
-  <view class="seat-map-container">
-    <view class="seat-map-header">
-      <view class="seat-map-title">座位地图</view>
+  <view class="seat-status-container">
+    <view class="seat-status-header">
+      <view class="seat-status-title">座位状态</view>
       <view class="seat-legend">
         <view class="legend-item">
           <view class="legend-color available"></view>
@@ -30,46 +28,25 @@
           <view class="legend-color occupied"></view>
           <text>已占用</text>
         </view>
-        <view class="legend-item">
-          <view class="legend-color booked"></view>
-          <text>已预订</text>
-        </view>
-        <view class="legend-item">
-          <view class="legend-color maintenance"></view>
-          <text>维护中</text>
-        </view>
       </view>
     </view>
-
-    <scroll-view scroll-x class="seat-map-scroll">
-      <view class="seat-map">
-        <view class="seat-row" wx:for="{{seatMap}}" wx:for-item="row" wx:for-index="rowIndex" wx:key="rowIndex">
-          <view class="row-label">{{rowIndex + 1}}排</view>
-          <view class="seat-col" wx:for="{{row}}" wx:for-item="seat" wx:key="seatId">
-            <view class="seat {{seat.status}}" bindtap="onSeatTap" data-seat="{{seat}}">
-              <text>{{seat.seatNumber}}</text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </scroll-view>
+    
   </view>
 
   <view class="seat-list">
     <view class="section-title">座位列表</view>
     <view class="area-buttons">
       <view class="button-row">
-        <button class="area-button" bindtap="filterByArea" data-area="all">全部</button>
-      </view>
-      <view class="button-row">
         <button class="area-button" bindtap="filterByArea" data-area="A">A区</button>
         <button class="area-button" bindtap="filterByArea" data-area="B">B区</button>
-      </view>
-      <view class="button-row">
         <button class="area-button" bindtap="filterByArea" data-area="C">C区</button>
         <button class="area-button" bindtap="filterByArea" data-area="D">D区</button>
       </view>
     </view>
+  </view>
+
+  <view class="filtered-results">
+    <view class="section-title">筛选结果</view>
     <view class="seat-item" wx:for="{{filteredSeats}}" wx:key="seatId" bindtap="onSeatItemTap" data-seat="{{item}}">
       <view class="seat-info">
         <view class="seat-number">{{item.seatNumber}}</view>
@@ -84,9 +61,7 @@
     </view>
   </view>
 
-  <view class="add-seat-btn" wx:if="{{isAdmin}}">
-    <button class="btn-primary" bindtap="navigateToAddSeat">添加座位</button>
-  </view>
+
 </view>
 
 <!-- 座位详情弹窗 -->
@@ -109,14 +84,6 @@
       <view class="detail-item">
         <text class="detail-label">状态：</text>
         <text class="detail-value {{selectedSeat.status}}">{{selectedSeat.statusText}}</text>
-      </view>
-      <view class="detail-item" wx:if="{{selectedSeat.features && selectedSeat.features.length}}">
-        <text class="detail-label">设施：</text>
-        <text class="detail-value">{{selectedSeat.features.join('、')}}</text>
-      </view>
-      <view class="detail-item" wx:if="{{selectedSeat.description}}">
-        <text class="detail-label">描述：</text>
-        <text class="detail-value">{{selectedSeat.description}}</text>
       </view>
     </view>
     <view class="modal-footer">

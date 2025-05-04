@@ -1,0 +1,21 @@
+<!--pages/admin/seat-add/seat-add.wxml-->
+<view class="container">
+  <view class="form-item">
+    <text class="label">座位编号</text>
+    <input class="input" value="{{seatInfo.seatNumber}}" bindinput="onInputChange" data-field="seatNumber" />
+  </view>
+  
+  <view class="form-item">
+    <text class="label">座位区域</text>
+    <input class="input" value="{{seatInfo.seatArea}}" bindinput="onInputChange" data-field="seatArea" />
+  </view>
+  
+  <view class="form-item">
+    <text class="label">座位类型</text>
+    <picker mode="selector" range="{{['半沉浸','沉浸桌','侧进式']}}" value="{{['半沉浸','沉浸桌','侧进式'].indexOf(seatInfo.type)}}" bindchange="onTypeChange">
+      <view class="picker">{{seatInfo.type}}</view>
+    </picker>
+  </view>
+  
+  <button type="primary" bindtap="addSeat">添加座位</button>
+</view>

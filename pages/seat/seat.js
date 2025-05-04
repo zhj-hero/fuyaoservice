@@ -176,12 +176,19 @@ Page({
         this.setData({
             searchText: e.detail.value
         })
+
+        // 清除之前的定时器
+        if (this.searchTimer) {
+            clearTimeout(this.searchTimer);
+        }
+
+        // 设置200ms延迟执行筛选
+        this.searchTimer = setTimeout(() => {
+            this.filterSeats();
+        }, 1000);
     },
 
-    // 搜索按钮点击事件
-    onSearchTap: function () {
-        this.filterSeats();
-    },
+
 
     // 筛选变化
     onFilterChange: function (e) {
@@ -222,16 +229,8 @@ Page({
             filteredSeats
         })
 
-        // 自动显示匹配的座位详情
-        if (filteredSeats.length === 1) {
-            this.showSeatDetail(filteredSeats[0])
-        } else if (filteredSeats.length > 1 && searchText && searchText.trim()) {
-            // 如果有多个匹配结果且是搜索操作，显示第一个匹配结果
-            this.showSeatDetail(filteredSeats[0])
-        } else {
-            // 无匹配结果时关闭详情
-            this.closeSeatDetail()
-        }
+        // 关闭所有自动显示的座位详情
+        this.closeSeatDetail()
     },
 
     // 点击座位
@@ -290,14 +289,9 @@ Page({
         if (!selectedSeat) return
 
         wx.navigateTo({
-            url: `/pages/admin/seat-edit?seatId=${selectedSeat._id}`,
+            url: `/pages/admin/seat-edit/seat-edit?seatId=${selectedSeat._id}`,
         })
     },
 
-    // 跳转到添加座位页面
-    navigateToAddSeat: function () {
-        wx.navigateTo({
-            url: '/pages/admin/seat-add',
-        })
-    }
+
 })

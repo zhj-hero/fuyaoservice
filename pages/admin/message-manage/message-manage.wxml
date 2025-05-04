@@ -1,0 +1,28 @@
+<!-- pages/admin/message-manage/message-manage.wxml -->
+<view class="container">
+  <view class="header">
+    <text>留言管理</text>
+  </view>
+  
+  <view class="message-list">
+    <block wx:for="{{messageList}}" wx:key="_id">
+      <view class="message-item">
+        <view class="message-info">
+          <text>用户: {{item.userName}}</text>
+          <text>内容: {{item.content}}</text>
+          <text>时间: {{item.createTime}}</text>
+          <text wx:if="{{item.reply}}">回复: {{item.reply}}</text>
+        </view>
+        <view class="message-actions">
+          <button wx:if="{{!item.reply}}" bindtap="startReply" data-id="{{item._id}}" size="mini" type="primary">回复</button>
+          <button bindtap="deleteMessage" data-id="{{item._id}}" size="mini" type="warn">删除</button>
+        </view>
+        
+        <view wx:if="{{currentReplyId === item._id}}" class="reply-box">
+          <textarea placeholder="请输入回复内容" bindinput="onReplyInput" value="{{replyContent}}"></textarea>
+          <button bindtap="submitReply" size="mini" type="primary">提交回复</button>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

@@ -1,2 +1,15 @@
 <!--pages/admin/admin.wxml-->
-<text>pages/admin/admin.wxml</text>
+<view class="container">
+  <view class="card">
+    <button class="button" bindtap="navigateToSeatManage">座位管理</button>
+  </view>
+  <view class="card">
+    <button class="button" bindtap="navigateToBookingReview">预订审核</button>
+  </view>
+  <view class="card">
+    <button class="button" bindtap="navigateToNoticeManage">通知管理</button>
+  </view>
+  <view class="card">
+    <button class="button" bindtap="navigateToMessageManage">留言管理</button>
+  </view>
+</view>

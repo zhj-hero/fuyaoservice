@@ -11,16 +11,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 20rpx;
-  background-color: #fff;
+  background-color: transparent;
   border-radius: 10rpx;
   margin-bottom: 30rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2rpx 10rpx rgb(240, 232, 232);
 }
 
 .search-box {
   position: relative;
   flex: 1;
-  margin-right: 20rpx;
+  margin-right: 0rpx;
   display: flex;
   align-items: center;
 }
@@ -28,32 +28,16 @@
 .search-box input {
   background-color:rgb(233, 243, 243);
   border-radius: 30rpx;
-  padding: 20rpx 60rpx 20rpx 30rpx;
+  padding: 20rpx 30rpx;
   font-size: 26rpx;
-  width:900%;
+  width:100%;
   box-sizing: border-box;
   height: 60rpx;
   line-height: 40rpx;
   position: relative;
 }
 
-.search-icon {
-  position: relative;
-  right: 30rpx;
-  top: 40%;
-  transform: translateY(0%);
-  width: 45rpx;
-  height: 45rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  background-color:rgb(233, 243, 243);
-  border-radius: 20rpx;
-  color: white;
-  padding: 6rpx;
-  background-size: contain;
-}
+
 
 .filter-options {
   width: 200rpx;
@@ -75,8 +59,17 @@
   margin-left: 10rpx;
 }
 
-/* 座位地图样式 */
-.seat-map-container {
+/* 座位状态样式 */
+.seat-status-container {
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding: 10rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 筛选结果样式 */
+.filtered-results {
   background-color: #fff;
   border-radius: 10rpx;
   padding: 20rpx;
@@ -84,7 +77,18 @@
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
-.seat-map-header {
+.filtered-results-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-left: 10rpx;
+  display: flex;
+  align-items: center;
+  height: 40rpx;
+  line-height: 40rpx;
+}
+
+.seat-status-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -92,10 +96,15 @@
   flex-wrap: wrap;
 }
 
-.seat-map-title {
+.seat-status-title {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+  margin-left: 10rpx;
+  display: flex;
+  align-items: center;
+  height: 40rpx;
+  line-height: 40rpx;
 }
 
 .seat-legend {
@@ -125,40 +134,7 @@
   background-color: #F44336;
 }
 
-.legend-color.booked {
-  background-color: #FFC107;
-}
 
-.legend-color.maintenance {
-  background-color: #9E9E9E;
-}
-
-.seat-map-scroll {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.seat-map {
-  padding: 20rpx 0;
-  min-width: 100%;
-}
-
-.seat-row {
-  display: flex;
-  margin-bottom: 20rpx;
-  align-items: center;
-}
-
-.row-label {
-  width: 80rpx;
-  text-align: center;
-  font-size: 24rpx;
-  color: #666;
-}
-
-.seat-col {
-  margin: 0 10rpx;
-}
 
 .seat {
   width: 60rpx;
@@ -180,19 +156,14 @@
   background-color: #F44336;
 }
 
-.seat.booked {
-  background-color: #FFC107;
-}
 
-.seat.maintenance {
-  background-color: #9E9E9E;
-}
 
 /* 座位列表样式 */
 .seat-list {
   background-color: #fff;
   border-radius: 10rpx;
   padding: 20rpx;
+  margin-bottom: 30rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
 
@@ -200,7 +171,7 @@
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20rpx;
+  margin-bottom: 10rpx;
 }
 
 .area-buttons {
@@ -214,8 +185,9 @@
   margin-bottom: 20rpx;
 }
 
-.button-row button {
-  background-color:rgb(251, 253, 253);
+.button-row .seat-button,
+.area-button {
+  background-color:white;
   color: #000000;
 }
 
@@ -224,10 +196,11 @@
   height: 80rpx;
   line-height: 80rpx;
   text-align: center;
-  background-color:rgb(0, 5, 4);
-  color: #fff;
   border-radius: 10rpx;
   font-size: 28rpx;
+  font-weight: ;
+  margin-right: 15rpx;
+  margin-left: 10rpx;
 }
 
 .seat-item {
@@ -259,6 +232,10 @@
   border-radius: 30rpx;
   font-size: 24rpx;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40rpx; /* 可根据需要调整高度 */
 }
 
 .seat-status.available {
@@ -269,13 +246,7 @@
   background-color: #F44336;
 }
 
-.seat-status.booked {
-  background-color: #FFC107;
-}
 
-.seat-status.maintenance {
-  background-color: #9E9E9E;
-}
 
 .no-data {
   text-align: center;
@@ -380,6 +351,7 @@
   padding: 4rpx 16rpx;
   border-radius: 20rpx;
   display: inline-block;
+  width: auto;
 }
 
 .detail-value.available {

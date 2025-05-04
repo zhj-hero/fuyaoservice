@@ -8,59 +8,28 @@ Page({
 
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  navigateToSeatManage: function () {
+    wx.navigateTo({
+      url: '/pages/admin/seat-manage/seat-manage'
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  navigateToBookingReview: function () {
+    wx.navigateTo({
+      url: '/pages/admin/reservation-review/reservation-review'
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  navigateToNoticeManage: function () {
+    wx.navigateTo({
+      url: '/pages/admin/notice-manage/notice-manage'
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  navigateToMessageManage: function () {
+    wx.navigateTo({
+      url: '/pages/admin/message-manage/message-manage'
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
-})
+});

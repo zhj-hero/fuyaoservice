@@ -1,0 +1,24 @@
+<!-- pages/admin/reservation-review/reservation-review.wxml -->
+<view class="container">
+  <view class="header">
+    <text>预订审核</text>
+  </view>
+  
+  <view class="reservation-list">
+    <block wx:for="{{reservationList}}" wx:key="_id">
+      <view class="reservation-item">
+        <view class="reservation-info">
+          <text>用户: {{item.userName}}</text>
+          <text>座位号: {{item.seatNumber}}</text>
+          <text>日期: {{item.date}}</text>
+          <text>时间段: {{item.timeSlot}}</text>
+          <text>状态: {{item.status}}</text>
+        </view>
+        <view class="reservation-actions">
+          <button bindtap="approveReservation" data-id="{{item._id}}" size="mini" type="primary">通过</button>
+          <button bindtap="rejectReservation" data-id="{{item._id}}" size="mini" type="warn">拒绝</button>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

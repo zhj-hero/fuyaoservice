@@ -1,0 +1,28 @@
+<!--pages/admin/seat-edit/seat-edit.wxml-->
+<view class="container">
+  <view class="form-item">
+    <text class="label">座位编号</text>
+    <input class="input" value="{{seatInfo.seatNumber}}" disabled />
+  </view>
+  
+  <view class="form-item">
+    <text class="label">座位区域</text>
+    <input class="input" value="{{seatInfo.seatArea}}" disabled />
+  </view>
+  
+  <view class="form-item">
+    <text class="label">座位类型</text>
+    <picker mode="selector" range="{{['半沉浸','沉浸桌','侧进式']}}" value="{{['半沉浸','沉浸桌','侧进式'].indexOf(seatInfo.type)}}" bindchange="onTypeChange">
+      <view class="picker">{{seatInfo.type}}</view>
+    </picker>
+  </view>
+  
+  <view class="form-item">
+    <text class="label">座位状态</text>
+    <picker mode="selector" range="{{['空闲','已占用']}}" value="{{seatInfo.status === 'available' ? 0 : 1}}" bindchange="onStatusChange">
+      <view class="picker">{{seatInfo.status === 'available' ? '空闲' : '已占用'}}</view>
+    </picker>
+  </view>
+  
+  <button type="primary" bindtap="saveSeat">保存修改</button>
+</view>
