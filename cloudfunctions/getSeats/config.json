@@ -1,0 +1,12 @@
+{
+    "timeout": 20,
+    "env": "prod",
+    "memorySize": 256,
+    "triggers": [
+        {
+            "name": "getSeats",
+            "type": "timer",
+            "config": "0 0 6,18 * * * *"
+        }
+    ]
+}

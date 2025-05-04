@@ -8,7 +8,6 @@ Page({
     date: '',
     startTime: '',
     endTime: '',
-    purpose: '',
     remark: '',
     startTimeArray: [],
     endTimeArray: [],
@@ -74,12 +73,7 @@ Page({
             case 'occupied':
               statusText = '已占用'
               break
-            case 'booked':
-              statusText = '已预订'
-              break
-            case 'maintenance':
-              statusText = '维护中'
-              break
+
           }
 
           seat.statusText = statusText
@@ -240,16 +234,8 @@ Page({
 
   // 提交预订
   submitBooking: function () {
-    const { seatId, date, startTime, endTime, purpose } = this.data
+    const { seatId, date, startTime, endTime } = this.data
 
-    // 表单验证
-    if (!purpose) {
-      wx.showToast({
-        title: '请输入使用用途',
-        icon: 'none'
-      })
-      return
-    }
 
     // 显示加载中
     wx.showLoading({

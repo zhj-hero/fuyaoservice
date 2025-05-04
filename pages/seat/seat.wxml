@@ -3,7 +3,9 @@
   <view class="filter-bar">
     <view class="search-box">
       <input type="text" placeholder="搜索座位号" bindinput="onSearchInput" />
-      <image class="search-icon" src="/static/images/search.png"></image>
+      <button class="search-btn" bindtap="onSearchTap">
+        <image class="search-icon" src="/static/images/search.png"></image>
+      </button>
     </view>
     
     <view class="filter-options">
@@ -55,6 +57,19 @@
 
   <view class="seat-list">
     <view class="section-title">座位列表</view>
+    <view class="area-buttons">
+      <view class="button-row">
+        <button class="area-button" bindtap="filterByArea" data-area="all">全部</button>
+      </view>
+      <view class="button-row">
+        <button class="area-button" bindtap="filterByArea" data-area="A">A区</button>
+        <button class="area-button" bindtap="filterByArea" data-area="B">B区</button>
+      </view>
+      <view class="button-row">
+        <button class="area-button" bindtap="filterByArea" data-area="C">C区</button>
+        <button class="area-button" bindtap="filterByArea" data-area="D">D区</button>
+      </view>
+    </view>
     <view class="seat-item" wx:for="{{filteredSeats}}" wx:key="seatId" bindtap="onSeatItemTap" data-seat="{{item}}">
       <view class="seat-info">
         <view class="seat-number">{{item.seatNumber}}</view>

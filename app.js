@@ -6,7 +6,7 @@ App({
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
     } else {
       wx.cloud.init({
-        env: 'cloud1-7g0ti6rh5d59a178', // 请替换为您的腾讯云环境ID
+        env: 'cloud1-7g0ti6rh5d59a178', // 腾讯云环境ID
         traceUser: true,
       })
     }
@@ -99,6 +99,29 @@ App({
     wx.reLaunch({
       url: '/pages/login/login?t=' + Date.now()
     })
+  },
+
+  // 用户信息监听器列表
+  _userInfoListeners: [],
+
+  // 添加用户信息变化监听
+  watchUserInfoChange: function (listener) {
+    this._userInfoListeners.push(listener);
+  },
+
+  // 移除用户信息变化监听
+  unwatchUserInfoChange: function (listener) {
+    const index = this._userInfoListeners.indexOf(listener);
+    if (index !== -1) {
+      this._userInfoListeners.splice(index, 1);
+    }
+  },
+
+  // 通知所有监听器用户信息已变化
+  _notifyUserInfoChange: function () {
+    this._userInfoListeners.forEach(listener => {
+      listener();
+    });
   },
 
   globalData: {

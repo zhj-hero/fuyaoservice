@@ -21,36 +21,50 @@
   position: relative;
   flex: 1;
   margin-right: 20rpx;
+  display: flex;
+  align-items: center;
 }
 
 .search-box input {
-  background-color: #f5f5f5;
+  background-color:rgb(233, 243, 243);
   border-radius: 30rpx;
-  padding: 15rpx 60rpx 15rpx 30rpx;
-  font-size: 28rpx;
-  width: 100%;
+  padding: 20rpx 60rpx 20rpx 30rpx;
+  font-size: 26rpx;
+  width:900%;
   box-sizing: border-box;
+  height: 60rpx;
+  line-height: 40rpx;
+  position: relative;
 }
 
 .search-icon {
-  position: absolute;
-  right: 20rpx;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40rpx;
-  height: 40rpx;
+  position: relative;
+  right: 30rpx;
+  top: 40%;
+  transform: translateY(0%);
+  width: 45rpx;
+  height: 45rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  background-color:rgb(233, 243, 243);
+  border-radius: 20rpx;
+  color: white;
+  padding: 6rpx;
+  background-size: contain;
 }
 
 .filter-options {
-  width: 180rpx;
+  width: 200rpx;
 }
 
 .filter-picker {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f5f5f5;
-  border-radius: 30rpx;
+  background-color:rgb(233, 243, 243);
+  border-radius: 20rpx;
   padding: 15rpx 20rpx;
   font-size: 28rpx;
 }
@@ -187,6 +201,33 @@
   font-weight: bold;
   color: #333;
   margin-bottom: 20rpx;
+}
+
+.area-buttons {
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.button-row button {
+  background-color:rgb(251, 253, 253);
+  color: #000000;
+}
+
+.area-button {
+  width: 45%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background-color:rgb(0, 5, 4);
+  color: #fff;
+  border-radius: 10rpx;
+  font-size: 28rpx;
 }
 
 .seat-item {
