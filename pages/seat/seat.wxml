@@ -2,7 +2,7 @@
 <view class="container">
   <view class="filter-bar">
     <view class="search-box">
-      <input type="text" placeholder="搜索座位号，如：A01" bindinput="onSearchInput" />
+      <input type="text" placeholder="以关键字搜索座位号，如：'A','01'." bindinput="onSearchInput" />
     </view>
 
     
@@ -70,7 +70,6 @@
   <view class="modal-content">
     <view class="modal-header">
       <text class="modal-title">座位详情</text>
-      <image class="close-icon" src="/static/images/close.png" bindtap="closeSeatDetail"></image>
     </view>
     <view class="modal-body">
       <view class="detail-item">
