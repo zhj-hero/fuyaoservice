@@ -24,6 +24,13 @@ Page({
         this.fetchSeatList()
     },
 
+    onShow: function () {
+        // 每次页面显示时刷新座位列表数据
+        if (app.globalData.isLoggedIn && app.globalData.isAdmin) {
+            this.fetchSeatList()
+        }
+    },
+
     // 获取座位列表
     fetchSeatList: function () {
         wx.showLoading({

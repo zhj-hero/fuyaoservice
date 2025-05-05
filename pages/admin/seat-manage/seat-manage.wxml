@@ -2,8 +2,8 @@
 <view class="container">
   <view class="header">
     <text>座位管理</text>
-    <button bindtap="addSeat" type="primary" size="mini" class="add-btn">
-      <text class="btn-icon">+</text> 添加座位
+    <button bindtap="addSeat" size="mini" class="add-btn">
+      <text class="btn-icon"></text> 添加座位
     </button>
   </view>
   

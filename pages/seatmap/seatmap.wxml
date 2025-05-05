@@ -1,2 +1,2 @@
 <!--pages/seatmap/seatmap.wxml-->
-<image src="/static/images/seatmap.jpg" mode="aspectFill"></image>
+<image src="/static/images/seatmap.png" mode="aspectFill"></image>
