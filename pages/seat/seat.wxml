@@ -2,7 +2,7 @@
 <view class="container">
   <view class="filter-bar">
     <view class="search-box">
-      <input type="text" placeholder="以关键字搜索座位号，如：'A','01'." bindinput="onSearchInput" />
+      <input type="text" placeholder="以关键字搜索座位号，如：'A','1'等" bindinput="onSearchInput" />
     </view>
 
     
