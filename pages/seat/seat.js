@@ -50,12 +50,36 @@ Page({
             isAdmin: app.globalData.isAdmin
         })
 
-        // 获取座位数据
+        // 尝试从 Storage 读取筛选状态 (首次加载时应用)
+        const seatStatusOnLoad = wx.getStorageSync('seatStatus');
+        let initialFilterIndex = 0; // 默认显示全部
+        if (seatStatusOnLoad === 'available') {
+            initialFilterIndex = 1; // 1 对应空闲座位
+            // 注意：此处不清除，留给 onShow 处理，确保 switchTab 生效
+        }
+        this.setData({
+            filterIndex: initialFilterIndex
+        });
+
+        // 获取座位数据（fetchSeats内部会调用filterSeats应用filterIndex）
         this.fetchSeats()
     },
 
     onShow: function () {
+        // 尝试从 Storage 读取筛选状态 (处理 switchTab 或页面返回)
+        const seatStatusOnShow = wx.getStorageSync('seatStatus');
+        if (seatStatusOnShow === 'available') {
+            this.setData({
+                filterIndex: 1 // 1 对应空闲座位
+            });
+            // 读取并应用后立即清除状态，避免影响后续访问
+            wx.removeStorageSync('seatStatus');
+        } 
+        // 如果 storage 中没有状态，则不改变当前的 filterIndex
+        // 这样可以保留用户在页面上自己选择的筛选条件
+
         // 每次显示页面时刷新数据
+        // fetchSeats 内部会调用 filterSeats 应用当前的 filterIndex
         this.fetchSeats()
     },
 
@@ -135,41 +159,6 @@ Page({
         })
     },
 
-    // // 生成座位地图
-    // generateSeatMap: function () {
-    //     const { seats } = this.data
-    //     if (!seats.length) return
-
-    //     // 获取最大行列数
-    //     let maxRow = 0
-    //     let maxCol = 0
-
-    //     seats.forEach(seat => {
-    //         if (seat.row > maxRow) maxRow = seat.row
-    //         if (seat.column > maxCol) maxCol = seat.column
-    //     })
-
-    //     // 初始化座位地图
-    //     const seatMap = []
-    //     for (let i = 0; i < maxRow; i++) {
-    //         const row = []
-    //         for (let j = 0; j < maxCol; j++) {
-    //             row.push(null)
-    //         }
-    //         seatMap.push(row)
-    //     }
-
-    //     // 填充座位数据
-    //     seats.forEach(seat => {
-    //         if (seat.row > 0 && seat.column > 0) {
-    //             seatMap[seat.row - 1][seat.column - 1] = seat
-    //         }
-    //     })
-
-    //     this.setData({
-    //         seatMap
-    //     })
-    // },
 
     // 搜索输入
     onSearchInput: function (e) {
@@ -279,7 +268,7 @@ Page({
         }
 
         wx.navigateTo({
-            url: `/pages/booking/booking?seatId=${selectedSeat.seatNumber}`,
+            url: `/pages/booking/booking?seatId=${selectedSeat._id}`,
         })
     },
 

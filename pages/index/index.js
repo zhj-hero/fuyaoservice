@@ -34,6 +34,7 @@ Page({
     // 每次显示页面时刷新数据
     this.fetchHomeData()
 
+   
     // 更新登录状态
     this.setData({
       app: app
@@ -120,9 +121,21 @@ Page({
   },
 
   // 跳转到座位预订页面
-  navigateToSeatBooking: function () {
-    wx.navigateTo({
-      url: '/pages/booking/booking',
+  navigateToSeatBooking: function (e) {
+    // 跳转到座位页面并自动筛选出空闲座位
+    wx.setStorageSync('seatStatus', 'available');
+    wx.switchTab({
+      url: '/pages/seat/seat',
+      success: function (res) {
+        console.log('跳转成功', res)
+      },
+      fail: function (err) {
+        console.error('跳转失败', err)
+        wx.showToast({
+          title: '跳转失败，请稍后再试',
+          icon: 'none'
+        })
+      }
     })
   },
 

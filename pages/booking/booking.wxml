@@ -1,10 +1,15 @@
 <!--pages/booking/booking.wxml-->
 <view class="container">
-  <!-- 座位信息 -->
+  
+  
+  <!-- 座位信息卡片 -->
   <view class="seat-info-card" wx:if="{{seatInfo}}">
     <view class="card-header">
-      <view class="seat-number">{{seatInfo.seatNumber}}</view>
-      <view class="seat-status {{seatInfo.status}}">{{seatInfo.statusText}}</view>
+      <view class="seat-info-title">
+        <view class="seat-number">{{seatInfo.seatNumber}}</view>
+        <view class="seat-status {{seatInfo.status}}">{{seatInfo.statusText}}</view>
+      </view>
+      <view class="change-seat" bindtap="openSeatSelector">更换座位</view>
     </view>
     <view class="card-body">
       <view class="info-item">
@@ -77,5 +82,32 @@
   <view class="btn-group">
     <button class="btn-cancel" bindtap="cancelBooking">取消</button>
     <button class="btn-submit" bindtap="submitBooking">提交预订</button>
+  </view>
+</view>
+
+<!-- 座位选择器弹窗 -->
+<view class="seat-selector-modal" wx:if="{{showSeatSelector}}">
+  <view class="modal-mask" bindtap="closeSeatSelector"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">选择座位</text>
+      <view class="modal-close" bindtap="closeSeatSelector">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="seat-list">
+        <view class="seat-item" wx:for="{{availableSeats}}" wx:key="_id" bindtap="selectSeat" data-id="{{item._id}}">
+          <view class="seat-info">
+            <view class="seat-number">{{item.seatNumber}}</view>
+            <view class="seat-type">{{item.type}}</view>
+          </view>
+          <view class="seat-status {{item.status}}">
+            <text>{{item.statusText}}</text>
+          </view>
+        </view>
+        <view class="no-data" wx:if="{{!availableSeats.length}}">
+          <text>暂无可用座位</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

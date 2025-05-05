@@ -3,17 +3,21 @@ const app = getApp()
 
 Page({
   data: {
-    seatId: '',
+    seatId: 'A1',
     seatInfo: null,
     date: '',
     startTime: '',
     endTime: '',
+    purpose: '',
     remark: '',
     startTimeArray: [],
     endTimeArray: [],
     today: '',
     tomorrow: '',
-    dateOptions: []
+    dateOptions: [],
+    availableSeats: [],
+    showSeatSelector: false,
+    selectedSeatId: ''
   },
 
   onLoad: function (options) {
@@ -231,11 +235,109 @@ Page({
       remark: e.detail.value
     })
   },
+  
+  // 打开座位选择器
+  openSeatSelector: function() {
+    // 获取可用座位列表
+    this.fetchAvailableSeats()
+    this.setData({
+      showSeatSelector: true
+    })
+  },
+  
+  // 关闭座位选择器
+  closeSeatSelector: function() {
+    this.setData({
+      showSeatSelector: false
+    })
+  },
+  
+  // 获取可用座位列表
+  fetchAvailableSeats: function() {
+    wx.showLoading({
+      title: '加载中...',
+    })
+    
+    wx.cloud.callFunction({
+      name: 'getSeats',
+      data: {
+        status: 'available'
+      },
+      success: res => {
+        wx.hideLoading()
+        
+        if (res.result.code === 0) {
+          const seats = res.result.data.map(seat => {
+            // 添加状态文本
+            let statusText = '未知'
+            switch (seat.status) {
+              case 'available':
+                statusText = '空闲'
+                break
+              case 'occupied':
+                statusText = '已占用'
+                break
+            }
+            
+            return {
+              ...seat,
+              statusText
+            }
+          })
+          
+          this.setData({
+            availableSeats: seats
+          })
+        } else {
+          wx.showToast({
+            title: res.result.message || '获取座位失败',
+            icon: 'none'
+          })
+        }
+      },
+      fail: err => {
+        wx.hideLoading()
+        console.error('获取座位失败', err)
+        wx.showToast({
+          title: '获取座位失败，请稍后再试',
+          icon: 'none'
+        })
+      }
+    })
+  },
+  
+  // 选择座位
+  selectSeat: function(e) {
+    const seatId = e.currentTarget.dataset.id
+    this.setData({
+      selectedSeatId: seatId,
+      showSeatSelector: false
+    })
+    
+    // 获取选中座位的信息
+    this.fetchSeatInfo(seatId)
+  },
 
   // 提交预订
   submitBooking: function () {
-    const { seatId, date, startTime, endTime } = this.data
-
+    const { seatId, date, startTime, endTime, purpose } = this.data
+    
+    // 验证表单
+    if (!purpose) {
+      wx.showToast({
+        title: '请输入使用用途',
+        icon: 'none'
+      })
+      return
+    }
+    
+    if (!seatId) {
+      wx.showToast({
+        title: '请选择座位',
+        icon: 'none'
+      })
+      return
+    }
 
     // 显示加载中
     wx.showLoading({

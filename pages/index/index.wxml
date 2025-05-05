@@ -35,7 +35,6 @@
 
   <view class="quick-actions">
     <view class="action-item" bindtap="navigateToSeatBooking">
-      <image src="/static/images/booking.png"></image>
       <text>预订座位</text>
     </view>
     <view class="action-item" bindtap="navigateToMyBookings">
