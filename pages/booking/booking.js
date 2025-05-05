@@ -3,15 +3,11 @@ const app = getApp()
 
 Page({
   data: {
-    seatId: 'A1',
+    seatId: '',
     seatInfo: null,
-    date: '',
-    startTime: '',
-    endTime: '',
-    purpose: '',
     remark: '',
-    startTimeArray: [],
-    endTimeArray: [],
+    name: '',
+    phone: '',
     today: '',
     tomorrow: '',
     dateOptions: [],
@@ -139,95 +135,51 @@ Page({
     const tDay = tomorrow.getDate()
     const tomorrowStr = `${tYear}-${tMonth < 10 ? '0' + tMonth : tMonth}-${tDay < 10 ? '0' + tDay : tDay}`
 
-    // 设置日期选项
-    const dateOptions = [
-      { label: '今天', value: today },
-      { label: '明天', value: tomorrowStr }
-    ]
-
-    // 生成时间选项（8:00 - 22:00，每小时一个选项）
-    const startTimeArray = []
-    const endTimeArray = []
-
-    for (let i = 8; i <= 21; i++) {
-      const hour = i < 10 ? '0' + i : i
-      startTimeArray.push(`${hour}:00`)
-    }
-
-    for (let i = 9; i <= 22; i++) {
-      const hour = i < 10 ? '0' + i : i
-      endTimeArray.push(`${hour}:00`)
-    }
+    // 设置最大日期（1年后）
+    const maxDate = new Date(now)
+    maxDate.setFullYear(maxDate.getFullYear() + 1)
+    const maxYear = maxDate.getFullYear()
+    const maxMonth = maxDate.getMonth() + 1
+    const maxDay = maxDate.getDate()
+    const maxDateStr = `${maxYear}-${maxMonth < 10 ? '0' + maxMonth : maxMonth}-${maxDay < 10 ? '0' + maxDay : maxDay}`
 
     this.setData({
       today,
-      tomorrow: tomorrowStr,
-      date: today,
-      startTime: startTimeArray[0],
-      endTime: endTimeArray[0],
-      dateOptions,
-      startTimeArray,
-      endTimeArray
+      maxDate: maxDateStr,
+      startDate: today,
+      endDate: tomorrowStr
     })
   },
 
-  // 选择日期
-  bindDateChange: function (e) {
+  // 选择开始日期
+  bindStartDateChange: function (e) {
     this.setData({
-      date: e.detail.value
+      startDate: e.detail.value
     })
-  },
 
-  // 选择开始时间
-  bindStartTimeChange: function (e) {
-    const index = e.detail.value
-    const startTime = this.data.startTimeArray[index]
-
-    // 确保结束时间晚于开始时间
-    const startHour = parseInt(startTime.split(':')[0])
-    const endHour = parseInt(this.data.endTime.split(':')[0])
-
-    if (endHour <= startHour) {
-      // 如果结束时间早于或等于开始时间，自动调整结束时间
-      const newEndTimeIndex = Math.min(index + 1, this.data.endTimeArray.length - 1)
+    // 如果结束日期早于开始日期，自动调整为开始日期
+    if (new Date(this.data.endDate) < new Date(e.detail.value)) {
       this.setData({
-        startTime,
-        endTime: this.data.endTimeArray[newEndTimeIndex]
-      })
-    } else {
-      this.setData({
-        startTime
+        endDate: e.detail.value
       })
     }
   },
 
-  // 选择结束时间
-  bindEndTimeChange: function (e) {
-    const index = e.detail.value
-    const endTime = this.data.endTimeArray[index]
-
-    // 确保结束时间晚于开始时间
-    const startHour = parseInt(this.data.startTime.split(':')[0])
-    const endHour = parseInt(endTime.split(':')[0])
-
-    if (endHour <= startHour) {
+  // 选择结束日期
+  bindEndDateChange: function (e) {
+    // 确保结束日期不早于开始日期
+    if (new Date(e.detail.value) < new Date(this.data.startDate)) {
       wx.showToast({
-        title: '结束时间必须晚于开始时间',
+        title: '结束日期不能早于开始日期',
         icon: 'none'
       })
     } else {
       this.setData({
-        endTime
+        endDate: e.detail.value
       })
     }
   },
 
-  // 输入用途
-  inputPurpose: function (e) {
-    this.setData({
-      purpose: e.detail.value
-    })
-  },
 
   // 输入备注
   inputRemark: function (e) {
@@ -235,29 +187,43 @@ Page({
       remark: e.detail.value
     })
   },
-  
+
+  // 输入姓名
+  inputName: function (e) {
+    this.setData({
+      name: e.detail.value
+    })
+  },
+
+  // 输入手机号
+  inputPhone: function (e) {
+    this.setData({
+      phone: e.detail.value
+    })
+  },
+
   // 打开座位选择器
-  openSeatSelector: function() {
+  openSeatSelector: function () {
     // 获取可用座位列表
     this.fetchAvailableSeats()
     this.setData({
       showSeatSelector: true
     })
   },
-  
+
   // 关闭座位选择器
-  closeSeatSelector: function() {
+  closeSeatSelector: function () {
     this.setData({
       showSeatSelector: false
     })
   },
-  
+
   // 获取可用座位列表
-  fetchAvailableSeats: function() {
+  fetchAvailableSeats: function () {
     wx.showLoading({
       title: '加载中...',
     })
-    
+
     wx.cloud.callFunction({
       name: 'getSeats',
       data: {
@@ -265,7 +231,7 @@ Page({
       },
       success: res => {
         wx.hideLoading()
-        
+
         if (res.result.code === 0) {
           const seats = res.result.data.map(seat => {
             // 添加状态文本
@@ -278,13 +244,13 @@ Page({
                 statusText = '已占用'
                 break
             }
-            
+
             return {
               ...seat,
               statusText
             }
           })
-          
+
           this.setData({
             availableSeats: seats
           })
@@ -305,35 +271,42 @@ Page({
       }
     })
   },
-  
+
   // 选择座位
-  selectSeat: function(e) {
+  selectSeat: function (e) {
     const seatId = e.currentTarget.dataset.id
     this.setData({
       selectedSeatId: seatId,
       showSeatSelector: false
     })
-    
+
     // 获取选中座位的信息
     this.fetchSeatInfo(seatId)
   },
 
   // 提交预订
   submitBooking: function () {
-    const { seatId, date, startTime, endTime, purpose } = this.data
-    
-    // 验证表单
-    if (!purpose) {
+    const { seatId, startDate, endDate } = this.data
+
+    if (!seatId) {
       wx.showToast({
-        title: '请输入使用用途',
+        title: '请选择座位',
         icon: 'none'
       })
       return
     }
-    
-    if (!seatId) {
+
+    if (!this.data.name) {
       wx.showToast({
-        title: '请选择座位',
+        title: '请输入姓名',
+        icon: 'none'
+      })
+      return
+    }
+
+    if (!this.data.phone) {
+      wx.showToast({
+        title: '请输入手机号',
         icon: 'none'
       })
       return
@@ -349,14 +322,22 @@ Page({
       name: 'bookSeat',
       data: {
         seatId,
-        date,
-        startTime,
-        endTime,
-        purpose,
-        remark: this.data.remark
+        startDate,
+        endDate,
+        remark: this.data.remark,
+        name: this.data.name,
+        phone: this.data.phone
       },
       success: res => {
         wx.hideLoading()
+
+        if (!res || !res.result) {
+          wx.showToast({
+            title: '请求失败，请重试',
+            icon: 'none'
+          })
+          return
+        }
 
         if (res.result.code === 0) {
           wx.showToast({

@@ -28,6 +28,7 @@
 .seat-info-title {
   display: flex;
   align-items: center;
+  gap: 20rpx;
 }
 
 .change-seat {
@@ -42,6 +43,7 @@
   font-size: 36rpx;
   font-weight: bold;
   color: #333;
+  margin-top: 10rpx;
 }
 
 .seat-status {
@@ -49,6 +51,8 @@
   border-radius: 30rpx;
   font-size: 24rpx;
   color: #fff;
+  display: flex;
+  align-items: center;
 }
 
 .seat-status.available {
@@ -121,7 +125,37 @@
   width: 48%;
 }
 
-.form-label {
+/* 日期选择器行样式 */
+.date-picker-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.date-picker-row .form-group {
+  width: 48%;
+  margin-bottom: 0;
+}
+
+.date-picker-row .picker {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date-picker-row .picker text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.required {
+  color: #ff4d4f;
+  margin-left: 4rpx;
+  position: relative;
   font-size: 28rpx;
   color: #333;
   margin-bottom: 15rpx;
@@ -129,9 +163,17 @@
   align-items: center;
 }
 
+.form-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+  display: inline;
+}
+
 .required {
   color: #F44336;
-  margin-left: 10rpx;
+  margin-left: 4rpx;
+  display: inline;
 }
 
 .picker {

@@ -1,9 +1,9 @@
 <!--pages/booking/booking.wxml-->
 <view class="container">
   
-  
   <!-- 座位信息卡片 -->
   <view class="seat-info-card" wx:if="{{seatInfo}}">
+    <view class="form-title">座位信息</view>
     <view class="card-header">
       <view class="seat-info-title">
         <view class="seat-number">{{seatInfo.seatNumber}}</view>
@@ -31,44 +31,44 @@
   <view class="booking-form">
     <view class="form-title">预订信息</view>
     
-    <!-- 日期选择 -->
-    <view class="form-group">
-      <view class="form-label">日期</view>
-      <picker mode="date" value="{{date}}" start="{{today}}" end="{{tomorrow}}" bindchange="bindDateChange">
-        <view class="picker">
-          <text>{{date}}</text>
-          <image class="picker-arrow" src="/static/images/down.png"></image>
-        </view>
-      </picker>
-    </view>
     
-    <!-- 时间选择 -->
-    <view class="form-row">
-      <view class="form-group half">
-        <view class="form-label">开始时间</view>
-        <picker mode="selector" range="{{startTimeArray}}" value="0" bindchange="bindStartTimeChange">
+    <!-- 日期选择器行 -->
+    <view class="date-picker-row">
+      <!-- 开始日期 -->
+      <view class="form-group">
+        <view class="form-label">开始日期</view>
+        <picker mode="date" value="{{startDate}}" start="{{today}}" end="{{maxDate}}" bindchange="bindStartDateChange">
           <view class="picker">
-            <text>{{startTime}}</text>
+            <text>{{startDate}}</text>
             <image class="picker-arrow" src="/static/images/down.png"></image>
           </view>
         </picker>
       </view>
       
-      <view class="form-group half">
-        <view class="form-label">结束时间</view>
-        <picker mode="selector" range="{{endTimeArray}}" value="0" bindchange="bindEndTimeChange">
+      <!-- 结束日期 -->
+      <view class="form-group">
+        <view class="form-label">结束日期</view>
+        <picker mode="date" value="{{endDate}}" start="{{startDate}}" end="{{maxDate}}" bindchange="bindEndDateChange">
           <view class="picker">
-            <text>{{endTime}}</text>
+            <text>{{endDate}}</text>
             <image class="picker-arrow" src="/static/images/down.png"></image>
           </view>
         </picker>
       </view>
     </view>
     
-    <!-- 用途输入 -->
+
+    
+    <!-- 姓名输入 -->
     <view class="form-group">
-      <view class="form-label">使用用途 <text class="required">*</text></view>
-      <input class="form-input" placeholder="请输入使用用途" value="{{purpose}}" bindinput="inputPurpose" />
+      <view class="form-label">姓名<text class="required">*</text></view>
+      <input class="form-input" placeholder="请输入姓名" value="{{name}}" bindinput="inputName" required />
+    </view>
+    
+    <!-- 手机号输入 -->
+    <view class="form-group">
+      <view class="form-label">手机号<text class="required">*</text></view>
+      <input class="form-input" type="number" placeholder="请输入手机号" value="{{phone}}" bindinput="inputPhone" required />
     </view>
     
     <!-- 备注输入 -->
