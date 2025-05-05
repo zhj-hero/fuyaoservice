@@ -76,6 +76,41 @@ Page({
         })
     },
 
+    // 座位编号变更处理
+    onSeatNumberChange: function(e) {
+        this.setData({
+            'seatInfo.seatNumber': e.detail.value
+        })
+    },
+    
+    // 座位区域变更处理
+    onSeatAreaChange: function(e) {
+        this.setData({
+            'seatInfo.seatArea': e.detail.value
+        })
+    },
+    
+    // 座位类型变更处理
+    onTypeChange: function(e) {
+        const typeIndex = e.detail.value
+        const typeArray = ['半沉浸','沉浸桌','侧进式']
+        const type = typeArray[typeIndex]
+        
+        this.setData({
+            'seatInfo.type': type
+        })
+    },
+
+    // 座位状态变更处理
+    onStatusChange: function (e) {
+        const statusIndex = e.detail.value
+        const status = statusIndex === 0 ? 'available' : 'occupied'
+
+        this.setData({
+            'seatInfo.status': status
+        })
+    },
+
     // 保存修改
     saveSeat: function () {
         const { seatInfo } = this.data

@@ -2,12 +2,12 @@
 <view class="container">
   <view class="form-item">
     <text class="label">座位编号</text>
-    <input class="input" value="{{seatInfo.seatNumber}}" disabled />
+    <input class="input" value="{{seatInfo.seatNumber}}" bindinput="onSeatNumberChange" />
   </view>
   
   <view class="form-item">
     <text class="label">座位区域</text>
-    <input class="input" value="{{seatInfo.seatArea}}" disabled />
+    <input class="input" value="{{seatInfo.seatArea}}" bindinput="onSeatAreaChange" />
   </view>
   
   <view class="form-item">
