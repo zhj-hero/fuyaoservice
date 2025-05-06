@@ -22,7 +22,8 @@ Page({
         // 设置用户信息和管理员状态
         this.setData({
             userInfo: app.globalData.userInfo,
-            isAdmin: app.globalData.isAdmin
+            isAdmin: app.globalData.isAdmin,
+            activeTab: options.activeTab ? parseInt(options.activeTab) : 0
         })
     },
 
@@ -32,10 +33,24 @@ Page({
         const isAdmin = userInfo && userInfo.isAdmin ? true : false;
         app.globalData.userInfo = userInfo;
         app.globalData.isAdmin = isAdmin;
-        this.setData({
-            userInfo: userInfo,
-            isAdmin: isAdmin
-        });
+
+        // 检查是否有从首页传来的activeTab设置
+        const userActiveTab = wx.getStorageSync('userActiveTab');
+        if (userActiveTab !== '' && userActiveTab !== null && userActiveTab !== undefined) {
+            this.setData({
+                activeTab: parseInt(userActiveTab),
+                userInfo: userInfo,
+                isAdmin: isAdmin
+            });
+            // 使用后清除，避免影响下次进入
+            wx.removeStorageSync('userActiveTab');
+        } else {
+            this.setData({
+                userInfo: userInfo,
+                isAdmin: isAdmin
+            });
+        }
+
         this.fetchUserBookings();
         // 添加全局数据监听
         if (!this._userInfoListener) {
@@ -76,8 +91,42 @@ Page({
                 wx.hideLoading()
 
                 if (res.result.code === 0) {
+                    // 处理预订数据，确保兼容新旧数据格式
+                    const bookings = res.result.data.map(booking => {
+                        // 处理状态文本
+                        let statusText = '未知';
+                        switch (booking.status) {
+                            case 'pending':
+                                statusText = '待审核';
+                                break;
+                            case 'approved':
+                                statusText = '已通过';
+                                break;
+                            case 'rejected':
+                                statusText = '已拒绝';
+                                break;
+                            case 'cancelled':
+                                statusText = '已取消';
+                                break;
+                            case 'completed':
+                                statusText = '已完成';
+                                break;
+                        }
+                        booking.statusText = statusText;
+
+                        // 确保兼容新旧数据格式
+                        if (!booking.startDate && booking.date) {
+                            booking.startDate = booking.date;
+                        }
+                        if (!booking.endDate && booking.date) {
+                            booking.endDate = booking.date;
+                        }
+
+                        return booking;
+                    });
+
                     this.setData({
-                        bookings: res.result.data
+                        bookings: bookings
                     })
                 } else {
                     wx.showToast({

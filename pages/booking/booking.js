@@ -286,7 +286,7 @@ Page({
 
   // 提交预订
   submitBooking: function () {
-    const { seatId, startDate, endDate } = this.data
+    const { seatId, startDate, endDate, seatInfo } = this.data
 
     if (!seatId) {
       wx.showToast({
@@ -322,6 +322,7 @@ Page({
       name: 'bookSeat',
       data: {
         seatId,
+        seatNumber: seatInfo ? seatInfo.seatNumber : '', // 传递座位号
         startDate,
         endDate,
         remark: this.data.remark,

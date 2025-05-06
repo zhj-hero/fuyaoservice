@@ -28,7 +28,7 @@
   <view class="tab-content">
     <!-- 我的预订 -->
     <view class="booking-list" wx:if="{{activeTab === 0}}">
-      <view class="section-title">我的预订</view>
+
       <block wx:if="{{bookings.length > 0}}">
         <view class="booking-item" wx:for="{{bookings}}" wx:key="_id">
           <view class="booking-header">
@@ -37,16 +37,24 @@
           </view>
           <view class="booking-info">
             <view class="info-row">
-              <text class="label">日期：</text>
-              <text class="value">{{item.date}}</text>
+              <text class="label">开始日期：</text>
+              <text class="value">{{item.startDate}}</text>
             </view>
             <view class="info-row">
-              <text class="label">时间：</text>
-              <text class="value">{{item.startTime}} - {{item.endTime}}</text>
+              <text class="label">结束日期：</text>
+              <text class="value">{{item.endDate}}</text>
             </view>
             <view class="info-row">
-              <text class="label">用途：</text>
-              <text class="value">{{item.purpose}}</text>
+              <text class="label">姓名：</text>
+              <text class="value">{{item.name || item.userName || userInfo.name || userInfo.nickName || '未设置'}}</text>
+            </view>
+            <view class="info-row">
+              <text class="label">手机：</text>
+              <text class="value">{{item.userPhone || userInfo.phone || '未设置'}}</text>
+            </view>
+            <view class="info-row">
+              <text class="label">备注：</text>
+              <text class="value">{{item.remark}}</text>
             </view>
           </view>
           <view class="booking-actions">

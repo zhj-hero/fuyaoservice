@@ -18,7 +18,7 @@ exports.main = async (event, context) => {
         // 查询用户的预订信息
         const bookingsCollection = db.collection('bookings')
         const bookings = await bookingsCollection.where({
-            openid: openid
+            userId: openid
         }).orderBy('createTime', 'desc').get()
 
         // 返回成功结果

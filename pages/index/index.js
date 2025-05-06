@@ -34,7 +34,7 @@ Page({
     // 每次显示页面时刷新数据
     this.fetchHomeData()
 
-   
+
     // 更新登录状态
     this.setData({
       app: app
@@ -149,8 +149,24 @@ Page({
       return
     }
 
-    wx.navigateTo({
-      url: '/pages/user/bookings',
+    wx.switchTab({
+      url: '/pages/user/user?activeTab=0',
+      success: function () {
+        // 成功跳转后，设置activeTab
+        const userPage = getCurrentPages().pop();
+        if (userPage && userPage.route.includes('user')) {
+          userPage.setData({
+            activeTab: 0
+          });
+        }
+      },
+      fail: function (err) {
+        console.error('跳转失败', err);
+        // 如果switchTab失败，尝试使用navigateTo
+        wx.navigateTo({
+          url: '/pages/user/user?activeTab=0'
+        });
+      }
     })
   },
 

@@ -5,7 +5,7 @@ const db = cloud.database()
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-    const { seatId, startDate, endDate, remark, name, phone } = event
+    const { seatId, seatNumber, startDate, endDate, remark, name, phone } = event
     const wxContext = cloud.getWXContext()
 
     if (!seatId || !startDate || !endDate || !name || !phone) {
@@ -50,6 +50,7 @@ exports.main = async (event, context) => {
     // 写入预约信息
     const booking = {
         seatId,
+        seatNumber: seatNumber || seat.number, // 使用传入的座位号或从座位信息中获取
         userId: wxContext.OPENID,
         userName: wxContext.NAME,
         seatType: seat.type,
@@ -61,11 +62,11 @@ exports.main = async (event, context) => {
         createTime: db.serverDate(),
         status: 'pending'
     }
-    
+
     try {
         // 保存预约记录
         await db.collection('bookings').add({ data: booking })
-        
+
         // // 发送订阅消息给管理员
         // await cloud.openapi.subscribeMessage.send({
         //     touser: '管理员OPENID', // 需要替换为实际管理员OPENID
@@ -77,7 +78,7 @@ exports.main = async (event, context) => {
         //         thing3: { value: '新预约待审核' }
         //     }
         // })
-        
+
         return {
             code: 0,
             message: '预约申请已提交，等待管理员审核'

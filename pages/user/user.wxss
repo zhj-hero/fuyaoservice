@@ -192,11 +192,14 @@
 
 .info-row .label {
   color: #666;
-  width: 100rpx;
+  width: 160rpx;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .info-row .value {
+  white-space: nowrap;
+  flex: 1;
   color: #333;
   flex: 1;
 }
