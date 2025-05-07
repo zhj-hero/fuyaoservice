@@ -16,5 +16,8 @@
         <button bindtap="deleteNotice" data-id="{{item._id}}" size="mini" type="warn">删除</button>
       </view>
     </block>
+    <view class="no-data" wx:if="{{showEmpty}}">
+      <text>暂无通知</text>
+    </view>
   </view>
 </view>

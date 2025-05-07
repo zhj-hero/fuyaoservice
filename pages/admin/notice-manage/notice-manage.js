@@ -4,6 +4,7 @@ const app = getApp()
 Page({
     data: {
         noticeList: [],
+        showEmpty: false,
         newNoticeContent: '',
         isAdmin: false
     },
@@ -36,8 +37,11 @@ Page({
             success: res => {
                 wx.hideLoading()
                 if (res.result.code === 0) {
+                    // 正确获取通知列表数据，通知列表在res.result.data.list中
+                    const noticeList = res.result.data.list || []
                     this.setData({
-                        noticeList: res.result.data
+                        noticeList: noticeList,
+                        showEmpty: noticeList.length === 0
                     })
                 } else {
                     wx.showToast({

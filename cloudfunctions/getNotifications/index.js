@@ -7,6 +7,10 @@ cloud.init({
 
 // 云函数入口函数
 exports.main = async (event, context) => {
+    // 获取用户信息
+    const wxContext = cloud.getWXContext()
+    const openid = wxContext.OPENID
+
     try {
         // 获取分页参数
         const { page = 1, pageSize = 10 } = event
@@ -15,7 +19,7 @@ exports.main = async (event, context) => {
         const db = cloud.database()
 
         // 查询通知列表
-        const noticesCollection = db.collection('notices')
+        const noticesCollection = db.collection('notifications')
         const total = await noticesCollection.count()
         const notices = await noticesCollection
             .orderBy('createTime', 'desc')

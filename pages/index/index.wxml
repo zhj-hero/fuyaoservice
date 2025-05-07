@@ -66,8 +66,9 @@
 
   <view class="section-title">最新通知</view>
   <view class="notification-list">
-    <view class="notification-item" wx:for="{{notifications}}" wx:key="index" bindtap="viewNotification" data-id="{{item._id}}">
+    <view class="notification-item" wx:for="{{notifications}}" wx:key="index" bindtap="viewNotification" data-id="{{item._id}}" data-title="{{item.title}}" data-content="{{item.content}}" data-time="{{item.createTime}}">
       <view class="notification-title">{{item.title}}</view>
+      <view class="notification-content ellipsis">{{item.content}}</view>
       <view class="notification-time">{{item.createTime}}</view>
     </view>
     <view class="no-data" wx:if="{{!notifications.length}}">

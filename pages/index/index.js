@@ -92,8 +92,10 @@ Page({
       },
       success: res => {
         if (res.result.code === 0) {
+          // 正确获取通知列表数据，通知列表在res.result.data.list中
+          const notificationList = res.result.data.list || []
           this.setData({
-            notifications: res.result.data
+            notifications: notificationList
           })
         }
       },
@@ -186,10 +188,17 @@ Page({
 
   // 查看通知详情
   viewNotification: function (e) {
-    const id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      url: '/pages/notification/detail?id=${id}',
-    })
+    const title = e.currentTarget.dataset.title;
+    const content = e.currentTarget.dataset.content;
+    const time = e.currentTarget.dataset.time;
+
+    wx.showModal({
+      title: title,
+      content: content,
+      showCancel: false,
+      confirmText: '关闭',
+      confirmColor: '#3A7FED'
+    });
   },
 
   // 跳转到管理后台

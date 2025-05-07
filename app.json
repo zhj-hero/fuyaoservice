@@ -14,7 +14,6 @@
     "pages/admin/seat-edit/seat-edit",
     "pages/booking/booking",
     "pages/message/message",
-    "pages/notification/notification",
     "pages/user/edit-profile",
     "pages/seatmap/seatmap"
   ],
