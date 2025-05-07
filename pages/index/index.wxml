@@ -24,14 +24,7 @@
     </swiper>
   </view>
 
-  <view class="notice-bar" wx:if="{{notice}}">
-    <view class="notice-icon">
-      <image src="/static/images/notice.png"></image>
-    </view>
-    <view class="notice-content">
-      <text>{{notice.content}}</text>
-    </view>
-  </view>
+
 
   <view class="quick-actions">
     <view class="action-item" bindtap="navigateToSeatBooking">
@@ -66,8 +59,7 @@
 
   <view class="section-title">最新通知</view>
   <view class="notification-list">
-    <view class="notification-item" wx:for="{{notifications}}" wx:key="index" bindtap="viewNotification" data-id="{{item._id}}" data-title="{{item.title}}" data-content="{{item.content}}" data-time="{{item.createTime}}">
-      <view class="notification-title">{{item.title}}</view>
+    <view class="notification-item" wx:for="{{notifications}}" wx:key="index" bindtap="viewNotification" data-id="{{item._id}}" data-title="通   知" data-content="{{item.content}}" data-time="{{item.createTime}}"> 
       <view class="notification-content ellipsis">{{item.content}}</view>
       <view class="notification-time">{{item.createTime}}</view>
     </view>

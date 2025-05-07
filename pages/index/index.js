@@ -55,7 +55,7 @@ Page({
     })
 
     // 获取最新通知
-    this.fetchLatestNotice()
+    // this.fetchLatestNotice()
 
     // 获取通知列表
     this.fetchNotifications()
@@ -66,22 +66,6 @@ Page({
     wx.hideLoading()
   },
 
-  // 获取最新通知
-  fetchLatestNotice: function () {
-    wx.cloud.callFunction({
-      name: 'getLatestNotice',
-      success: res => {
-        if (res.result.code === 0 && res.result.data) {
-          this.setData({
-            notice: res.result.data
-          })
-        }
-      },
-      fail: err => {
-        console.error('获取最新通知失败', err)
-      }
-    })
-  },
 
   // 获取通知列表
   fetchNotifications: function () {
@@ -195,6 +179,19 @@ Page({
     wx.showModal({
       title: title,
       content: content,
+      showCancel: false,
+      confirmText: '关闭',
+      confirmColor: '#3A7FED'
+    });
+  },
+
+  // 查看最新通知详情
+  viewLatestNotice: function () {
+    if (!this.data.notice) return;
+
+    wx.showModal({
+      title: this.data.notice.title || '最新通知',
+      content: this.data.notice.content,
       showCancel: false,
       confirmText: '关闭',
       confirmColor: '#3A7FED'

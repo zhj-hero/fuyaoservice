@@ -2,7 +2,7 @@
 <view class="container">
 
   <view class="notice-input">
-    <textarea placeholder="请输入通知内容" bindinput="onNoticeInput" value="{{newNoticeContent}}"></textarea>
+    <textarea placeholder="请输入通知内容" bindinput="onNoticeInput" value="{{newNoticeContent}}" maxlength="1000"></textarea>
     <button bindtap="publishNotice" type="primary" size="mini">发布通知</button>
   </view>
   

@@ -63,6 +63,13 @@ Page({
 
     // 输入通知内容
     onNoticeInput: function (e) {
+        if (e.detail.value.length > 1000) {
+            wx.showToast({
+                title: '通知内容不能超过1000字',
+                icon: 'none'
+            })
+            return
+        }
         this.setData({
             newNoticeContent: e.detail.value
         })

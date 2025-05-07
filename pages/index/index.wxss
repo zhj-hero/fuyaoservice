@@ -201,13 +201,13 @@ page {
   color: #666;
   margin-bottom: 10rpx;
 }
-
+  /*设置缺省查看样式*/
 .notification-content.ellipsis {
   max-height: 80rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 
@@ -241,4 +241,23 @@ page {
 .btn-primary:active {
   opacity: 0.9;
   transform: scale(0.98);
+}
+
+/* 弹窗样式 */
+.wx-modal {
+  font-size: 20rpx !important;
+}
+
+.wx-modal-title {
+  font-size: 24rpx !important;
+}
+
+.wx-modal-content {
+  font-size: 18rpx !important;
+  color: #666;
+  text-align: left;
+}
+
+.wx-modal-btn {
+  font-size: 22rpx !important;
 }
