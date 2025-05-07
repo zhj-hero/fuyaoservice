@@ -32,7 +32,7 @@ Page({
         })
 
         wx.cloud.callFunction({
-            name: 'getNoticeList',
+            name: 'getNotifications',
             success: res => {
                 wx.hideLoading()
                 if (res.result.code === 0) {

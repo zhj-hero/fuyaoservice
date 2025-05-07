@@ -87,6 +87,10 @@ Page({
 
         wx.cloud.callFunction({
             name: 'getUserBookings',
+            data: {
+                isAdmin: this.data.isAdmin,
+                viewAllBookings: false // 在用户页面始终设置为false，确保即使是管理员也只能查看自己的预订
+            },
             success: res => {
                 wx.hideLoading()
 

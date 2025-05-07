@@ -1,22 +1,34 @@
 <!-- pages/admin/reservation-review/reservation-review.wxml -->
 <view class="container">
-  <view class="header">
-    <text>预订审核</text>
-  </view>
-  
   <view class="reservation-list">
     <block wx:for="{{reservationList}}" wx:key="_id">
       <view class="reservation-item">
-        <view class="reservation-info">
-          <text>用户: {{item.userName}}</text>
-          <text>座位号: {{item.seatNumber}}</text>
-          <text>日期: {{item.date}}</text>
-          <text>时间段: {{item.timeSlot}}</text>
-          <text>状态: {{item.status}}</text>
+        <view class="reservation-header">
+          <text class="seat-number">{{item.seatNumber}}</text>
+          <text class="status {{item.status}}">{{item.statusText}}</text>
+        </view>
+        <view class="reservation-info-text">
+          <view class="info-row">
+            <text class="label">用户姓名：</text>
+            <text class="value">{{item.name}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">手机号码：</text>
+            <text class="value">{{item.phone}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">起始日期：</text>
+            <text class="value">{{item.startDate}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">终止日期：</text>
+            <text class="value">{{item.endDate}}</text>
+          </view>
         </view>
         <view class="reservation-actions">
-          <button bindtap="approveReservation" data-id="{{item._id}}" size="mini" type="primary">通过</button>
+          <button bindtap="approveReservation" data-id="{{item._id}}" data-seat-id="{{item.seatId}}" size="mini" type="primary">通过</button>
           <button bindtap="rejectReservation" data-id="{{item._id}}" size="mini" type="warn">拒绝</button>
+          <button bindtap="deleteReservation" data-id="{{item._id}}" size="mini" type="delete">删除</button>
         </view>
       </view>
     </block>

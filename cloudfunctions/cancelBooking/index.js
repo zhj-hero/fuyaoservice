@@ -1,12 +1,12 @@
 // 云函数入口文件
-const cloud = require('wx-server-sdk')
+import cloud from 'wx-server-sdk'
 
 cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
 })
 
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async (event) => {
     try {
         // 获取预订ID
         const { bookingId } = event
@@ -23,21 +23,17 @@ exports.main = async (event, context) => {
         const booking = await bookingsCollection.doc(bookingId).get()
 
         // 验证预订是否属于当前用户
-        if (booking.data.openid !== openid) {
+        if (booking.data.userId !== openid) {
             return {
                 code: -1,
                 message: '无权取消此预订'
             }
         }
 
-        // 删除预订
-        await bookingsCollection.doc(bookingId).remove()
-
-        // 更新座位状态
-        const seatsCollection = db.collection('seats')
-        await seatsCollection.doc(booking.data.seatId).update({
+        // 更新预订状态为已取消
+        await bookingsCollection.doc(bookingId).update({
             data: {
-                status: 'available'
+                status: 'cancelled'
             }
         })
 

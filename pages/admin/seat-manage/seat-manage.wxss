@@ -176,10 +176,11 @@ button[type="warn"][size="mini"] {
   align-items: center;
   justify-content: center;
   background-color: #2ecc71 !important;
-  color:rgb(19, 2, 2) !important;
+  color:rgb(238, 233, 233) !important;
   border: none;
   font-weight: bold;
   transition: all 0.3s ease;
+  text-align: center;
 }
 
 /* 添加座位按钮悬停效果 */

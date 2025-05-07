@@ -1,1 +1,103 @@
 /* pages/admin/reservation-review/reservation-review.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f7f7f7;
+}
+
+.reservation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.seat-number {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.status {
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #fff;
+}
+
+
+.status.pending {
+  background-color: #FFC107;
+}
+
+.status.approved {
+  background-color: #4CAF50;
+}
+
+.status.rejected {
+  background-color: #F44336;
+}
+
+.status.cancelled {
+  background-color: #9E9E9E;
+}
+
+
+.reservation-list {
+  margin-top: 20rpx;
+}
+
+.reservation-item {
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+}
+
+.reservation-info-text {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 10rpx;
+}
+
+.info-row .label {
+  color: #666;
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.info-row .value {
+  color: #333;
+  flex: 1;
+}
+
+.reservation-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: -20rpx;
+}
+
+.btn-primary {
+  background-color: #07c160;
+}
+
+.btn-warn {  
+  background-color:rgb(15, 1, 2);
+  color: white;
+}
+
+.btn-delete {
+  background-color: #07c160;
+  color: white;
+}
