@@ -1,0 +1,15 @@
+<!-- components/notice-modal/notice-modal.wxml -->
+<view class="modal-mask" wx:if="{{visible}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="preventBubble">
+    <view class="modal-header">
+      <text class="modal-title">{{title}}</text>
+    </view>
+    <view class="modal-body">
+      <text class="modal-content-text">{{content}}</text>
+      <text class="modal-time" wx:if="{{time}}">{{time}}</text>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn confirm-btn" bindtap="confirmModal">已读</button>
+    </view>
+  </view>
+</view>

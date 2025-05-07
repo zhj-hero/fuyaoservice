@@ -11,7 +11,11 @@ Page({
       availableSeats: 0,
       occupiedSeats: 0
     },
-    app: getApp() // 添加app到data中，以便在wxml中访问
+    app: getApp(), // 添加app到data中，以便在wxml中访问
+    modalVisible: false,
+    modalTitle: '',
+    modalContent: '',
+    modalTime: ''
   },
 
   onLoad: function (options) {
@@ -176,25 +180,25 @@ Page({
     const content = e.currentTarget.dataset.content;
     const time = e.currentTarget.dataset.time;
 
-    wx.showModal({
-      title: title,
-      content: content,
-      showCancel: false,
-      confirmText: '关闭',
-      confirmColor: '#3A7FED'
+    this.setData({
+      modalVisible: true,
+      modalTitle: title,
+      modalContent: content,
+      modalTime: time
     });
   },
 
-  // 查看最新通知详情
-  viewLatestNotice: function () {
-    if (!this.data.notice) return;
+  // 关闭通知弹窗
+  closeNoticeModal: function () {
+    this.setData({
+      modalVisible: false
+    });
+  },
 
-    wx.showModal({
-      title: this.data.notice.title || '最新通知',
-      content: this.data.notice.content,
-      showCancel: false,
-      confirmText: '关闭',
-      confirmColor: '#3A7FED'
+  // 确认通知弹窗
+  confirmNoticeModal: function () {
+    this.setData({
+      modalVisible: false
     });
   },
 

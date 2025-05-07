@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "扶摇自习室",
   "usingComponents": {
+    "notice-modal": "/components/notice-modal/notice-modal"
   }
 }
