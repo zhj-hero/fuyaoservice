@@ -1,2 +1,68 @@
 <!--pages/message/message.wxml-->
-<text>pages/message/message.wxml</text>
+<view class="container">
+  <!-- 留言输入区域 -->
+  <view class="message-input">
+    <textarea placeholder="请输入留言内容" bindinput="onMessageInput" value="{{newMessageContent}}" maxlength="500"></textarea>
+    <view class="action-buttons">
+      <button wx:if="{{!isLoggedIn}}" bindtap="navigateToLogin" type="primary" size="mini">登录后留言</button>
+      <button wx:else bindtap="sendMessage" type="primary" size="mini">发送留言</button>
+    </view>
+  </view>
+  
+  <!-- 留言列表 -->
+  <view class="message-list">
+    <block wx:for="{{messageList}}" wx:key="_id">
+      <view class="message-item">
+        <view class="message-header">
+          <image class="avatar" src="{{item.avatarUrl || '/static/images/default-avatar.png'}}"></image>
+          <view class="user-info">
+            <text class="username">{{item.userName}}</text>
+            <text class="time">{{item.createTime}}</text>
+          </view>
+        </view>
+        <view class="message-content">
+          <text>{{item.content}}</text>
+        </view>
+        <view class="message-actions">
+          <text class="action-btn" bindtap="showCommentInput" data-id="{{item._id}}">评论</text>
+          <text wx:if="{{isAdmin || item._openid === app.globalData.openid}}" class="action-btn delete" bindtap="deleteMessage" data-id="{{item._id}}">删除</text>
+        </view>
+        
+        <!-- 评论列表 -->
+        <view class="comment-list" wx:if="{{item.comments && item.comments.length > 0}}">
+          <view class="comment-item" wx:for="{{item.comments}}" wx:for-item="comment" wx:key="_id">
+            <view class="comment-header">
+              <image class="comment-avatar" src="{{comment.avatarUrl || '/static/images/default-avatar.png'}}"></image>
+              <view class="comment-user-info">
+                <text class="comment-username">{{comment.userName}}</text>
+                <text class="comment-time">{{comment.createTime}}</text>
+              </view>
+            </view>
+            <view class="comment-content">
+              <text>{{comment.content}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 评论输入框 -->
+        <view class="comment-input" wx:if="{{showCommentInput && commentingMessageId === item._id}}">
+          <textarea placeholder="请输入评论内容" bindinput="onCommentInput" value="{{newCommentContent}}" maxlength="200"></textarea>
+          <view class="comment-buttons">
+            <button bindtap="hideCommentInput" size="mini">取消</button>
+            <button bindtap="sendComment" type="primary" size="mini">发送</button>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMoreMessages}}" bindtap="loadMoreMessages">
+      <text>加载更多</text>
+    </view>
+    
+    <!-- 无数据提示 -->
+    <view class="no-data" wx:if="{{showEmpty}}">
+      <text>暂无留言</text>
+    </view>
+  </view>
+</view>

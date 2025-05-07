@@ -21,11 +21,28 @@ exports.main = async (event, context) => {
         // 查询通知列表
         const noticesCollection = db.collection('notifications')
         const total = await noticesCollection.count()
-        const notices = await noticesCollection
-            .orderBy('createTime', 'desc')
+
+        // 获取用户信息，判断是否为管理员
+        const userRes = await db.collection('users').where({
+            _openid: openid
+        }).get()
+        const isAdmin = userRes.data.length > 0 && userRes.data[0].isAdmin
+
+        // 构建查询条件
+        let query = noticesCollection.orderBy('createTime', 'desc')
             .skip((page - 1) * pageSize)
             .limit(pageSize)
-            .get()
+
+        // 如果不是管理员，只查询isActive为true的通知
+        if (!isAdmin) {
+            query = noticesCollection.where({
+                isActive: true
+            }).orderBy('createTime', 'desc')
+                .skip((page - 1) * pageSize)
+                .limit(pageSize)
+        }
+
+        const notices = await query.get()
 
         // 返回成功结果
         return {

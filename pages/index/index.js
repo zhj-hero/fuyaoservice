@@ -52,6 +52,13 @@ Page({
     })
   },
 
+  // 跳转到留言页面
+  navigateToMessage: function () {
+    wx.navigateTo({
+      url: '/pages/message/message'
+    })
+  },
+
   // 获取首页数据
   fetchHomeData: function () {
     wx.showLoading({

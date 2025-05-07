@@ -18,14 +18,14 @@ exports.main = async (event, context) => {
         // 连接数据库
         const db = cloud.database()
         const userCollection = db.collection('users')
-        
+
         // 如果提供了手机号和密码，进行账号密码登录
         if (phone && password) {
             // 查询用户是否存在
             let user = await userCollection.where({
                 phone: phone
             }).get()
-            
+
             // 验证用户是否存在
             if (user.data.length === 0) {
                 return {
@@ -33,7 +33,7 @@ exports.main = async (event, context) => {
                     message: '用户不存在'
                 }
             }
-            
+
             // 验证密码是否正确
             if (user.data[0].password !== password) {
                 return {
@@ -41,7 +41,7 @@ exports.main = async (event, context) => {
                     message: '密码错误'
                 }
             }
-            
+
             // 返回成功结果
             return {
                 code: 0,
@@ -52,7 +52,7 @@ exports.main = async (event, context) => {
                 message: '登录成功'
             }
         }
-        
+
         // 微信登录逻辑（保留原有逻辑）
         // 查询用户是否已存在
         let user = await userCollection.where({
@@ -66,7 +66,7 @@ exports.main = async (event, context) => {
                 message: '未提供登录信息'
             }
         }
-        
+
         // 如果用户不存在，则创建新用户
         if (user.data.length === 0) {
             await userCollection.add({

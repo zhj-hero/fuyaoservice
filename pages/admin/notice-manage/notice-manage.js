@@ -75,6 +75,54 @@ Page({
         })
     },
 
+    // 隐藏/显示通知
+    toggleNoticeActive: function (e) {
+        // 检查管理员权限
+        if (!this.data.isAdmin) {
+            wx.showToast({
+                title: '无权限操作',
+                icon: 'none'
+            })
+            return
+        }
+
+        const { id, isActive } = e.currentTarget.dataset
+        wx.showLoading({
+            title: '处理中...',
+        })
+
+        wx.cloud.callFunction({
+            name: 'updateNotice',
+            data: {
+                id: id,
+                isActive: !isActive
+            },
+            success: res => {
+                wx.hideLoading()
+                if (res.result.code === 0) {
+                    wx.showToast({
+                        title: '操作成功',
+                        icon: 'success'
+                    })
+                    this.fetchNoticeList()
+                } else {
+                    wx.showToast({
+                        title: res.result.message || '操作失败',
+                        icon: 'none'
+                    })
+                }
+            },
+            fail: err => {
+                wx.hideLoading()
+                console.error('操作失败', err)
+                wx.showToast({
+                    title: '操作失败，请稍后再试',
+                    icon: 'none'
+                })
+            }
+        })
+    },
+
     // 发布通知
     publishNotice: function () {
         const { newNoticeContent } = this.data
@@ -126,6 +174,15 @@ Page({
 
     // 删除通知
     deleteNotice: function (e) {
+        // 检查管理员权限
+        if (!this.data.isAdmin) {
+            wx.showToast({
+                title: '无权限操作',
+                icon: 'none'
+            })
+            return
+        }
+
         const noticeId = e.currentTarget.dataset.id
         wx.showModal({
             title: '确认删除',

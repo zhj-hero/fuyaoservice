@@ -33,7 +33,7 @@ Page({
         })
 
         wx.cloud.callFunction({
-            name: 'getMessageList',
+            name: 'getMessages',
             success: res => {
                 wx.hideLoading()
                 if (res.result.code === 0) {

@@ -37,6 +37,13 @@ textarea {
   align-items: center;
 }
 
+.action-buttons {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10rpx;
+  font-size: 20rpx;
+}
+
 .notice-content {
   flex: 1;
 }

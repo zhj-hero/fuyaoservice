@@ -13,7 +13,10 @@
           <text>{{item.content}}</text>
           <text class="notice-time">{{item.createTime}}</text>
         </view>
-        <button bindtap="deleteNotice" data-id="{{item._id}}" size="mini" type="warn">删除</button>
+        <view class="action-buttons">
+          <button bindtap="deleteNotice" data-id="{{item._id}}" size="mini" type="warn">删除</button>
+          <button size="mini" type="primary" bindtap="toggleNoticeActive" data-id="{{item._id}}" data-is-active="{{item.isActive}}">{{item.isActive ? '隐藏' : '显示'}}</button>
+        </view>
       </view>
     </block>
     <view class="no-data" wx:if="{{showEmpty}}">
