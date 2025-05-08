@@ -198,10 +198,11 @@
 }
 
 .info-row .value {
-  white-space: nowrap;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   flex: 1;
   color: #333;
-  flex: 1;
 }
 
 .booking-actions {
