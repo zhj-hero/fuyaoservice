@@ -64,7 +64,7 @@
     <!-- 备注输入 -->
     <view class="form-group">
       <view class="form-label">备注</view>
-      <textarea class="form-textarea" placeholder="请输入备注信息（选填）" value="{{remark}}" bindinput="inputRemark"></textarea>
+      <textarea class="form-textarea" placeholder="请输入备注信息，不超过100字（选填）" value="{{remark}}" bindinput="inputRemark" maxlength="100"></textarea>
     </view>
   </view>
   
