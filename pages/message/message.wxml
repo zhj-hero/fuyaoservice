@@ -36,10 +36,15 @@
               <view class="comment-user-info">
                 <text class="comment-username">{{comment.userName}}</text>
                 <text class="comment-time">{{comment.createTime}}</text>
+                <text wx:if="{{comment.parentId}}" class="reply-to">回复 @{{getReplyToName(comment.parentName)}} (parentId:{{comment.parentId}})</text>
               </view>
             </view>
             <view class="comment-content">
               <text>{{comment.content}}</text>
+            </view>
+            <view class="comment-actions">
+              <text class="action-btn" bindtap="showReplyInput" data-id="{{item._id}}" data-comment-id="{{comment._id}}">回复</text>
+              <text wx:if="{{isAdmin || comment._openid === app.globalData.openid}}" class="action-btn delete" bindtap="deleteComment" data-message-id="{{item._id}}" data-comment-id="{{comment._id}}">删除</text>
             </view>
           </view>
         </view>

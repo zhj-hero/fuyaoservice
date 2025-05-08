@@ -5,7 +5,7 @@ const db = cloud.database()
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-    const { messageId, content } = event
+    const { messageId, content, parentId } = event
     const wxContext = cloud.getWXContext()
 
     // 验证用户是否登录
@@ -55,7 +55,9 @@ exports.main = async (event, context) => {
             createTime: db.serverDate(),
             openid: wxContext.OPENID,
             userName: user.name || '匿名用户',
-            avatarUrl: user.avatarUrl || ''
+            avatarUrl: user.avatarUrl || '',
+            parentId: parentId || null,
+            parentName: parentId ? messageRes.data.comments.find(comment => comment._id === parentId).userName : ''
         }
 
         // 更新留言，添加评论

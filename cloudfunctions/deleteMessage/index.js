@@ -28,13 +28,13 @@ exports.main = async (event, context) => {
 
         // 获取用户信息，判断是否为管理员
         const userRes = await db.collection('users').where({
-            _openid: wxContext.OPENID
+            openid: wxContext.OPENID
         }).get()
 
         const isAdmin = userRes.data.length > 0 && userRes.data[0].isAdmin
 
         // 检查权限：只有留言作者或管理员可以删除留言
-        if (messageRes.data._openid !== wxContext.OPENID && !isAdmin) {
+        if (messageRes.data.openid !== wxContext.OPENID && !isAdmin) {
             return {
                 code: 403,
                 message: '无权限操作'

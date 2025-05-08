@@ -24,9 +24,17 @@ exports.main = async (event, context) => {
 
         // 获取用户信息，判断是否为管理员
         const userRes = await db.collection('users').where({
-            _openid: openid
+            openid: openid  // 统一使用openid字段
         }).get()
-        const isAdmin = userRes.data.length > 0 && userRes.data[0].isAdmin
+        
+        if (!userRes.data || userRes.data.length === 0) {
+            return {
+                code: 403,
+                message: '用户不存在'
+            }
+        }
+        
+        const isAdmin = Boolean(userRes.data[0].isAdmin)  // 确保转换为布尔值
 
         // 构建查询条件
         let query = noticesCollection.orderBy('createTime', 'desc')

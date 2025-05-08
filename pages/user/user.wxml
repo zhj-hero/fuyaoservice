@@ -58,7 +58,7 @@
             </view>
           </view>
           <view class="booking-actions">
-            <button class="btn-cancel" bindtap="cancelBooking" data-id="{{item._id}}" wx:if="{{item.status === 'pending' || item.status === 'approved'}}">取消预订</button>
+            <button class="btn-cancel" bindtap="cancelBooking" data-id="{{item._id}}" wx:if="{{item.status === 'pending' }}">取消预订</button>
           </view>
         </view>
       </block>
