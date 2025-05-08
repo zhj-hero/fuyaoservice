@@ -24,6 +24,10 @@
             <text class="label">终止日期：</text>
             <text class="value">{{item.endDate}}</text>
           </view>
+          <view class="info-row">
+            <text class="label">备注信息：</text>
+            <text class="value">{{item.remark}}</text>
+          </view>
         </view>
         <view class="reservation-actions">
           <button bindtap="approveReservation" data-id="{{item._id}}" data-seat-id="{{item.seatId}}" size="mini" type="primary">通过</button>

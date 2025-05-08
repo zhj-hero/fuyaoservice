@@ -73,7 +73,9 @@ Page({
             case 'occupied':
               statusText = '已占用'
               break
-
+            case 'reserved':
+              statusText = '已预订'
+              break
           }
 
           seat.statusText = statusText
@@ -90,7 +92,7 @@ Page({
             })
             setTimeout(() => {
               wx.navigateBack()
-            }, 1500)
+            }, 200)
           }
         } else {
           wx.showToast({
@@ -99,7 +101,7 @@ Page({
           })
           setTimeout(() => {
             wx.navigateBack()
-          }, 1500)
+          }, 200)
         }
       },
       fail: err => {
@@ -111,7 +113,7 @@ Page({
         })
         setTimeout(() => {
           wx.navigateBack()
-        }, 1500)
+        }, 200)
       }
     })
   },
@@ -233,23 +235,13 @@ Page({
         wx.hideLoading()
 
         if (res.result.code === 0) {
-          const seats = res.result.data.map(seat => {
-            // 添加状态文本
-            let statusText = '未知'
-            switch (seat.status) {
-              case 'available':
-                statusText = '空闲'
-                break
-              case 'occupied':
-                statusText = '已占用'
-                break
-            }
-
-            return {
+          // 确保只返回状态为available的座位
+          const seats = res.result.data
+            .filter(seat => seat.status === 'available')
+            .map(seat => ({
               ...seat,
-              statusText
-            }
-          })
+              statusText: '空闲'
+            }))
 
           this.setData({
             availableSeats: seats
@@ -286,7 +278,7 @@ Page({
 
   // 提交预订
   submitBooking: function () {
-    const { seatId, startDate, endDate, seatInfo } = this.data
+    const { userId, seatId, startDate, endDate, seatInfo } = this.data
 
     if (!seatId) {
       wx.showToast({
@@ -349,7 +341,7 @@ Page({
           // 返回上一页
           setTimeout(() => {
             wx.navigateBack()
-          }, 1500)
+          }, 200)
         } else {
           wx.showToast({
             title: res.result.message || '预订失败',

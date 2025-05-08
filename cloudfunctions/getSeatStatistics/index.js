@@ -26,6 +26,11 @@ exports.main = async (event, context) => {
             status: 'available'
         }).count()
 
+        // // 查询已预约座位数
+        // const reservedSeats = await seatsCollection.where({
+        //     status: 'reserved'
+        // }).count()
+
         // 查询今日预订数
         const bookingsCollection = db.collection('bookings')
         const today = new Date()

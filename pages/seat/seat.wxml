@@ -25,6 +25,10 @@
           <text>空闲</text>
         </view>
         <view class="legend-item">
+          <view class="legend-color reserved"></view>
+          <text>已预订</text>
+        </view>
+        <view class="legend-item">
           <view class="legend-color occupied"></view>
           <text>已占用</text>
         </view>

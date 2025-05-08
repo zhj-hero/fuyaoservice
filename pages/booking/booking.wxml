@@ -16,22 +16,12 @@
         <text class="label">类型：</text>
         <text class="value">{{seatInfo.type}}</text>
       </view>
-      <view class="info-item" wx:if="{{seatInfo.features && seatInfo.features.length}}">
-        <text class="label">设施：</text>
-        <text class="value">{{seatInfo.features.join('、')}}</text>
-      </view>
-      <view class="info-item" wx:if="{{seatInfo.description}}">
-        <text class="label">描述：</text>
-        <text class="value">{{seatInfo.description}}</text>
-      </view>
     </view>
   </view>
 
   <!-- 预订表单 -->
   <view class="booking-form">
     <view class="form-title">预订信息</view>
-    
-    
     <!-- 日期选择器行 -->
     <view class="date-picker-row">
       <!-- 开始日期 -->

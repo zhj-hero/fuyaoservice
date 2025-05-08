@@ -15,6 +15,18 @@ exports.main = async (event, context) => {
         }
     }
 
+    // 检查用户是否有待审核的预订
+    const pendingRes = await db.collection('bookings').where({
+        userId: wxContext.OPENID,
+        status: 'pending'
+    }).get()
+    if (pendingRes.data && pendingRes.data.length > 0) {
+        return {
+            code: 6,
+            message: '您已有待审核的预订，请等待审核完成后再预订'
+        }
+    }
+
     // 获取座位信息并校验状态
     const seatRes = await db.collection('seats').doc(seatId).get().catch(() => null)
     if (!seatRes || !seatRes.data) {
@@ -66,6 +78,13 @@ exports.main = async (event, context) => {
     try {
         // 保存预约记录
         await db.collection('bookings').add({ data: booking })
+
+        // 更新座位状态为已预订
+        await db.collection('seats').doc(seatId).update({
+            data: {
+                status: 'reserved'
+            }
+        })
 
         // // 发送订阅消息给管理员
         // await cloud.openapi.subscribeMessage.send({

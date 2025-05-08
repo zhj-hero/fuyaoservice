@@ -1,5 +1,5 @@
 // 云函数入口文件
-import cloud from 'wx-server-sdk'
+const cloud = require('wx-server-sdk')
 
 cloud.init({
     env: cloud.DYNAMIC_CURRENT_ENV
@@ -34,6 +34,14 @@ exports.main = async (event) => {
         await bookingsCollection.doc(bookingId).update({
             data: {
                 status: 'cancelled'
+            }
+        })
+
+        // 更新座位状态为可用
+        // const seatsCollection = db.collection('seats')
+        await db.collection('seats').doc(booking.data.seatId).update({
+            data: {
+                status: 'available'
             }
         })
 

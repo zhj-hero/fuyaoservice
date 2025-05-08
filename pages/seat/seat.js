@@ -7,7 +7,7 @@ Page({
         seats: [],
         filteredSeats: [],
         searchText: '',
-        filterOptions: ['全部', '空闲', '已占用'],
+        filterOptions: ['全部', '空闲', '已预订', '已占用'],
         filterIndex: 0,
         showSeatDetail: false,
         selectedSeat: null
@@ -74,7 +74,7 @@ Page({
             });
             // 读取并应用后立即清除状态，避免影响后续访问
             wx.removeStorageSync('seatStatus');
-        } 
+        }
         // 如果 storage 中没有状态，则不改变当前的 filterIndex
         // 这样可以保留用户在页面上自己选择的筛选条件
 
@@ -110,6 +110,9 @@ Page({
                                 break
                             case 'occupied':
                                 statusText = '已占用'
+                                break
+                            case 'reserved':
+                                statusText = '已预订'
                                 break
                         }
 
@@ -174,7 +177,7 @@ Page({
         // 设置200ms延迟执行筛选
         this.searchTimer = setTimeout(() => {
             this.filterSeats();
-        }, 1000);
+        }, 200);
     },
 
 
@@ -205,7 +208,8 @@ Page({
         if (filterIndex > 0) {
             const statusMap = {
                 1: 'available',  // 空闲
-                2: 'occupied'   // 已占用
+                2: 'reserved',   // 已预订
+                3: 'occupied'    // 已占用
             }
 
             const targetStatus = statusMap[filterIndex]

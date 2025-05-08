@@ -1,11 +1,12 @@
 /* pages/seat/seat.wxss */
+/* 页面容器样式 */
 .container {
   padding: 20rpx;
   background-color: #f8f8f8;
   min-height: 100vh;
 }
 
-/* 筛选栏样式 */
+/* 筛选栏样式 - 包含搜索框和筛选器 */
 .filter-bar {
   display: flex;
   justify-content: space-between;
@@ -59,14 +60,6 @@
   margin-left: 10rpx;
 }
 
-/* 座位状态样式 */
-.seat-status-container {
-  background-color: #fff;
-  border-radius: 10rpx;
-  padding: 10rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
 
 /* 筛选结果样式 */
 .filtered-results {
@@ -87,6 +80,16 @@
   height: 40rpx;
   line-height: 40rpx;
 }
+
+/* 座位状态区域 - 显示座位状态统计和图例 */
+.seat-status-container {
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding: 10rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
 
 .seat-status-header {
   display: flex;
@@ -130,35 +133,16 @@
   background-color: #4CAF50;
 }
 
+.legend-color.reserved {
+  background-color: #FFC107;
+}
+
 .legend-color.occupied {
   background-color: #F44336;
 }
 
 
-
-.seat {
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8rpx;
-  font-size: 22rpx;
-  color: #fff;
-  box-shadow: 0 2rpx 5rpx rgba(0, 0, 0, 0.1);
-}
-
-.seat.available {
-  background-color: #4CAF50;
-}
-
-.seat.occupied {
-  background-color: #F44336;
-}
-
-
-
-/* 座位列表样式 */
+/* 座位列表区域 - 显示所有座位信息 */
 .seat-list {
   background-color: #fff;
   border-radius: 10rpx;
@@ -241,6 +225,10 @@
   background-color: #4CAF50;
 }
 
+.seat-status.reserved {
+  background-color: #FFC107;
+}
+
 .seat-status.occupied {
   background-color: #F44336;
 }
@@ -271,7 +259,7 @@
   box-shadow: 0 4rpx 10rpx rgba(58, 127, 237, 0.3);
 }
 
-/* 座位详情弹窗 */
+/* 座位详情弹窗 - 显示座位详细信息 */
 .seat-detail-modal {
   position: fixed;
   top: 0;
@@ -344,7 +332,7 @@
 
 .detail-value.available,
 .detail-value.occupied,
-.detail-value.booked,
+.detail-value.reserved,
 .detail-value.maintenance {
   color: #fff;
   padding: 2rpx 12rpx;
@@ -361,13 +349,10 @@
   background-color: #F44336;
 }
 
-.detail-value.booked {
+.detail-value.reserved {
   background-color: #FFC107;
 }
 
-.detail-value.maintenance {
-  background-color: #9E9E9E;
-}
 
 .modal-footer {
   display: flex;
