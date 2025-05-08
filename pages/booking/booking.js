@@ -25,6 +25,15 @@ Page({
       return
     }
 
+    // 获取用户信息并填充表单
+    if (app.globalData.userInfo) {
+      const { name, phone } = app.globalData.userInfo
+      this.setData({
+        name: name || '',
+        phone: phone || ''
+      })
+    }
+
     // 获取座位ID
     if (options.seatId) {
       this.setData({
