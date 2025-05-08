@@ -104,7 +104,8 @@ Page({
     // 座位状态变更处理
     onStatusChange: function (e) {
         const statusIndex = e.detail.value
-        const status = statusIndex === 0 ? 'available' : 'occupied'
+        const statusOptions = ['available', 'occupied']
+        const status = statusOptions[statusIndex]
 
         this.setData({
             'seatInfo.status': status
