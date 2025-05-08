@@ -110,10 +110,18 @@
 .comment-item {
   padding: 10rpx 0;
   border-bottom: 1rpx solid #eee;
+  display: flex;
+  flex-direction: column;
 }
 
 .comment-item:last-child {
   border-bottom: none;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10rpx;
 }
 
 .comment-header {
