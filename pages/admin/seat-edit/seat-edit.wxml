@@ -19,8 +19,8 @@
   
   <view class="form-item">
     <text class="label">座位状态</text>
-    <picker mode="selector" range="{{['空闲','已占用']}}" value="{{seatInfo.status === 'available' ? 0 : 1}}" bindchange="onStatusChange">
-      <view class="picker">{{seatInfo.status === 'available' ? '空闲' : '已占用'}}</view>
+    <picker mode="selector" range="{{['空闲','已占用','已预订']}}" value="{{seatInfo.status === 'available' ? 0 : seatInfo.status === 'occupied' ? 1 : 2}}" bindchange="onStatusChange">
+      <view class="picker">{{seatInfo.statusText || (seatInfo.status === 'available' ? '空闲' : seatInfo.status === 'occupied' ? '已占用' : '已预订')}}</view>
     </picker>
   </view>
   

@@ -77,25 +77,25 @@ Page({
     },
 
     // 座位编号变更处理
-    onSeatNumberChange: function(e) {
+    onSeatNumberChange: function (e) {
         this.setData({
             'seatInfo.seatNumber': e.detail.value
         })
     },
-    
+
     // 座位区域变更处理
-    onSeatAreaChange: function(e) {
+    onSeatAreaChange: function (e) {
         this.setData({
             'seatInfo.seatArea': e.detail.value
         })
     },
-    
+
     // 座位类型变更处理
-    onTypeChange: function(e) {
+    onTypeChange: function (e) {
         const typeIndex = e.detail.value
-        const typeArray = ['半沉浸','沉浸桌','侧进式']
+        const typeArray = ['半沉浸', '沉浸桌', '侧进式']
         const type = typeArray[typeIndex]
-        
+
         this.setData({
             'seatInfo.type': type
         })
@@ -104,11 +104,19 @@ Page({
     // 座位状态变更处理
     onStatusChange: function (e) {
         const statusIndex = e.detail.value
-        const statusOptions = ['available', 'occupied']
+        const statusOptions = ['available', 'occupied', 'reserved']
         const status = statusOptions[statusIndex]
+        
+        // 添加状态文本映射
+        const statusTextMap = {
+            'available': '空闲',
+            'occupied': '已占用', 
+            'reserved': '已预订'
+        }
 
         this.setData({
-            'seatInfo.status': status
+            'seatInfo.status': status,
+            'seatInfo.statusText': statusTextMap[status] // 同步更新状态文本
         })
     },
 
@@ -129,7 +137,8 @@ Page({
                     seatNumber: seatInfo.seatNumber,
                     seatArea: seatInfo.seatArea,
                     type: seatInfo.type,
-                    status: seatInfo.status
+                    status: seatInfo.status,
+                    statusText: seatInfo.statusText // 新增statusText字段
                 }
             },
             success: res => {
