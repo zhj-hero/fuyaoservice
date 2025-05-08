@@ -46,91 +46,91 @@ Page({
       isLoggedIn: app.globalData.isLoggedIn,
       isAdmin: app.globalData.isAdmin
     })
-    
-    // 先刷新留言列表
+
+    // 刷新留言列表
     this.fetchMessageList()
-    
-    // 然后测试getReplyToName（可选）
-    console.log('测试getReplyToName:', this.getReplyToName(''));
   },
 
-  // 获取留言列表
-  // 获取回复对象的用户名
-  getReplyToName: function(parentId) {
-      return this.data.userNameMap[parentId] || '未知用户';
+  // 处理评论数据，添加被回复者的用户名
+  processComments: function (comments, userNameMap) {
+    return comments.map(comment => {
+      return {
+        ...comment,
+        replyUserName: comment.parentId ? userNameMap[comment.parentId] : null
+      }
+    });
   },
 
   fetchMessageList: function (page = 1) {
-      wx.showLoading({
-        title: '加载中...',
-      })
-  
-      wx.cloud.callFunction({
-        name: 'getMessages',
-        data: {
-          page: page,
-          pageSize: this.data.pageSize
-        },
-        success: res => {
-          wx.hideLoading()
-          if (res.result.code === 0) {
-            // 构建用户名映射
-            const userNameMap = {};
-            const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list];
-            
-            // 调试日志：打印原始数据
-            console.log('原始评论数据:', res.result.data.list);
-            
-            messageList.forEach(message => {
-              if (message.comments) {
-                message.comments.forEach(comment => {
-                  userNameMap[comment._id] = comment.userName;
-                  // 调试日志：打印每条评论的映射关系
-                  console.log(`构建映射: ${comment._id} => ${comment.userName}`);
-                });
-              }
-            });
-  
-            // 调试日志：打印完整的userNameMap
-            console.log('最终userNameMap:', userNameMap);
-            
-            const total = res.result.data.total;
-            const hasMore = messageList.length < total;
-  
-            this.setData({
-              messageList: messageList,
-              showEmpty: messageList.length === 0,
-              currentPage: page,
-              totalMessages: total,
-              hasMoreMessages: hasMore,
-              isAdmin: res.result.data.isAdmin,
-              userNameMap: userNameMap // 更新用户名映射
-            });
-          } else {
-            // 正确获取留言列表数据
-            const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list]
-            const total = res.result.data.total
-            const hasMore = messageList.length < total
-  
-            this.setData({
-              messageList: messageList,
-              showEmpty: messageList.length === 0,
-              currentPage: page,
-              totalMessages: total,
-              hasMoreMessages: hasMore,
-              isAdmin: res.result.data.isAdmin
-            })
-          }
-        },
-        fail: err => {
-          wx.hideLoading()
-          console.error('获取留言列表失败', err)
-          wx.showToast({
-            title: '获取留言列表失败，请稍后再试',
-            icon: 'none'
+    wx.showLoading({
+      title: '加载中...',
+    })
+
+    wx.cloud.callFunction({
+      name: 'getMessages',
+      data: {
+        page: page,
+        pageSize: this.data.pageSize
+      },
+      success: res => {
+        wx.hideLoading()
+        if (res.result.code === 0) {
+          // 构建用户名映射
+          const userNameMap = {};
+          const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list];
+
+          messageList.forEach(message => {
+            if (message.comments) {
+              message.comments.forEach(comment => {
+                userNameMap[comment._id] = comment.userName;
+              });
+            }
+          });
+
+          // 处理每条留言的评论，添加被回复者的用户名
+          messageList.forEach(message => {
+            if (message.comments && message.comments.length > 0) {
+              message.comments = this.processComments(message.comments, userNameMap);
+            }
+          });
+
+          const total = res.result.data.total;
+          const hasMore = messageList.length < total;
+
+          this.setData({
+            messageList: messageList,
+            showEmpty: messageList.length === 0,
+            currentPage: page,
+            totalMessages: total,
+            hasMoreMessages: hasMore,
+            isAdmin: res.result.data.isAdmin,
+            userNameMap: userNameMap // 更新用户名映射
+          });
+        } else {
+          // 正确获取留言列表数据
+          const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list]
+          const total = res.result.data.total
+          const hasMore = messageList.length < total
+
+          this.setData({
+            messageList: messageList,
+            showEmpty: messageList.length === 0,
+            currentPage: page,
+            totalMessages: total,
+            hasMoreMessages: hasMore,
+            isAdmin: res.result.data.isAdmin
           })
         }
-      })
+      },
+      fail: err => {
+        wx.hideLoading()
+        console.error('获取留言列表失败', err)
+        wx.showToast({
+          title: '获取留言列表失败，请稍后再试',
+          icon: 'none'
+        })
+      }
+    })
   },
 
   // 输入留言内容
@@ -249,23 +249,12 @@ Page({
       })
       return
     }
-  
+
     // 获取被回复评论的用户名
     const commentId = e.currentTarget.dataset.commentId;
-    let replyToUserName = '用户';
-    
-    // 查找评论用户名
-    for (const message of this.data.messageList) {
-      if (message.comments) {
-        for (const comment of message.comments) {
-          if (comment._id === commentId) {
-            replyToUserName = comment.userName || '用户';
-            break;
-          }
-        }
-      }
-    }
-    
+    // 直接从userNameMap中获取用户名
+    const replyToUserName = this.data.userNameMap[commentId] || '用户';
+
     this.setData({
       commentingMessageId: e.currentTarget.dataset.id,
       replyingCommentId: commentId,
@@ -274,7 +263,7 @@ Page({
       newCommentContent: ''
     });
   },
-  
+
   // 在sendComment方法中传递被回复者用户名
   sendComment: function () {
     // 检查登录状态
@@ -469,20 +458,13 @@ Page({
     })
   },
 
-  
-
   // 获取回复对象的用户名
-  // 根据评论ID获取被回复的用户名
-
   getReplyToName: function (commentId) {
-      console.log('===== 调试开始 =====');
-      console.log('传入的commentId:', commentId, '类型:', typeof commentId);
-      console.log('当前userNameMap:', this.data.userNameMap);
-      console.log('所有keys:', Object.keys(this.data.userNameMap));
-      console.log('===== 调试结束 =====');
-      
-      const replyToUserName = this.data.userNameMap[commentId] || '未知用户';
-      return replyToUserName;
+    if (!commentId || commentId.trim() === '') {
+      return '未知用户';
+    }
+    const replyToUserName = this.data.userNameMap[commentId] || '未知用户';
+    return replyToUserName;
   },
 })
 

@@ -36,7 +36,7 @@
               <view class="comment-user-info">
                 <text class="comment-username">{{comment.userName}}</text>
                 <text class="comment-time">{{comment.createTime}}</text>
-                <text wx:if="{{comment.parentId}}" class="reply-to">回复 @{{getReplyToName(comment.parentName)}} (parentId:{{comment.parentId}})</text>
+                <text wx:if="{{comment.parentId}}" class="reply-to">回复 @{{comment.replyUserName || '未知用户'}} </text>
               </view>
             </view>
             <view class="comment-content">
