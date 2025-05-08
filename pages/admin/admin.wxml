@@ -9,7 +9,4 @@
   <view class="card">
     <button class="button" bindtap="navigateToNoticeManage">通知管理</button>
   </view>
-  <view class="card">
-    <button class="button" bindtap="navigateToMessageManage">留言管理</button>
-  </view>
 </view>

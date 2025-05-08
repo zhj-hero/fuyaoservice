@@ -26,10 +26,4 @@ Page({
     });
   },
 
-  navigateToMessageManage: function () {
-    wx.navigateTo({
-      url: '/pages/admin/message-manage/message-manage'
-    });
-  },
-
 });
