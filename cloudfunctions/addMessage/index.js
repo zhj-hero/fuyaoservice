@@ -35,6 +35,24 @@ exports.main = async (event, context) => {
         }).get()
         console.log('用户查询结果:', userRes)
 
+        // 检查当天留言数量
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const countRes = await db.collection('messages').where({
+            openid: wxContext.OPENID,
+            createTime: db.command.gte(today).and(db.command.lt(tomorrow))
+        }).count();
+
+        if (countRes.total >= 3) {
+            return {
+                code: 429,
+                message: '为防止刷屏，我们限制每人每日最多发布3条留言。'
+            }
+        }
+
         if (userRes.data.length === 0) {
             return {
                 code: 404,

@@ -2,9 +2,7 @@
 const app = getApp()
 
 Page({
-  /**
-   * 页面的初始数据
-   */
+  /* 页面的初始数据*/
   data: {
     messageList: [],
     showEmpty: false,
@@ -22,9 +20,7 @@ Page({
     userNameMap: {}, // 添加用户名映射对象
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  /* 生命周期函数--监听页面加载*/
   onLoad: function (options) {
     // 检查登录状态
     this.setData({
@@ -37,9 +33,7 @@ Page({
     this.fetchMessageList()
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
+  /*生命周期函数--监听页面显示*/
   onShow: function () {
     // 更新登录状态
     this.setData({
@@ -61,6 +55,107 @@ Page({
     });
   },
 
+  // 检查文本是否需要展开收起功能
+  checkContentNeedExpand: function (content) {
+    // 计算文本的行数，如果超过两行则需要展开收起功能
+    // 这里简单判断字符数，实际上可能需要更复杂的计算
+    return content && content.length > 60; // 假设平均30个字符一行
+  },
+
+  // 切换留言展开收起状态
+  toggleMessageExpand: function (e) {
+    const messageId = e.currentTarget.dataset.id;
+    const messageList = this.data.messageList;
+    const index = messageList.findIndex(item => item._id === messageId);
+
+    if (index !== -1) {
+      const isExpanded = !messageList[index].isExpanded;
+      const key = `messageList[${index}].isExpanded`;
+      this.setData({
+        [key]: isExpanded
+      });
+    }
+  },
+
+  // 切换评论展开收起状态
+  toggleCommentExpand: function (e) {
+    const messageId = e.currentTarget.dataset.messageId;
+    const commentId = e.currentTarget.dataset.commentId;
+    const messageList = this.data.messageList;
+    const messageIndex = messageList.findIndex(item => item._id === messageId);
+
+    if (messageIndex !== -1 && messageList[messageIndex].comments) {
+      const commentIndex = messageList[messageIndex].comments.findIndex(comment => comment._id === commentId);
+      if (commentIndex !== -1) {
+        const isExpanded = !messageList[messageIndex].comments[commentIndex].isExpanded;
+        const key = `messageList[${messageIndex}].comments[${commentIndex}].isExpanded`;
+        this.setData({
+          [key]: isExpanded
+        });
+      }
+    }
+  },
+
+  // 切换评论列表显示状态
+  toggleCommentList: function (e) {
+    const messageId = e.currentTarget.dataset.id;
+    const messageList = this.data.messageList;
+    const index = messageList.findIndex(item => item._id === messageId);
+
+    if (index !== -1) {
+      const showComments = !messageList[index].showComments;
+      const key = `messageList[${index}].showComments`;
+      this.setData({
+        [key]: showComments
+      });
+    }
+  },
+
+  // 处理消息列表数据
+  processMessageListData: function (res, page) {
+    // 构建用户名映射
+    const userNameMap = {};
+    const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list];
+
+    messageList.forEach(message => {
+      if (message.comments) {
+        message.comments.forEach(comment => {
+          userNameMap[comment._id] = comment.userName;
+        });
+      }
+    });
+
+    // 处理每条留言的评论，添加被回复者的用户名
+    messageList.forEach(message => {
+      // 检查留言内容是否需要展开收起
+      message.needExpand = this.checkContentNeedExpand(message.content);
+      message.isExpanded = false; // 默认收起状态
+
+      if (message.comments && message.comments.length > 0) {
+        message.comments = this.processComments(message.comments, userNameMap);
+
+        // 为每条评论添加展开收起状态
+        message.comments.forEach(comment => {
+          comment.needExpand = this.checkContentNeedExpand(comment.content);
+          comment.isExpanded = false; // 默认收起状态
+        });
+      }
+    });
+
+    const total = res.result.data.total;
+    const hasMore = messageList.length < total;
+
+    return {
+      messageList,
+      showEmpty: messageList.length === 0,
+      currentPage: page,
+      totalMessages: total,
+      hasMoreMessages: hasMore,
+      isAdmin: res.result.data.isAdmin,
+      userNameMap
+    };
+  },
+
   fetchMessageList: function (page = 1) {
     wx.showLoading({
       title: '加载中...',
@@ -75,25 +170,10 @@ Page({
       success: res => {
         wx.hideLoading()
         if (res.result.code === 0) {
-          // 构建用户名映射
-          const userNameMap = {};
+          const processedData = this.processMessageListData(res, page);
+          this.setData(processedData);
+        } else {
           const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list];
-
-          messageList.forEach(message => {
-            if (message.comments) {
-              message.comments.forEach(comment => {
-                userNameMap[comment._id] = comment.userName;
-              });
-            }
-          });
-
-          // 处理每条留言的评论，添加被回复者的用户名
-          messageList.forEach(message => {
-            if (message.comments && message.comments.length > 0) {
-              message.comments = this.processComments(message.comments, userNameMap);
-            }
-          });
-
           const total = res.result.data.total;
           const hasMore = messageList.length < total;
 
@@ -103,23 +183,8 @@ Page({
             currentPage: page,
             totalMessages: total,
             hasMoreMessages: hasMore,
-            isAdmin: res.result.data.isAdmin,
-            userNameMap: userNameMap // 更新用户名映射
-          });
-        } else {
-          // 正确获取留言列表数据
-          const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list]
-          const total = res.result.data.total
-          const hasMore = messageList.length < total
-
-          this.setData({
-            messageList: messageList,
-            showEmpty: messageList.length === 0,
-            currentPage: page,
-            totalMessages: total,
-            hasMoreMessages: hasMore,
             isAdmin: res.result.data.isAdmin
-          })
+          });
         }
       },
       fail: err => {
@@ -149,9 +214,9 @@ Page({
 
   // 输入评论内容
   onCommentInput: function (e) {
-    if (e.detail.value.length > 200) {
+    if (e.detail.value.length > 140) {
       wx.showToast({
-        title: '评论内容不能超过200字',
+        title: '评论内容不能超过140字',
         icon: 'none'
       })
       return
