@@ -1,0 +1,28 @@
+<!--components/seat-detail-modal/seat-detail-modal.wxml-->
+<view class="seat-detail-modal" wx:if="{{show}}">
+  <view class="modal-mask" bindtap="onClose"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">座位详情</text>
+    </view>
+    <view class="modal-body">
+      <view class="detail-item">
+        <text class="detail-label">座位号：</text>
+        <text class="detail-value">{{seat.seatNumber}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">类型：</text>
+        <text class="detail-value">{{seat.type}}</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">状态：</text>
+        <text class="detail-value {{seat.status}}">{{seat.statusText}}</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="modal-btn btn-cancel" bindtap="onClose">关闭</view>
+      <view class="modal-btn btn-book" bindtap="onBook" wx:if="{{seat.status === 'available'}}">预订座位</view>
+      <view class="modal-btn btn-manage" bindtap="onManage" wx:if="{{isAdmin}}">管理座位</view>
+    </view>
+  </view>
+</view>
