@@ -13,7 +13,8 @@ Page({
     dateOptions: [],
     availableSeats: [],
     showSeatSelector: false,
-    selectedSeatId: ''
+    selectedSeatId: '',
+    showSuccessModal: false  // 添加成功弹窗显示状态
   },
 
   onLoad: function (options) {
@@ -342,15 +343,10 @@ Page({
         }
 
         if (res.result.code === 0) {
-          wx.showToast({
-            title: '预订成功',
-            icon: 'success'
+          // 显示成功弹窗，而不是Toast
+          this.setData({
+            showSuccessModal: true
           })
-
-          // 返回上一页
-          setTimeout(() => {
-            wx.navigateBack()
-          }, 200)
         } else {
           wx.showToast({
             title: res.result.message || '预订失败',
@@ -367,6 +363,21 @@ Page({
         })
       }
     })
+  },
+
+  // 关闭成功弹窗
+  closeSuccessModal: function() {
+    this.setData({
+      showSuccessModal: false
+    })
+    wx.navigateBack()
+  },
+
+  // 处理客服消息回调
+  handleContact: function(e) {
+    console.log('客服消息回调', e.detail)
+    // 可以在这里处理客服消息回调
+    this.closeSuccessModal()
   },
 
   // 取消预订
