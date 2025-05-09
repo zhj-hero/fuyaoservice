@@ -75,6 +75,7 @@ exports.main = async (event) => {
             const updateSeat = await transaction.collection('seats').doc(seatId).update({
                 data: {
                     status: 'occupied',
+                    statusText: '已占用',
                     updatedAt: db.serverDate()
                 }
             })
