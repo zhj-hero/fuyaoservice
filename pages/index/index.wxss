@@ -238,7 +238,14 @@ page {
   transition: all 0.3s ease;
 }
 
+/* 删除以下样式 */
 .btn-primary:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+/* 添加新的样式类 */
+.btn-primary-hover {
   opacity: 0.9;
   transform: scale(0.98);
 }

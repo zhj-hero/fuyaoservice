@@ -17,5 +17,5 @@
     </picker>
   </view>
   
-  <button type="primary" bindtap="addSeat">添加座位</button>
+  <button hover-class="button-hover" hover-stay-time="100"bindtap="addSeat">>添加座位</button>
 </view>

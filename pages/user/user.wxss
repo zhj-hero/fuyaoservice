@@ -270,36 +270,22 @@
 .btn-primary {
   background-color: #3A7FED;
   color: #fff;
-  transition: all 0.2s ease;
 }
 
-.btn-primary:active {
-  opacity: 0.8;
-  transform: scale(0.98);
-}
 
 .btn-admin {
   background-color: #FF9800;
   color: #fff;
-  transition: all 0.2s ease;
 }
 
-.btn-admin:active {
-  opacity: 0.8;
-  transform: scale(0.98);
-}
+
 
 .btn-logout {
 
   background-color: #E0E0E0;
   color: #333;
-  transition: all 0.2s ease;
 }
 
-.btn-logout:active {
-  opacity: 0.8;
-  transform: scale(0.98);
-}
 
 /* 用户管理部分 */
 .header {

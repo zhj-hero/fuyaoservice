@@ -50,13 +50,15 @@ button {
     margin-top: 20px;
 }
 
-button:active {
-    background: #06ad54;
-}
 
 .picker {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: #f9f9f9;
+}
+
+.button-hover {
+  opacity: 0.9;
+  transform: scale(0.98);
 }

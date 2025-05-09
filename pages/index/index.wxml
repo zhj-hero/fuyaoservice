@@ -95,7 +95,7 @@
   </view>
 
   <view class="admin-entry" wx:if="{{isAdmin}}" bindtap="navigateToAdmin">
-    <button class="btn-primary">进入管理后台</button>
+    <button class="btn-primary" hover-class="btn-primary-hover" hover-stay-time="100">进入管理后台</button>
   </view>
   
 <!-- 悬浮客服按钮 -->

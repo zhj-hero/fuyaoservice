@@ -23,6 +23,6 @@
       <view class="picker">{{seatInfo.statusText || (seatInfo.status === 'available' ? '空闲' : seatInfo.status === 'occupied' ? '已占用' : '已预订')}}</view>
     </picker>
   </view>
-  
-  <button type="primary" bindtap="saveSeat">保存修改</button>
+  <button hover-class="button-hover" hover-stay-time="100"bindtap="saveSeat">保存修改</button>
+
 </view>
