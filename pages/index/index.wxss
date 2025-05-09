@@ -261,3 +261,46 @@ page {
 .wx-modal-btn {
   font-size: 22rpx !important;
 }
+
+
+/* 悬浮客服按钮 */
+.float-contact-btn {
+  position: fixed;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: transparent;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 0;
+  margin: 0;
+  right: 0rpx;
+  bottom: 200rpx;
+}
+
+.float-contact-btn image {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+/* 透明客服按钮 */
+.contact-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.contact-button::after {
+  border: none;
+}

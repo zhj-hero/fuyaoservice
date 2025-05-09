@@ -20,7 +20,9 @@ Page({
     modalVisible: false,
     modalTitle: '',
     modalContent: '',
-    modalTime: ''
+    modalTime: '',
+    buttonTop: 460, // 按钮初始位置
+    buttonLeft: 380
   },
 
   onLoad: function (options) {
@@ -283,5 +285,28 @@ Page({
 
 
 
+
+
+  // 处理客服消息回调
+  handleContact: function(e) {
+    console.log('客服消息回调', e.detail)
+    // 可以在这里处理客服消息回调
+    // e.detail.path 是小程序消息指定的路径
+    // e.detail.query 是小程序消息指定的查询参数
+  },
+
+
+  // 处理按钮拖动
+  moveButton: function (e) {
+  
+  // 获取手指的坐标
+  var touch = e.touches[0];
+  
+  // 设置按钮位置为手指位置
+  this.setData({
+    buttonTop: touch.clientY - 40,  // 减去按钮高度的一半，使按钮中心跟随手指
+    buttonLeft: touch.clientX - 40  // 减去按钮宽度的一半，使按钮中心跟随手指
+  });
+},
 })
 

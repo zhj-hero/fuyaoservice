@@ -101,7 +101,7 @@ exports.main = async (event, context) => {
 
         return {
             code: 0,
-            message: '预约申请已提交，等待管理员审核'
+            message: '预约申请已提交，请联系客服审核'
         }
     } catch (e) {
         return {

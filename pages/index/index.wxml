@@ -97,4 +97,10 @@
   <view class="admin-entry" wx:if="{{isAdmin}}" bindtap="navigateToAdmin">
     <button class="btn-primary">进入管理后台</button>
   </view>
+  
+<!-- 悬浮客服按钮 -->
+<view class="float-contact-btn" catchtouchmove="moveButton" style="top: {{buttonTop}}px; left: {{buttonLeft}}px;">
+  <button open-type="contact" bindcontact="handleContact" class="contact-button"></button>
+  <image src="/static/images/customer-service.png" mode="aspectFit"></image>
+</view>
 </view>
