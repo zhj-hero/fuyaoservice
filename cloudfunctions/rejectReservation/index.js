@@ -20,11 +20,28 @@ exports.main = async (event, context) => {
             }
         }
 
+        // 获取预订记录中的座位ID
+        const booking = await db.collection('bookings').doc(reservationId).get()
+        if (!booking.data) {
+            return {
+                code: 404,
+                message: '未找到预订记录'
+            }
+        }
+
         // 更新预订状态为已拒绝
         const result = await db.collection('bookings').doc(reservationId).update({
             data: {
                 status: 'rejected',
                 updatedAt: db.serverDate()
+            }
+        })
+
+        // 更新座位状态为空闲
+        await db.collection('seats').doc(booking.data.seatId).update({
+            data: {
+                status: 'available',
+                statusText: '空闲'
             }
         })
 
