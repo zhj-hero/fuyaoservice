@@ -16,7 +16,7 @@ exports.main = async (event, context) => {
     }
 
     // 检查用户是否有待审核的预订
-    const pendingRes = await db.collection('bookings').where({
+    const pendingRes = await db.collection('reservations').where({
         userId: wxContext.OPENID,
         status: 'pending'
     }).get()
@@ -44,7 +44,7 @@ exports.main = async (event, context) => {
     }
 
     // 并发控制：再次检查该时间段是否已被预订
-    const overlap = await db.collection('bookings')
+    const overlap = await db.collection('reservations')
         .where({
             seatId,
             $or: [
@@ -60,7 +60,7 @@ exports.main = async (event, context) => {
     }
 
     // 写入预约信息
-    const booking = {
+    const reservation = {
         seatId,
         seatNumber: seatNumber || seat.number, // 使用传入的座位号或从座位信息中获取
         userId: wxContext.OPENID,
@@ -77,7 +77,7 @@ exports.main = async (event, context) => {
 
     try {
         // 保存预约记录
-        await db.collection('bookings').add({ data: booking })
+        await db.collection('reservations').add({ data: reservation })
 
         // 更新座位状态为已预订
         await db.collection('seats').doc(seatId).update({
@@ -87,17 +87,6 @@ exports.main = async (event, context) => {
             }
         })
 
-        // // 发送订阅消息给管理员
-        // await cloud.openapi.subscribeMessage.send({
-        //     touser: '管理员OPENID', // 需要替换为实际管理员OPENID
-        //     templateId: '订阅消息模板ID', // 需要替换为实际模板ID
-        //     page: 'pages/admin/reservation-review/reservation-review',
-        //     data: {
-        //         thing1: { value: seat.name },
-        //         time2: { value: startDate + '至' + endDate },
-        //         thing3: { value: '新预约待审核' }
-        //     }
-        // })
 
         return {
             code: 0,

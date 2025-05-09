@@ -21,17 +21,17 @@ exports.main = async (event, context) => {
     }
     
     // 获取待审核订单数
-    const pendingCount = await db.collection('bookings').where({
+    const pendingCount = await db.collection('reservations').where({
       status: 'pending'
     }).count()
     
     // 获取已通过订单数
-    const approvedCount = await db.collection('bookings').where({
+    const approvedCount = await db.collection('reservations').where({
       status: 'approved'
     }).count()
     
     // 获取已完成订单数
-    const completedCount = await db.collection('bookings').where({
+    const completedCount = await db.collection('reservations').where({
       status: 'completed'
     }).count()
     

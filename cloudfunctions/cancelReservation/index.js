@@ -9,7 +9,7 @@ cloud.init({
 exports.main = async (event) => {
     try {
         // 获取预订ID
-        const { bookingId } = event
+        const {  reserveId } = event
 
         // 获取openid
         const wxContext = cloud.getWXContext()
@@ -19,11 +19,11 @@ exports.main = async (event) => {
         const db = cloud.database()
 
         // 查询预订信息
-        const bookingsCollection = db.collection('bookings')
-        const booking = await bookingsCollection.doc(bookingId).get()
+        const reservationCollection = db.collection('reservations')
+        const reservation = await reservationCollection.doc(reserveId).get()
 
         // 验证预订是否属于当前用户
-        if (booking.data.userId !== openid) {
+        if (reservation.data.userId !== openid) {
             return {
                 code: -1,
                 message: '无权取消此预订'
@@ -31,7 +31,7 @@ exports.main = async (event) => {
         }
 
         // 更新预订状态为已取消
-        await bookingsCollection.doc(bookingId).update({
+        await reservationCollection.doc(reserveId).update({
             data: {
                 status: 'cancelled'
             }
@@ -39,7 +39,7 @@ exports.main = async (event) => {
 
         // 更新座位状态为可用
         // const seatsCollection = db.collection('seats')
-        await db.collection('seats').doc(booking.data.seatId).update({
+        await db.collection('seats').doc(reservation.data.seatId).update({
             data: {
                 status: 'available',
                 statusText: '可用'

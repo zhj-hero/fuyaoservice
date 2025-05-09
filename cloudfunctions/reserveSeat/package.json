@@ -1,5 +1,5 @@
 {
-    "name": "bookSeat",
+    "name": "reserveSeat",
     "version": "1.0.0",
     "description": "预订座位的云函数",
     "main": "index.js",

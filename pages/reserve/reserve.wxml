@@ -70,8 +70,8 @@
   
   <!-- 按钮区域 -->
   <view class="btn-group">
-    <button class="btn-cancel" bindtap="cancelBooking">取消</button>
-    <button class="btn-submit" bindtap="submitBooking">提交预订</button>
+    <button class="btn-cancel" bindtap="cancelReserve">取消</button>
+    <button class="btn-submit" bindtap="submitReserve">提交预订</button>
   </view>
 </view>
 

@@ -22,7 +22,7 @@ exports.main = async (event, context) => {
         }
 
         // 删除预订记录
-        const result = await db.collection('bookings').doc(id).remove()
+        const result = await db.collection('reservations').doc(id).remove()
 
         return {
             code: 0,

@@ -26,19 +26,7 @@ exports.main = async (event, context) => {
             status: 'available'
         }).count()
 
-        // // 查询已预约座位数
-        // const reservedSeats = await seatsCollection.where({
-        //     status: 'reserved'
-        // }).count()
 
-        // 查询今日预订数
-        const bookingsCollection = db.collection('bookings')
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-
-        const todayBookings = await bookingsCollection.where({
-            createTime: _.gte(today)
-        }).count()
 
         // 返回成功结果
         return {
@@ -47,8 +35,6 @@ exports.main = async (event, context) => {
                 totalSeats: totalSeats.total,
                 occupiedSeats: occupiedSeats.total,
                 availableSeats: availableSeats.total,
-                todayBookings: todayBookings.total,
-                occupancyRate: totalSeats.total > 0 ? (occupiedSeats.total / totalSeats.total * 100).toFixed(2) + '%' : '0%'
             },
             message: '获取座位统计成功'
         }

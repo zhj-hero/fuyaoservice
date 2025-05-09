@@ -74,6 +74,6 @@
   seat="{{selectedSeat}}"
   isAdmin="{{isAdmin}}"
   bind:close="closeSeatDetail"
-  bind:book="bookSeat"
+  bind:book="reserveSeat"
   bind:manage="manageSeat"
 />

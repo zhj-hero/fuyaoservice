@@ -28,20 +28,6 @@ exports.main = async (event, context) => {
             }
         }
 
-        // 检查座位是否有未完成的预约
-        const bookingCheck = await db.collection('bookings')
-            .where({
-                seatId: event.seatId,
-                status: _.in(['pending', 'approved', 'using'])
-            })
-            .count()
-
-        if (bookingCheck.total > 0) {
-            return {
-                code: 1,
-                message: '该座位有未完成的预约，无法删除'
-            }
-        }
 
         // 删除座位
         await db.collection('seats').doc(event.seatId).remove()

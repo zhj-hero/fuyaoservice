@@ -37,7 +37,7 @@ Page({
                         title: '删除中...',
                     })
                     wx.cloud.callFunction({
-                        name: 'deleteBooking',
+                        name: 'deleteReservation',
                         data: {
                             id: id
                         },
@@ -77,19 +77,19 @@ Page({
         })
 
         wx.cloud.callFunction({
-            name: 'getUserBookings',
+            name: 'getUserReservations',
             data: {
                 isAdmin: this.data.isAdmin,
-                viewAllBookings: true
+                viewAllReserves: true
             },
             success: res => {
                 wx.hideLoading()
                 // console.log('获取到的预订列表数据:', res.result.data)
                 if (res.result.code === 0) {
-                    const bookings = res.result.data.map(booking => {
+                    const reservations = res.result.data.map(reserve => {
                         // 处理状态文本
                         let statusText = '未知';
-                        switch (booking.status) {
+                        switch (reserve.status) {
                             case 'pending':
                                 statusText = '待审核';
                                 break;
@@ -104,13 +104,13 @@ Page({
                                 break;
                         }
                         return {
-                            ...booking,
+                            ...reserve,
                             statusText,
-                            seatId: booking.seatId
+                            seatId: reserve.seatId
                         }
                     })
                     this.setData({
-                        reservationList: bookings
+                        reservationList: reservations
                     })
                 } else {
                     wx.showToast({

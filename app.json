@@ -11,7 +11,7 @@
     "pages/admin/notice-manage/notice-manage",
     "pages/admin/seat-add/seat-add",
     "pages/admin/seat-edit/seat-edit",
-    "pages/booking/booking",
+    "pages/reserve/reserve",
     "pages/message/message",
     "pages/user/edit-profile",
     "pages/seatmap/seatmap"

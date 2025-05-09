@@ -27,15 +27,15 @@
   <!-- 标签页内容 -->
   <view class="tab-content">
     <!-- 我的预订 -->
-    <view class="booking-list" wx:if="{{activeTab === 0}}">
+    <view class="reserve-list" wx:if="{{activeTab === 0}}">
 
-      <block wx:if="{{bookings.length > 0}}">
-        <view class="booking-item" wx:for="{{bookings}}" wx:key="_id">
-          <view class="booking-header">
+      <block wx:if="{{reservations.length > 0}}">
+        <view class="reserve-item" wx:for="{{reservations}}" wx:key="_id">
+          <view class="reserve-header">
             <view class="seat-number">{{item.seatNumber}}</view>
-            <view class="booking-status {{item.status}}">{{item.statusText}}</view>
+            <view class="reserve-status {{item.status}}">{{item.statusText}}</view>
           </view>
-          <view class="booking-info">
+          <view class="reserve-info">
             <view class="info-row">
               <text class="label">开始日期：</text>
               <text class="value">{{item.startDate}}</text>
@@ -57,8 +57,8 @@
               <text class="value">{{item.remark}}</text>
             </view>
           </view>
-          <view class="booking-actions">
-            <button class="btn-cancel" bindtap="cancelBooking" data-id="{{item._id}}" wx:if="{{item.status === 'pending' }}">取消预订</button>
+          <view class="reserve-actions">
+            <button class="btn-cancel" bindtap="cancelReserve" data-id="{{item._id}}" wx:if="{{item.status === 'pending' }}">取消预订</button>
           </view>
         </view>
       </block>

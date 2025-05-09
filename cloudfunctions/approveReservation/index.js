@@ -50,7 +50,7 @@ exports.main = async (event) => {
         
         try {
             // 检查预订记录是否存在
-            const reservation = await transaction.collection('bookings').doc(reservationId).get()
+            const reservation = await transaction.collection('reservations').doc(reservationId).get()
             if (!reservation.data) {
                 await transaction.rollback()
                 throw new Error('预订记录不存在')
@@ -64,7 +64,7 @@ exports.main = async (event) => {
             }
 
             // 更新预订状态为已批准
-            const updateReservation = await transaction.collection('bookings').doc(reservationId).update({
+            const updateReservation = await transaction.collection('reservations').doc(reservationId).update({
                 data: {
                     status: 'approved',
                     updatedAt: db.serverDate()

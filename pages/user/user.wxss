@@ -127,7 +127,7 @@
 }
 
 /* 预订列表 */
-.booking-item {
+.reserve-item {
   margin-bottom: 30rpx;
   padding: 20rpx;
   border-radius: 10rpx;
@@ -136,12 +136,12 @@
   transition: all 0.3s ease;
 }
 
-.booking-item:hover {
+.reserve-item:hover {
   transform: translateY(-2rpx);
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
 }
 
-.booking-header {
+.reserve-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -156,30 +156,30 @@
   color: #333;
 }
 
-.booking-status {
+.reserve-status {
   padding: 6rpx 16rpx;
   border-radius: 20rpx;
   font-size: 24rpx;
   color: #fff;
 }
 
-.booking-status.pending {
+.reserve-status.pending {
   background-color: #FFC107;
 }
 
-.booking-status.approved {
+.reserve-status.approved {
   background-color: #4CAF50;
 }
 
-.booking-status.rejected {
+.reserve-status.rejected {
   background-color: #F44336;
 }
 
-.booking-status.cancelled {
+.reserve-status.cancelled {
   background-color: #9E9E9E;
 }
 
-.booking-info {
+.reserve-info {
   margin-bottom: 20rpx;
 }
 
@@ -205,7 +205,7 @@
   color: #333;
 }
 
-.booking-actions {
+.reserve-actions {
   display: flex;
   justify-content: flex-end;
 }
@@ -327,7 +327,7 @@
     padding: 20rpx;
   }
   
-  .booking-item {
+  .reserve-item {
     padding: 15rpx;
   }
 }

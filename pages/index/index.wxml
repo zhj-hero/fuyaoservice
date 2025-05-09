@@ -36,10 +36,10 @@
 
 
   <view class="quick-actions">
-    <view class="action-item" bindtap="navigateToSeatBooking">
+    <view class="action-item" bindtap="navigateToSeatreservation">
       <text>预订座位</text>
     </view>
-    <view class="action-item" bindtap="navigateToMyBookings">
+    <view class="action-item" bindtap="navigateToMyreservations">
       <text>我的预订</text>
     </view>
     <view class="action-item" bindtap="navigateToSeatMap">

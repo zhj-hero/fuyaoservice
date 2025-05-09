@@ -258,7 +258,7 @@ Page({
     },
 
     // 预订座位
-    bookSeat: function () {
+    reserveSeat: function () {
         const { selectedSeat } = this.data
         if (!selectedSeat) return
 
@@ -272,7 +272,7 @@ Page({
         }
 
         wx.navigateTo({
-            url: `/pages/booking/booking?seatId=${selectedSeat._id}`,
+            url: `/pages/reserve/reserve?seatId=${selectedSeat._id}`,
         })
     },
 

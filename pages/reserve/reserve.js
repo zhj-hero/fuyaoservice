@@ -1,4 +1,4 @@
-// pages/booking/booking.js
+// pages/reserve/reserve.js
 const app = getApp()
 
 Page({
@@ -287,7 +287,7 @@ Page({
   },
 
   // 提交预订
-  submitBooking: function () {
+  submitReserve: function () {
     const { userId, seatId, startDate, endDate, seatInfo } = this.data
 
     if (!seatId) {
@@ -321,7 +321,7 @@ Page({
 
     // 调用云函数预订座位
     wx.cloud.callFunction({
-      name: 'bookSeat',
+      name: 'reserveSeat',
       data: {
         seatId,
         seatNumber: seatInfo ? seatInfo.seatNumber : '', // 传递座位号
@@ -381,7 +381,7 @@ Page({
   },
 
   // 取消预订
-  cancelBooking: function () {
+  cancelReserve: function () {
     wx.navigateBack()
   }
 })

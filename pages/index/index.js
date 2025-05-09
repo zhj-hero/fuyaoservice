@@ -168,7 +168,7 @@ Page({
   },
 
   // 跳转到座位预订页面
-  navigateToSeatBooking: function (e) {
+  navigateToSeatreservation: function (e) {
     // 跳转到座位页面并自动筛选出空闲座位
     wx.setStorageSync('seatStatus', 'available');
     wx.switchTab({
@@ -187,7 +187,7 @@ Page({
   },
 
   // 跳转到我的预订页面
-  navigateToMyBookings: function () {
+  navigateToMyreservations: function () {
     // 检查登录状态
     if (!app.globalData.isLoggedIn) {
       wx.navigateTo({

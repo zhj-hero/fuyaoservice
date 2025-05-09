@@ -5,7 +5,7 @@ Page({
     data: {
         userInfo: null,
         isAdmin: false,
-        bookings: [],
+        reservations: [],
         activeTab: 0,
         tabs: ['我的预订', '个人信息']
     },
@@ -51,7 +51,7 @@ Page({
             });
         }
 
-        this.fetchUserBookings();
+        this.fetchUserReservations();
         // 添加全局数据监听
         if (!this._userInfoListener) {
             this._userInfoListener = () => {
@@ -80,26 +80,26 @@ Page({
     },
 
     // 获取用户预订信息
-    fetchUserBookings: function () {
+    fetchUserReservations: function () {
         wx.showLoading({
             title: '加载中...',
         })
 
         wx.cloud.callFunction({
-            name: 'getUserBookings',
+            name: 'getUserReservations',
             data: {
                 isAdmin: this.data.isAdmin,
-                viewAllBookings: false // 在用户页面始终设置为false，确保即使是管理员也只能查看自己的预订
+                viewAllReserves: false // 修正拼写错误：viewAllrteserves -> viewAllReserves
             },
             success: res => {
                 wx.hideLoading()
 
                 if (res.result.code === 0) {
                     // 处理预订数据，确保兼容新旧数据格式
-                    const bookings = res.result.data.map(booking => {
+                    const reservations = res.result.data.map(reserve => {
                         // 处理状态文本
                         let statusText = '未知';
-                        switch (booking.status) {
+                        switch (reserve.status) {
                             case 'pending':
                                 statusText = '待审核';
                                 break;
@@ -116,27 +116,37 @@ Page({
                                 statusText = '已完成';
                                 break;
                         }
-                        booking.statusText = statusText;
+                        reserve.statusText = statusText;
 
                         // 确保兼容新旧数据格式
-                        if (!booking.startDate && booking.date) {
-                            booking.startDate = booking.date;
+                        if (!reserve.startDate && reserve.date) {
+                            reserve.startDate = reserve.date;
                         }
-                        if (!booking.endDate && booking.date) {
-                            booking.endDate = booking.date;
+                        if (!reserve.endDate && reserve.date) {
+                            reserve.endDate = reserve.date;
                         }
 
-                        return booking;
+                        return reserve;
                     });
 
                     this.setData({
-                        bookings: bookings
+                        reservations: reservations
                     })
                 } else {
-                    wx.showToast({
-                        title: res.result.message || '获取预订信息失败',
-                        icon: 'none'
-                    })
+                    console.error('获取预订信息失败:', res.result)
+                    // 检查是否是集合不存在的错误
+                    if (res.result.message && res.result.message.includes('collection not exists')) {
+                        wx.showToast({
+                            title: '预订数据未初始化，请联系管理员',
+                            icon: 'none',
+                            duration: 3000
+                        })
+                    } else {
+                        wx.showToast({
+                            title: res.result.message || '获取预订信息失败',
+                            icon: 'none'
+                        })
+                    }
                 }
             },
             fail: err => {
@@ -151,30 +161,30 @@ Page({
     },
 
     // 取消预订
-    cancelBooking: function (e) {
-        const bookingId = e.currentTarget.dataset.id
+    cancelReserve: function (e) {
+        const reserveId = e.currentTarget.dataset.id
 
         wx.showModal({
             title: '提示',
             content: '确定要取消该预订吗？',
             success: (res) => {
                 if (res.confirm) {
-                    this.doCancelBooking(bookingId)
+                    this.doCancelReserve(reserveId)
                 }
             }
         })
     },
 
     // 执行取消预订
-    doCancelBooking: function (bookingId) {
+    doCancelReserve: function (reserveId) {
         wx.showLoading({
             title: '取消中...',
         })
 
         wx.cloud.callFunction({
-            name: 'cancelBooking',
+            name: 'cancelReservation',
             data: {
-                bookingId
+                reserveId: reserveId
             },
             success: res => {
                 wx.hideLoading()
@@ -186,7 +196,7 @@ Page({
                     })
 
                     // 刷新预订列表
-                    this.fetchUserBookings()
+                    this.fetchUserReservations()
                 } else {
                     wx.showToast({
                         title: res.result.message || '取消失败',

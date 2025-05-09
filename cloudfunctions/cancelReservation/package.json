@@ -1,5 +1,5 @@
 {
-    "name": "cancelBooking",
+    "name": "cancelReservation",
     "version": "1.0.0",
     "description": "取消预订云函数",
     "main": "index.js",
