@@ -41,7 +41,8 @@ exports.main = async (event) => {
         // const seatsCollection = db.collection('seats')
         await db.collection('seats').doc(booking.data.seatId).update({
             data: {
-                status: 'available'
+                status: 'available',
+                statusText: '可用'
             }
         })
 
