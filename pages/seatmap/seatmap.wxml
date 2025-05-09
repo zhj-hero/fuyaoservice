@@ -1,2 +1,2 @@
 <!--pages/seatmap/seatmap.wxml-->
-<image src="/static/images/seatmap.png" mode="aspectFill"></image>
+<image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/seatmap.png"></image>

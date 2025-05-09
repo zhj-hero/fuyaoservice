@@ -1,7 +1,7 @@
 <!--pages/login/login.wxml-->
 <view class="container">
   <view class="logo-container">
-    <image class="logo" src="/static/images/logo.png" mode="aspectFit"></image>
+    <image class="logo" src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/logo.png" mode="aspectFit"></image>
     
   </view>
 

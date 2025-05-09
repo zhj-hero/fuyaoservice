@@ -13,22 +13,22 @@
   <view class="banner">
     <swiper indicator-dots autoplay circular>
       <swiper-item>
-        <image src="/static/images/banner1.jpg" mode="aspectFill"></image>
+        <image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/banner1.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
-        <image src="/static/images/banner2.jpg" mode="aspectFill"></image>
+        <image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/banner2.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
-        <image src="/static/images/banner6.jpg" mode="aspectFill"></image>
+        <image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/banner3.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
-        <image src="/static/images/banner3.jpg" mode="aspectFill"></image>
+        <image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/banner4.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
-        <image src="/static/images/banner4.jpg" mode="aspectFill"></image>
+        <image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/banner5.jpg" mode="aspectFill"></image>
       </swiper-item>
       <swiper-item>
-        <image src="/static/images/banner5.jpg" mode="aspectFill"></image>
+        <image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/banner6.jpg" mode="aspectFill"></image>
       </swiper-item>
     </swiper>
   </view>
