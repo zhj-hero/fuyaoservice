@@ -11,6 +11,11 @@ Page({
       availableSeats: 0,
       occupiedSeats: 0
     },
+    orderStats: {
+      pendingCount: 0,
+      approvedCount: 0,
+      completedCount: 0
+    },
     app: getApp(), // 添加app到data中，以便在wxml中访问
     modalVisible: false,
     modalTitle: '',
@@ -43,6 +48,49 @@ Page({
     this.setData({
       app: app
     })
+    
+    // 检查用户权限并加载数据
+    this.checkUserRole();
+    
+    // 获取座位统计
+    this.getSeatStatistics();
+    
+    // 如果是管理员，获取订单统计
+    if (this.data.isAdmin) {
+      this.getReserveStatistics();
+    }
+  },
+
+  // 检查用户角色和权限
+  checkUserRole: function() {
+    // 更新管理员状态
+    const isAdmin = app.globalData.isAdmin || false;
+    this.setData({
+      isAdmin: isAdmin
+    });
+  },
+
+  // 获取座位统计
+  getSeatStatistics: function() {
+    // 这个函数已经通过 fetchSeatStatistics 实现
+    this.fetchSeatStatistics();
+  },
+
+  // 获取订单统计
+  getReserveStatistics: function() {
+    wx.cloud.callFunction({
+      name: 'getReserveStatistics',
+      success: res => {
+        if (res.result && res.result.code === 0) {
+          this.setData({
+            orderStats: res.result.data
+          });
+        }
+      },
+      fail: err => {
+        console.error('获取订单统计失败', err);
+      }
+    });
   },
 
   // 处理微信登录
@@ -214,5 +262,26 @@ Page({
     wx.navigateTo({
       url: '/pages/admin/admin',
     })
-  }
+  },
+
+  // 获取订单统计
+  getReserveStatistics: function () {
+    wx.cloud.callFunction({
+      name: 'getReserveStatistics',
+      success: res => {
+        if (res.result && res.result.code === 0) {
+          this.setData({
+            'orderStats': res.result.data
+          });
+        }
+      },
+      fail: err => {
+        console.error('获取订单统计失败', err);
+      }
+    });
+  },
+
+
+
 })
+

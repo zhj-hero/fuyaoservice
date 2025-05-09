@@ -66,6 +66,23 @@
     </view>
   </view>
 
+  <!-- 管理员可见的订单统计 -->
+  <view class="section-title" wx:if="{{isAdmin}}">订单统计</view>
+  <view class="status-card" wx:if="{{isAdmin}}">
+    <view class="status-item">
+      <text class="status-label">待审核</text>
+      <text class="status-value text-warning">{{orderStats.pendingCount || 0}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">已通过</text>
+      <text class="status-value text-success">{{orderStats.approvedCount || 0}}</text>
+    </view>
+    <view class="status-item">
+      <text class="status-label">已完成</text>
+      <text class="status-value">{{orderStats.completedCount || 0}}</text>
+    </view>
+  </view>
+
   <view class="section-title">最新通知</view>
   <view class="notification-list">
     <view class="notification-item" wx:for="{{notifications}}" wx:key="index" bindtap="viewNotification" data-id="{{item._id}}" data-title="通   知" data-content="{{item.content}}" data-time="{{item.createTime}}"> 
