@@ -14,7 +14,8 @@ Page({
     availableSeats: [],
     showSeatSelector: false,
     selectedSeatId: '',
-    showSuccessModal: false  // 添加成功弹窗显示状态
+    showSuccessModal: false,  // 添加成功弹窗显示状态
+    price: 0  // 添加价格字段
   },
 
   onLoad: function (options) {
@@ -91,7 +92,8 @@ Page({
           seat.statusText = statusText
 
           this.setData({
-            seatInfo: seat
+            seatInfo: seat,
+            price: this.calculatePrice()
           })
 
           // 如果座位不可用，提示用户
@@ -169,10 +171,16 @@ Page({
       startDate: e.detail.value
     })
 
+    // 立即计算并更新价格
+    this.setData({
+      price: this.calculatePrice()
+    })
+
     // 如果结束日期早于开始日期，自动调整为开始日期
     if (new Date(this.data.endDate) < new Date(e.detail.value)) {
       this.setData({
-        endDate: e.detail.value
+        endDate: e.detail.value,
+        price: this.calculatePrice()
       })
     }
   },
@@ -188,6 +196,11 @@ Page({
     } else {
       this.setData({
         endDate: e.detail.value
+      })
+
+      // 立即计算并更新价格
+      this.setData({
+        price: this.calculatePrice()
       })
     }
   },
@@ -366,7 +379,7 @@ Page({
   },
 
   // 关闭成功弹窗
-  closeSuccessModal: function() {
+  closeSuccessModal: function () {
     this.setData({
       showSuccessModal: false
     })
@@ -374,10 +387,44 @@ Page({
   },
 
   // 处理客服消息回调
-  handleContact: function(e) {
+  handleContact: function (e) {
     console.log('客服消息回调', e.detail)
     // 可以在这里处理客服消息回调
     this.closeSuccessModal()
+  },
+
+  // 计算价格
+  calculatePrice: function () {
+    const { seatInfo, startDate, endDate } = this.data
+    if (!seatInfo || !startDate || !endDate) return 0
+
+    // 计算预订天数
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1
+
+    // 根据座位类型和预订天数计算价格
+    let price = 0
+    const seatType = seatInfo.type
+
+    if (days < 31) {
+      // 日卡价格
+      if (seatType === '半沉浸') price = days * 10
+      else if (seatType === '沉浸桌') price = days * 12
+      else if (seatType === '侧进式') price = days * 15
+    } else if (days < 180) {
+      // 月卡价格（日均价格）
+      if (seatType === '半沉浸') price = days * (288 / 31)
+      else if (seatType === '沉浸桌') price = days * (328 / 31)
+      else if (seatType === '侧进式') price = days * (368 / 31)
+    } else {
+      // 半年卡价格（日均价格）
+      if (seatType === '半沉浸') price = days * (1700 / 180)
+      else if (seatType === '沉浸桌') price = days * (1900 / 180)
+      else if (seatType === '侧进式') price = days * (2100 / 180)
+    }
+
+    return Math.floor(price)
   },
 
   // 取消预订

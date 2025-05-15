@@ -7,7 +7,7 @@
     </view>
     <view class="modal-body">
       <view class="detail-item">
-        <text class="detail-label">座位号：</text>
+        <text class="detail-label">桌号：</text>
         <text class="detail-value">{{seat.seatNumber}}</text>
       </view>
       <view class="detail-item">
@@ -18,7 +18,24 @@
         <text class="detail-label">状态：</text>
         <text class="detail-value {{seat.status}}">{{seat.statusText}}</text>
       </view>
+      <view class="detail-item" wx:if="{{seat.type === '半沉浸'}}">
+        <text class="detail-label">价格：</text>
+        <text class="detail-value">10元/日，288元/月，1700元/半年</text>
+      </view>
+      <view class="detail-item" wx:if="{{seat.type === '沉浸桌'}}">
+        <text class="detail-label">价格：</text>
+        <text class="detail-value">12元/日，328元/月，1900元/半年</text>
+      </view>
+      <view class="detail-item" wx:if="{{seat.type === '侧进式'}}">
+        <text class="detail-label">价格：</text>
+        <text class="detail-value">15元/日，368元/月，2100元/半年</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-label">备注：</text>
+        <text class="detail-value">不足一月按日卡收费，不足半年按月卡收费</text>
+      </view>
     </view>
+
     <view class="modal-footer">
       <view class="modal-btn btn-cancel" bindtap="onClose">关闭</view>
       <view class="modal-btn btn-book" bindtap="onBook" wx:if="{{seat.status === 'available'}}">预订座位</view>

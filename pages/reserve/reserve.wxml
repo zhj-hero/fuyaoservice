@@ -49,6 +49,14 @@
     
 
     
+    <!-- 订单价格 -->
+    <view class="form-group">
+      <view class="form-label">订单价格</view>
+      <view class="form-input price-display">
+        <text class="price-symbol">¥</text><text class="price-amount">{{price}}</text>
+      </view>
+    </view>
+    
     <!-- 姓名输入 -->
     <view class="form-group">
       <view class="form-label">姓名<text class="required">*</text></view>
@@ -71,7 +79,7 @@
   <!-- 按钮区域 -->
   <view class="btn-group">
     <button class="btn-cancel" bindtap="cancelReserve">取消</button>
-    <button class="btn-submit" bindtap="submitReserve">提交预订</button>
+    <button class="btn-submit" bindtap="submitReserve">预订</button>
   </view>
 </view>
 
@@ -107,7 +115,7 @@
   <view class="success-modal-mask"></view>
   <view class="success-modal-content">
     <view class="success-modal-title">预订成功</view>
-    <view class="success-modal-message">预订成功，请联系管理员审核</view>
+    <view class="success-modal-message">预订成功，请联系客服获取开门密码</view>
     <view class="success-modal-buttons">
       <button class="success-modal-btn cancel" bindtap="closeSuccessModal">关闭</button>
       <button class="success-modal-btn confirm" open-type="contact" bindcontact="handleContact">联系客服</button>
