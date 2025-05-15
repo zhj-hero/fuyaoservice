@@ -10,7 +10,7 @@
     <block wx:for="{{noticeList}}" wx:key="_id">
       <view class="notice-item">
         <view class="notice-content">
-          <text>{{item.content}}</text>
+          <text user-select>{{item.content}}</text>
           <text class="notice-time">{{item.createTime}}</text>
         </view>
         <view class="action-buttons">

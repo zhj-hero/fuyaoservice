@@ -54,3 +54,8 @@ textarea {
   color: #999;
   margin-top: 10rpx;
 }
+
+.notice-content text {
+  user-select: text;
+  -webkit-user-select: text;
+}

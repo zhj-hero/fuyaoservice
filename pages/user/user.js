@@ -7,7 +7,7 @@ Page({
         isAdmin: false,
         reservations: [],
         activeTab: 0,
-        tabs: ['我的预订', '个人信息']
+        tabs: ['我的预订', '个人信息', '管理后台']
     },
 
     onLoad: function (options) {
@@ -89,7 +89,7 @@ Page({
             name: 'getUserReservations',
             data: {
                 isAdmin: this.data.isAdmin,
-                viewAllReserves: false // 修正拼写错误：viewAllrteserves -> viewAllReserves
+                viewAllReserves: false // 仅查看用户自己的预订
             },
             success: res => {
                 wx.hideLoading()
@@ -240,5 +240,28 @@ Page({
                 }
             }
         })
-    }
+    },
+    // 导航到预订审核页面
+    navigateToReservationReview: function () {
+        wx.navigateTo({
+            url: '/pages/admin/reservation-review/reservation-review',
+        })
+    },
+
+    // 导航到通知管理页面
+    navigateToNoticeManage: function () {
+        wx.navigateTo({
+            url: '/pages/admin/notice-manage/notice-manage',
+        })
+    },
+
+    // 跳转到用户管理页面
+    showUserManagement: function () {
+        wx.navigateTo({
+            url: '/pages/admin/user-manage/user-manage',
+        })
+    },
+
+    // 用户管理功能已移至独立页面 /pages/admin/user-manage/user-manage.js
+
 })

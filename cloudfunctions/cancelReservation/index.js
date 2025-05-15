@@ -42,7 +42,7 @@ exports.main = async (event) => {
         await db.collection('seats').doc(reservation.data.seatId).update({
             data: {
                 status: 'available',
-                statusText: '可用'
+                statusText: '空闲'
             }
         })
 

@@ -7,7 +7,6 @@ Page({
         formData: {
             name: '',
             phone: '',
-            email: ''
         }
     },
 
@@ -26,7 +25,6 @@ Page({
             formData: {
                 name: app.globalData.userInfo.name || '',
                 phone: app.globalData.userInfo.phone || '',
-                email: ''
             }
         })
     },

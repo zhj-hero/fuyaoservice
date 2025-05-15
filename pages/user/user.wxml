@@ -16,6 +16,7 @@
     <view 
       wx:for="{{tabs}}" 
       wx:key="index" 
+      wx:if="{{index !== 2 || isAdmin}}" 
       class="tab-item {{activeTab === index ? 'active' : ''}}" 
       bindtap="switchTab" 
       data-index="{{index}}"
@@ -58,7 +59,7 @@
             </view>
           </view>
           <view class="reserve-actions">
-            <button class="btn-cancel" bindtap="cancelReserve" data-id="{{item._id}}" wx:if="{{item.status === 'pending' }}">取消预订</button>
+            <button class="btn-cancel btn" bindtap="cancelReserve" data-id="{{item._id}}" wx:if="{{item.status === 'pending' }}">取消预订</button>
           </view>
         </view>
       </block>
@@ -82,10 +83,30 @@
       </view>
       
       <view class="action-buttons">
-        <button class="btn-primary" bindtap="editUserInfo">修改信息</button>
-        <button class="btn-admin" bindtap="navigateToAdmin" wx:if="{{isAdmin}}">管理后台</button>
-        <button class="btn-logout" bindtap="logout">退出登录</button>
+        <button class="btn-primary btn" bindtap="editUserInfo">修改信息</button>
+        <button class="btn-logout btn" bindtap="logout">退出登录</button>
       </view>
+    </view>
+    
+    <!-- 管理后台 -->
+    <view class="admin-panel" wx:if="{{activeTab === 2 && isAdmin}}">
+      <view class="section-title">管理后台</view>
+      <view class="admin-options">
+        <view class="admin-option-item" bindtap="navigateToReservationReview">
+          <view class="option-icon">📋</view>
+          <view class="option-text">预订审核</view>
+        </view>
+        <view class="admin-option-item" bindtap="navigateToNoticeManage">
+          <view class="option-icon">📢</view>
+          <view class="option-text">通知管理</view>
+        </view>
+        <view class="admin-option-item" bindtap="showUserManagement">
+          <view class="option-icon">👥</view>
+          <view class="option-text">用户管理</view>
+        </view>
+      </view>
+      
+      <!-- 用户管理功能已移至独立页面 -->
     </view>
   </view>
 </view>

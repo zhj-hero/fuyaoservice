@@ -37,7 +37,7 @@
     outline: none;
 }
 
-button {
+.btn {
     background: #07c160;
     color: #fff;
     border: none;
@@ -47,8 +47,26 @@ button {
     font-size: 16px;
     text-align: center;
     margin-top: 20px;
+    display: inline-block;
+    transition: all 0.3s ease;
 }
 
+.btn:hover, .btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: #07c160;
+}
+
+.btn-danger {
+    background: #F44336;
+}
+
+.btn-default {
+    background: #1890ff;
+}
 
 .picker {
     padding: 10px;
@@ -57,8 +75,23 @@ button {
     background-color: #f9f9f9;
 }
 
-/* 添加新的样式类 */
+
 .button-hover {
     opacity: 0.9;
     transform: scale(0.98);
+}
+
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.button-group .btn {
+    flex: 1;
+    margin: 0;
+    min-width: 0;
 }

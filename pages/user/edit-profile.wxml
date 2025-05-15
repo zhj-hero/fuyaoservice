@@ -25,6 +25,6 @@
     
     
     
-    <button form-type="submit" type="primary" class="submit-btn">保存修改</button>
+    <button form-type="submit" type="primary" class="submit-btn" style="width: 220rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">保存修改</button>
   </form>
 </view>

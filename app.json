@@ -5,12 +5,11 @@
     "pages/register/register",
     "pages/seat/seat",
     "pages/user/user",
-    "pages/admin/admin",
-    "pages/admin/seat-manage/seat-manage",
     "pages/admin/reservation-review/reservation-review",
     "pages/admin/notice-manage/notice-manage",
-    "pages/admin/seat-add/seat-add",
     "pages/admin/seat-edit/seat-edit",
+    "pages/admin/user-manage/user-manage",
+    "pages/admin/user-edit/user-edit",
     "pages/reserve/reserve",
     "pages/message/message",
     "pages/user/edit-profile",
@@ -50,5 +49,6 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "debug": true
 }

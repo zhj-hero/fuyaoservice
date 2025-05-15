@@ -1,0 +1,31 @@
+<!--pages/admin/user-manage/user-manage.wxml-->
+<view class="container">
+
+  <view class="user-management">
+    <view class="user-list">
+      <block wx:if="{{userList.length > 0}}">
+        <view class="user-item" wx:for="{{userList}}" wx:key="_id">
+          <view class="info-row">
+            <text class="label">用户：</text>
+            <text class="value">{{item.name || item.nickName || '未设置'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">手机：</text>
+            <text class="value">{{item.phone || '未设置'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="label">角色：</text>
+            <text class="value">{{item.isAdmin ? '管理员' : '普通用户'}}</text>
+          </view>
+          <view class="user-actions">
+            <button class="btn-edit btn" bindtap="editUser" data-id="{{item._id}}" size="mini" data-user="{{item}}">编辑</button>
+            <button class="btn-delete btn" bindtap="deleteUser" data-id="{{item._id}}"size="mini"  wx:if="{{!item.isAdmin}}">删除</button>
+          </view>
+        </view>
+      </block>
+      <view class="no-data" wx:else>
+        <text>暂无用户数据</text>
+      </view>
+    </view>
+  </view>
+</view>

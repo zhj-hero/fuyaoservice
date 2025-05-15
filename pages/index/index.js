@@ -50,13 +50,13 @@ Page({
     this.setData({
       app: app
     })
-    
+
     // 检查用户权限并加载数据
     this.checkUserRole();
-    
+
     // 获取座位统计
     this.getSeatStatistics();
-    
+
     // 如果是管理员，获取订单统计
     if (this.data.isAdmin) {
       this.getReserveStatistics();
@@ -64,7 +64,7 @@ Page({
   },
 
   // 检查用户角色和权限
-  checkUserRole: function() {
+  checkUserRole: function () {
     // 更新管理员状态
     const isAdmin = app.globalData.isAdmin || false;
     this.setData({
@@ -73,13 +73,13 @@ Page({
   },
 
   // 获取座位统计
-  getSeatStatistics: function() {
+  getSeatStatistics: function () {
     // 这个函数已经通过 fetchSeatStatistics 实现
     this.fetchSeatStatistics();
   },
 
   // 获取订单统计
-  getReserveStatistics: function() {
+  getReserveStatistics: function () {
     wx.cloud.callFunction({
       name: 'getReserveStatistics',
       success: res => {
@@ -196,22 +196,20 @@ Page({
       return
     }
 
+    // 使用本地存储传递activeTab参数
+    wx.setStorageSync('userActiveTab', 0);
+
+    // 使用switchTab跳转到用户页面（不带查询参数）
     wx.switchTab({
-      url: '/pages/user/user?activeTab=0',
-      success: function () {
-        // 成功跳转后，设置activeTab
-        const userPage = getCurrentPages().pop();
-        if (userPage && userPage.route.includes('user')) {
-          userPage.setData({
-            activeTab: 0
-          });
-        }
+      url: '/pages/user/user',
+      success: function (res) {
+        console.log('跳转成功', res)
       },
       fail: function (err) {
         console.error('跳转失败', err);
         // 如果switchTab失败，尝试使用navigateTo
         wx.navigateTo({
-          url: '/pages/user/user?activeTab=0'
+          url: '/pages/user/user'
         });
       }
     })
@@ -261,8 +259,30 @@ Page({
 
   // 跳转到管理后台
   navigateToAdmin: function () {
-    wx.navigateTo({
-      url: '/pages/admin/admin',
+    // 检查登录状态
+    if (!app.globalData.isLoggedIn) {
+      wx.navigateTo({
+        url: '/pages/login/login',
+      })
+      return
+    }
+
+    // 使用本地存储传递activeTab参数(2表示管理后台标签页)
+    wx.setStorageSync('userActiveTab', 2);
+
+    // 跳转到用户页面
+    wx.switchTab({
+      url: '/pages/user/user',
+      success: function (res) {
+        console.log('跳转成功', res)
+      },
+      fail: function (err) {
+        console.error('跳转失败', err);
+        // 如果switchTab失败，尝试使用navigateTo
+        wx.navigateTo({
+          url: '/pages/user/user'
+        });
+      }
     })
   },
 
@@ -287,8 +307,10 @@ Page({
 
 
 
+
+
   // 处理客服消息回调
-  handleContact: function(e) {
+  handleContact: function (e) {
     console.log('客服消息回调', e.detail)
     // 可以在这里处理客服消息回调
     // e.detail.path 是小程序消息指定的路径
@@ -298,15 +320,15 @@ Page({
 
   // 处理按钮拖动
   moveButton: function (e) {
-  
-  // 获取手指的坐标
-  var touch = e.touches[0];
-  
-  // 设置按钮位置为手指位置
-  this.setData({
-    buttonTop: touch.clientY - 40,  // 减去按钮高度的一半，使按钮中心跟随手指
-    buttonLeft: touch.clientX - 40  // 减去按钮宽度的一半，使按钮中心跟随手指
-  });
-},
+
+    // 获取手指的坐标
+    var touch = e.touches[0];
+
+    // 设置按钮位置为手指位置
+    this.setData({
+      buttonTop: touch.clientY - 40,  // 减去按钮高度的一半，使按钮中心跟随手指
+      buttonLeft: touch.clientX - 40  // 减去按钮宽度的一半，使按钮中心跟随手指
+    });
+  },
 })
 

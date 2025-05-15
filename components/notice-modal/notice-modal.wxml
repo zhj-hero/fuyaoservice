@@ -5,7 +5,7 @@
       <text class="modal-title">{{title}}</text>
     </view>
     <view class="modal-body">
-      <text class="modal-content-text">{{content}}</text>
+      <text class="modal-content-text" user-select>{{content}}</text>
       <text class="modal-time" wx:if="{{time}}">{{time}}</text>
     </view>
     <view class="modal-footer">
