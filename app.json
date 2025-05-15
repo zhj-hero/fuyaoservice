@@ -10,6 +10,7 @@
     "pages/admin/seat-edit/seat-edit",
     "pages/admin/user-manage/user-manage",
     "pages/admin/user-edit/user-edit",
+    "pages/admin/seat-add/seat-add",
     "pages/reserve/reserve",
     "pages/message/message",
     "pages/user/edit-profile",

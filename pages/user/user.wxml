@@ -104,9 +104,11 @@
           <view class="option-icon">👥</view>
           <view class="option-text">用户管理</view>
         </view>
+        <view class="admin-option-item" bindtap="navigateToAddSeat">
+          <view class="option-icon">💺</view>
+          <view class="option-text">添加座位</view>
+        </view>
       </view>
-      
-      <!-- 用户管理功能已移至独立页面 -->
     </view>
   </view>
 </view>

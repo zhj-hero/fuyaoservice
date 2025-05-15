@@ -28,6 +28,41 @@ Page({
         }
 
 
+        // 对筛选结果进行排序 - 先按区域字母排序，再按座位号自然排序
+        filtered.sort((a, b) => {
+            // 先比较区域
+            const areaCompare = a.seatArea.localeCompare(b.seatArea);
+            if (areaCompare !== 0) return areaCompare;
+
+            // 区域相同则比较座位号
+            // 拆分座位号为字母和数字部分
+            function splitSeatNumber(seatNumber) {
+                const match = seatNumber.match(/^([A-Za-z]+)(\d+)(.*)$/);
+                if (match) {
+                    return {
+                        prefix: match[1] || '',
+                        number: parseInt(match[2], 10),
+                        suffix: match[3] || ''
+                    };
+                }
+                return { prefix: '', number: 0, suffix: seatNumber };
+            }
+            const aParts = splitSeatNumber(a.seatNumber);
+            const bParts = splitSeatNumber(b.seatNumber);
+
+            // 先比较字母前缀
+            const prefixCompare = aParts.prefix.localeCompare(bParts.prefix);
+            if (prefixCompare !== 0) return prefixCompare;
+
+            // 再比较数字部分
+            if (aParts.number !== bParts.number) {
+                return aParts.number - bParts.number;
+            }
+
+            // 最后比较后缀
+            return aParts.suffix.localeCompare(bParts.suffix);
+        });
+
         // 更新数据，重置搜索文本和筛选索引
         this.setData({
             filteredSeats: filtered,
@@ -217,6 +252,42 @@ Page({
                 filteredSeats = filteredSeats.filter(seat => seat.status === targetStatus)
             }
         }
+
+        // 对筛选结果进行排序 - 先按区域字母排序，再按座位号自然排序
+        filteredSeats.sort((a, b) => {
+            // 先比较区域
+            const areaCompare = a.seatArea.localeCompare(b.seatArea);
+            if (areaCompare !== 0) return areaCompare;
+
+            // 区域相同则比较座位号
+            // 拆分座位号为字母和数字部分
+            function splitSeatNumber(seatNumber) {
+                // 改进正则表达式，确保能正确匹配C1、C3等简单座位号格式
+                const match = seatNumber.match(/^([A-Za-z]+)(\d+)(.*)$/);
+                if (match) {
+                    return {
+                        prefix: match[1] || '',
+                        number: parseInt(match[2], 10),
+                        suffix: match[3] || ''
+                    };
+                }
+                return { prefix: '', number: 0, suffix: seatNumber };
+            }
+            const aParts = splitSeatNumber(a.seatNumber);
+            const bParts = splitSeatNumber(b.seatNumber);
+
+            // 先比较字母前缀
+            const prefixCompare = aParts.prefix.localeCompare(bParts.prefix);
+            if (prefixCompare !== 0) return prefixCompare;
+
+            // 再比较数字部分
+            if (aParts.number !== bParts.number) {
+                return aParts.number - bParts.number;
+            }
+
+            // 最后比较后缀
+            return aParts.suffix.localeCompare(bParts.suffix);
+        });
 
         this.setData({
             filteredSeats

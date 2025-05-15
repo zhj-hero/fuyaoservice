@@ -1,10 +1,5 @@
 <!--pages/admin/user-edit/user-edit.wxml-->
 <view class="container">
-  <view class="header">
-    <view class="title">编辑用户</view>
-    <view class="back-btn" bindtap="goBack">返回</view>
-  </view>
-
   <view class="user-edit-form" wx:if="{{userData}}">
     <form bindsubmit="formSubmit">
       <view class="form-group">

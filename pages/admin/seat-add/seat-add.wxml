@@ -1,4 +1,4 @@
-<!--pages/admin/seat-edit/seat-edit.wxml-->
+<!--pages/admin/seat-add/seat-add.wxml-->
 <view class="container">
   <view class="form-item">
     <text class="label">座位编号</text>
@@ -25,7 +25,6 @@
   </view>
   
   <view class="button-group">
-    <view class="btn btn-primary" bindtap="saveSeat">保存修改</view>
-    <view class="btn btn-danger" bindtap="deleteSeat">删除座位</view>
+    <view class="btn btn-primary" bindtap="addSeat">添加座位</view>
   </view>
 </view>

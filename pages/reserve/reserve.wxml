@@ -115,7 +115,7 @@
   <view class="success-modal-mask"></view>
   <view class="success-modal-content">
     <view class="success-modal-title">预订成功</view>
-    <view class="success-modal-message">预订成功，请联系客服获取开门密码</view>
+    <view class="success-modal-message">预订成功，请联系管理员确认</view>
     <view class="success-modal-buttons">
       <button class="success-modal-btn cancel" bindtap="closeSuccessModal">关闭</button>
       <button class="success-modal-btn confirm" open-type="contact" bindcontact="handleContact">联系客服</button>

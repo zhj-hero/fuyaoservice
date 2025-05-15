@@ -7,18 +7,6 @@
   box-sizing: border-box;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30rpx;
-}
-
-.title {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-}
 
 .back-btn {
   font-size: 28rpx;
@@ -79,19 +67,21 @@
 .btn-cancel {
   width: 45%;
   height: 80rpx;
-  line-height: 80rpx;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 40rpx;
   font-size: 30rpx;
-  color: #666;
+  color: #333;
   background-color: #f0f0f0;
 }
 
 .btn-submit {
   width: 45%;
   height: 80rpx;
-  line-height: 80rpx;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 40rpx;
   font-size: 30rpx;
   color: #fff;

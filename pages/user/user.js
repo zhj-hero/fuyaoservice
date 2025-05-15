@@ -262,6 +262,11 @@ Page({
         })
     },
 
-    // 用户管理功能已移至独立页面 /pages/admin/user-manage/user-manage.js
+    // 跳转至座位管理页面
+    navigateToAddSeat: function () {
+        wx.navigateTo({
+            url: '/pages/admin/seat-add/seat-add',
+        })
+    },
 
 })
