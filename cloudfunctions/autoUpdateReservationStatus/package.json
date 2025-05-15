@@ -1,0 +1,14 @@
+{
+    "name": "autoUpdateReservationStatus",
+    "version": "1.0.0",
+    "description": "自动更新预约状态的云函数，每天00:00检查已通过的预约，将过期预约状态更新为已结束，座位状态更新为空闲",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "wx-server-sdk": "^3.0.0"
+    }
+}
