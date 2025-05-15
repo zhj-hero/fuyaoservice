@@ -43,8 +43,8 @@
   background-color: #9E9E9E;
 }
 
-.status.completedc{
-  background-color:blue
+.status.completed {
+  background-color: #3A7FED
 }
 
 .reservation-list {

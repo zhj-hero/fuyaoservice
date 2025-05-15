@@ -102,7 +102,7 @@ Page({
                             case 'cancelled':
                                 statusText = '已取消';
                                 break;
-                            case'completed':
+                            case 'completed':
                                 statusText = '已完成';
                                 break;
                             default:
