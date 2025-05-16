@@ -16,7 +16,7 @@
         <view class="message-header">
           <image class="avatar" src="{{item.avatarUrl || '/static/images/default-avatar.png'}}"></image>
           <view class="user-info">
-            <text class="username">{{item.userName}}</text>
+            <text class="nickname">{{item.nickName}}</text>
             <text class="time">{{item.createTime}}</text>
           </view>
         </view>
@@ -38,9 +38,9 @@
             <view class="comment-header">
               <image class="comment-avatar" src="{{comment.avatarUrl || '/static/images/default-avatar.png'}}"></image>
               <view class="comment-user-info">
-                <text class="comment-username">{{comment.userName}}</text>
+                <text class="comment-nickname">{{comment.nickName}}</text>
                 <text class="comment-time">{{comment.createTime}}</text>
-                <text wx:if="{{comment.parentId}}" class="reply-to">回复 @{{comment.replyUserName || '未知用户'}} </text>
+                <text wx:if="{{comment.parentId}}" class="reply-to">回复 @{{comment.replyNickName || '未知用户'}} </text>
               </view>
             </view>
             <view class="comment-content {{comment.isExpanded ? 'expanded' : 'collapsed'}}">

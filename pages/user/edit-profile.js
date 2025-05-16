@@ -79,24 +79,21 @@ Page({
                         ...formData
                     }
 
+                    // 更新本地存储
+                    wx.setStorageSync('userInfo', app.globalData.userInfo)
+
                     wx.showToast({
                         title: '修改成功',
                         icon: 'success'
                     })
 
-                    // 更新本地存储的用户信息
-                    wx.setStorageSync('userInfo', app.globalData.userInfo);
-
                     // 返回上一页并刷新数据
-                    wx.navigateBack({
-                        success: function () {
-                            const pages = getCurrentPages();
-                            const prevPage = pages[pages.length - 1];
-                            if (prevPage) {
-                                prevPage.onShow();
-                            }
-                        }
-                    })
+                    const pages = getCurrentPages()
+                    const prevPage = pages[pages.length - 1]
+                    if (prevPage) {
+                        prevPage.onShow()
+                    }
+                    wx.navigateBack()
                 } else {
                     wx.showToast({
                         title: res.result.message || '修改失败',
@@ -106,13 +103,11 @@ Page({
             },
             fail: err => {
                 wx.hideLoading()
-                // 增强错误日志，记录更多信息以便调试
                 console.error('修改个人信息失败', {
                     formData: formData,
                     error: err
                 })
 
-                // 显示更详细的错误信息
                 wx.showToast({
                     title: '修改失败: ' + (err.errMsg || '请稍后再试'),
                     icon: 'none',

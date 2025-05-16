@@ -20,35 +20,25 @@
 }
 
 .avatar {
-  width: 120rpx;
-  height: 120rpx;
-  border-radius: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 8px;
   border: 4rpx solid #f0f0f0;
 }
 
-.username {
+.usernickname {
   font-size: 36rpx;
   font-weight: bold;
   color: #333;
   margin-bottom: 10rpx;
-}
-
-.user-basic-info {
-  flex: 1;
-}
-
-.username {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10rpx;
+  padding: 6rpx 50rpx;
 }
 
 .user-role {
   font-size: 28rpx;
   color: #3A7FED;
   background-color: rgba(58, 127, 237, 0.1);
-  padding: 6rpx 16rpx;
+  padding: 6rpx 50rpx;
   border-radius: 20rpx;
   display: inline-block;
 }
@@ -165,6 +155,10 @@
 
 .reserve-status.cancelled {
   background-color: #9E9E9E;
+}
+
+.reserve-status.completed {
+  background-color: #3A7FED
 }
 
 .reserve-info {

@@ -61,6 +61,13 @@ exports.main = async (event, context) => {
         }
 
         const user = userRes.data[0]
+        console.log('用户信息:', user)
+        // // 获取微信用户信息作为备用
+        // const wxUserInfo = wxContext.userInfo?.user || {}
+
+        // 获取用户信息中的nickName和avatarUrl
+        const userNickName = user.userInfo.nickName  || '匿名用户'
+        const userAvatarUrl = user.userInfo.avatarUrl  || ''
 
         // 添加留言
         const result = await db.collection('messages').add({
@@ -69,8 +76,8 @@ exports.main = async (event, context) => {
                 createTime: db.serverDate(),
                 updateTime: db.serverDate(),
                 openid: wxContext.OPENID,
-                userName: user.name || '匿名用户',
-                avatarUrl: user.avatarUrl || '',
+                nickName: userNickName,
+                avatarUrl: userAvatarUrl,
                 comments: [],
                 isDeleted: false
             }

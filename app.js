@@ -11,26 +11,8 @@ App({
       })
     }
 
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
-
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
-        }
-      }
-    })
+    // 初始化数据库连接
+    this.db = wx.cloud.database()
 
     // 检查登录状态
     this.checkLoginStatus()
@@ -40,62 +22,42 @@ App({
   checkLoginStatus: function () {
     const token = wx.getStorageSync('token')
     const userInfo = wx.getStorageSync('userInfo')
+    const lastLoginTime = wx.getStorageSync('lastLoginTime')
 
-    if (token && userInfo) {
-      this.globalData.isLoggedIn = true
+    // 检查token是否过期（30天）
+    if (lastLoginTime && Date.now() - lastLoginTime > 30 * 24 * 60 * 60 * 1000) {
+      wx.removeStorageSync('token')
+      wx.removeStorageSync('userInfo')
+      this.globalData.isLoggedIn = false
+      this.globalData.token = null
+      this.globalData.userInfo = null
+      return
+    }
+
+    // 如果有用户信息，更新全局数据
+    if (userInfo) {
       this.globalData.userInfo = userInfo
-      this.globalData.token = token
+      this.globalData.token = token || null
+      this.globalData.isAdmin = userInfo.isAdmin || false
+      // 只有在有token的情况下才标记为已登录
+      this.globalData.isLoggedIn = !!token
     }
   },
 
-  // 登录方法
-  login: function (userInfo, callback) {
-    // 调用云函数登录
-    wx.cloud.callFunction({
-      name: 'login',
-      data: {
-        userInfo: userInfo
-      },
-      success: res => {
-        console.log('登录成功', res)
-        const { token, userInfo } = res.result
-
-        // 存储登录信息
-        wx.setStorageSync('token', token)
-        wx.setStorageSync('userInfo', userInfo)
-
-        this.globalData.isLoggedIn = true
-        this.globalData.userInfo = userInfo
-        this.globalData.token = token
-
-        if (callback) {
-          callback(true)
-        }
-      },
-      fail: err => {
-        console.error('登录失败', err)
-        if (callback) {
-          callback(false)
-        }
-      }
-    })
-  },
 
   // 退出登录
   logout: function () {
-    // 清除本地存储
+    // 只清除token，保留用户信息
     wx.removeStorageSync('token')
     wx.removeStorageSync('userInfo')
+    // 保留userInfo，不再清除
 
-    // 重置全局数据
-    this.globalData = {
-      userInfo: null,
-      isLoggedIn: false,
-      token: null,
-      isAdmin: false
-    }
+    // 标记为未登录状态
+    this.globalData.isLoggedIn = false
+    this.globalData.token = null
+    this.globalData.isAdmin = false
 
-    // 清空内存缓存并跳转登录页
+    // 跳转登录页
     wx.reLaunch({
       url: '/pages/login/login?t=' + Date.now()
     })

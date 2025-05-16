@@ -41,13 +41,8 @@ exports.main = async (event, context) => {
             }
         }
 
-        // 软删除留言（将isDeleted标记为true）
-        await db.collection('messages').doc(messageId).update({
-            data: {
-                isDeleted: true,
-                updateTime: db.serverDate()
-            }
-        })
+        // 直接删除留言记录
+        await db.collection('messages').doc(messageId).remove()
 
         return {
             code: 0,

@@ -60,14 +60,14 @@
   flex-direction: column;
 }
 
-.username {
+.nickname {
   font-size: 30rpx;
-  font-weight: bold;
+  font-weight:bold ;
   color: #333;
 }
 
 .time {
-  font-size: 24rpx;
+  font-size: 23rpx;
   color: #999;
   margin-top: 5rpx;
 }
@@ -177,7 +177,7 @@
   flex-direction: column;
 }
 
-.comment-username {
+.comment-nickname {
   font-size: 26rpx;
   font-weight: bold;
   color: #333;
@@ -186,6 +186,11 @@
 .comment-time {
   font-size: 22rpx;
   color: #999;
+}
+
+.reply-to {
+  font-size: 26rpx;
+  color: #333;
 }
 
 .comment-content {

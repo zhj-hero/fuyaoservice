@@ -38,8 +38,9 @@ exports.main = async (event, context) => {
                     data: {
                         openid: openid,
                         userInfo: {
-                            nickName: userInfo.nickName || '',
-                            avatarUrl: userInfo.avatarUrl || ''
+                            ...userInfo,
+                            avatarUrl: userInfo.avatarUrl || '',
+                            nickName: userInfo.nickName || ''
                         },
                         createTime: db.serverDate(),
                         isAdmin: false
@@ -58,6 +59,27 @@ exports.main = async (event, context) => {
             } catch (addErr) {
                 console.error('创建用户失败', addErr)
                 throw new Error('数据库写入失败')
+            }
+        } else {
+            // 用户已存在，更新用户信息（特别是头像和昵称）
+            try {
+                await userCollection.where({
+                    openid: openid
+                }).update({
+                    data: {
+                        'userInfo.avatarUrl': userInfo.avatarUrl,
+                        'userInfo.nickName': userInfo.nickName,
+                        updateTime: db.serverDate()
+                    }
+                })
+
+                // 重新获取更新后的用户数据
+                user = await userCollection.where({
+                    openid: openid
+                }).get()
+            } catch (updateErr) {
+                console.error('更新用户信息失败', updateErr)
+                // 更新失败不影响登录，继续使用原有数据
             }
         }
 

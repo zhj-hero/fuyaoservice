@@ -19,12 +19,26 @@ Page({
             return
         }
 
+        // 获取用户信息
+        const userInfo = app.globalData.userInfo;
+
+        // 确保头像URL正确设置
+        if (userInfo && !userInfo.avatarUrl && userInfo.userInfo && userInfo.userInfo.avatarUrl) {
+            userInfo.avatarUrl = userInfo.userInfo.avatarUrl;
+        }
+        // 确保用户nickName正确设置
+        if (userInfo && !userInfo.nickName && userInfo.userInfo && userInfo.userInfo.nickName) {
+            userInfo.nickName = userInfo.userInfo.nickName;
+        }
+
         // 设置用户信息和管理员状态
         this.setData({
-            userInfo: app.globalData.userInfo,
+            userInfo: userInfo,
             isAdmin: app.globalData.isAdmin,
             activeTab: options.activeTab ? parseInt(options.activeTab) : 0
         })
+
+        console.log('onLoad用户信息:', userInfo);
     },
 
     onShow: function () {
@@ -40,39 +54,80 @@ Page({
             return;
         }
 
-        const isAdmin = userInfo && userInfo.isAdmin ? true : false;
+        // 从全局数据获取最新管理员状态
+        const isAdmin = app.globalData.isAdmin || (userInfo && userInfo.isAdmin) ? true : false;
         app.globalData.userInfo = userInfo;
         app.globalData.isAdmin = isAdmin;
 
         // 检查是否有从首页传来的activeTab设置
         const userActiveTab = wx.getStorageSync('userActiveTab');
+
+        // 处理头像URL
+        let avatarUrl = '';
+        // 直接从userInfo中获取avatarUrl
+        if (userInfo.avatarUrl) {
+            avatarUrl = userInfo.avatarUrl;
+        }
+        // 如果在userInfo.userInfo中有avatarUrl（微信授权情况）
+        else if (userInfo.userInfo && userInfo.userInfo.avatarUrl) {
+            avatarUrl = userInfo.userInfo.avatarUrl;
+        }
+
+        // 处理昵称
+        let nickName = '';
+        // 直接从userInfo中获取nickName
+        if (userInfo.nickName) {
+            nickName = userInfo.nickName;
+        }
+        // 如果在userInfo.userInfo中有nickName（微信授权情况）  
+        else if (userInfo.userInfo && userInfo.userInfo.nickName) {
+            nickName = userInfo.userInfo.nickName;
+        }
+
+
+        // 更新用户信息到全局数据，确保avatarUrl正确
+        userInfo.avatarUrl = avatarUrl;
+        userInfo.nickName = nickName;
+        app.globalData.userInfo = userInfo;
+
         if (userActiveTab !== '' && userActiveTab !== null && userActiveTab !== undefined) {
             this.setData({
                 activeTab: parseInt(userActiveTab),
                 userInfo: userInfo,
-                isAdmin: isAdmin,
-                // 确保正确设置头像URL，添加空值检查
-                'userInfo.avatarUrl': userInfo.userInfo ? (userInfo.userInfo.avatarUrl || '') : (userInfo.avatarUrl || '')
+                isAdmin: isAdmin
             });
             // 使用后清除，避免影响下次进入
             wx.removeStorageSync('userActiveTab');
         } else {
             this.setData({
                 userInfo: userInfo,
-                isAdmin: isAdmin,
-                // 修正嵌套的avatarUrl路径，添加空值检查
-                'userInfo.avatarUrl': userInfo.userInfo ? (userInfo.userInfo.avatarUrl || '') : (userInfo.avatarUrl || '')
+                isAdmin: isAdmin
             });
         }
+
+        // 打印用户信息，便于调试
+        console.log('当前用户信息:', userInfo);
 
         this.fetchUserReservations();
         // 添加全局数据监听
         if (!this._userInfoListener) {
             this._userInfoListener = () => {
+                // 获取最新的用户信息
+                const updatedUserInfo = app.globalData.userInfo;
+                // 确保头像URL正确设置
+                if (updatedUserInfo) {
+                    // 如果头像URL不存在，尝试从嵌套结构中获取
+                    if (!updatedUserInfo.avatarUrl && updatedUserInfo.userInfo && updatedUserInfo.userInfo.avatarUrl) {
+                        updatedUserInfo.avatarUrl = updatedUserInfo.userInfo.avatarUrl;
+                    }
+                }
+
                 this.setData({
-                    userInfo: app.globalData.userInfo,
+                    userInfo: updatedUserInfo,
                     isAdmin: app.globalData.isAdmin
                 });
+
+                console.log('用户信息已更新:', updatedUserInfo);
             };
             app.watchUserInfoChange(this._userInfoListener);
         }
@@ -236,12 +291,6 @@ Page({
         })
     },
 
-    // 跳转到管理后台
-    navigateToAdmin: function () {
-        wx.navigateTo({
-            url: '/pages/admin/admin',
-        })
-    },
 
     // 退出登录
     logout: function () {

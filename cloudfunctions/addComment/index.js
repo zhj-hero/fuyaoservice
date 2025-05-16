@@ -54,10 +54,10 @@ exports.main = async (event, context) => {
             content: content,
             createTime: db.serverDate(),
             openid: wxContext.OPENID,
-            userName: user.name || '匿名用户',
-            avatarUrl: user.avatarUrl || '',
+            nickName: user.userInfo.nickName || '匿名用户',
+            avatarUrl: user.userInfo.avatarUrl || '',
             parentId: parentId || null,
-            parentName: parentId ? messageRes.data.comments.find(comment => comment._id === parentId).userName : ''
+            parentNickName: parentId ? messageRes.data.comments.find(comment => comment._id === parentId).nickName : ''
         }
 
         // 更新留言，添加评论

@@ -2,7 +2,6 @@
 <view class="container">
   <view class="logo-container">
     <image class="logo" src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/logo.png" mode="aspectFit"></image>
-    
   </view>
 
   <view class="login-form">
@@ -23,6 +22,35 @@
     <view class="login-options">
       <view class="register-link" bindtap="navigateToRegister">
         <text>没有账号？立即注册</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 微信授权弹窗 -->
+  <view class="auth-modal" wx:if="{{showAuthModal}}">
+    <view class="auth-modal-mask" bindtap="closeAuthModal"></view>
+    <view class="auth-modal-content">
+      <view class="auth-modal-header">
+        <text class="auth-modal-title">微信授权登录</text>
+      </view>
+      
+      <view class="auth-modal-body">
+        <view class="auth-avatar-container">
+          <view class="avatar-label">头像</view>
+          <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image class="avatar" src="{{tempUserInfo.avatarUrl || 'cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/default-avatar.png'}}" mode="aspectFill"></image>
+          </button>
+        </view>
+        
+        <view class="auth-nickname-container">
+          <view class="nickname-label">昵称</view>
+          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bindinput="onInputNickname" value="{{tempUserInfo.nickName}}" />
+        </view>
+      </view>
+      
+      <view class="auth-modal-footer">
+        <button class="auth-cancel-btn"  bindtap="closeAuthModal" size="mini">取消</button>
+        <button class="auth-confirm-btn"  bindtap="submitWechatLogin" size="mini">确认登录</button>
       </view>
     </view>
   </view>

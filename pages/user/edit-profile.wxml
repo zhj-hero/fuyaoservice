@@ -1,6 +1,7 @@
 <!--pages/user/edit-profile.wxml-->
 <view class="container">
   <form bindsubmit="handleSubmit">
+
     <view class="form-item">
       <text>姓名</text>
       <input 

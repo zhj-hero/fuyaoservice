@@ -8,16 +8,12 @@ Page({
     showEmpty: false,
     newMessageContent: '',
     newCommentContent: '',
-    currentPage: 1,
-    pageSize: 10,
-    totalMessages: 0,
-    hasMoreMessages: false,
     isAdmin: false,
     isLoggedIn: false,
     commentingMessageId: null,
     showCommentInput: false,
     replyingCommentId: null,
-    userNameMap: {}, // 添加用户名映射对象
+    nickNameMap: {}, // 添加用户昵称映射对象
   },
 
   /* 生命周期函数--监听页面加载*/
@@ -46,11 +42,11 @@ Page({
   },
 
   // 处理评论数据，添加被回复者的用户名
-  processComments: function (comments, userNameMap) {
+  processComments: function (comments, nickNameMap) {
     return comments.map(comment => {
       return {
         ...comment,
-        replyUserName: comment.parentId ? userNameMap[comment.parentId] : null
+        replyNickName: comment.parentId ? nickNameMap[comment.parentId] : null
       }
     });
   },
@@ -112,15 +108,15 @@ Page({
   },
 
   // 处理消息列表数据
-  processMessageListData: function (res, page) {
+  processMessageListData: function (res) {
     // 构建用户名映射
-    const userNameMap = {};
-    const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list];
+    const nickNameMap = {};
+    const messageList = res.result.data.list || [];
 
     messageList.forEach(message => {
       if (message.comments) {
         message.comments.forEach(comment => {
-          userNameMap[comment._id] = comment.userName;
+          nickNameMap[comment._id] = comment.nickName;
         });
       }
     });
@@ -132,7 +128,7 @@ Page({
       message.isExpanded = false; // 默认收起状态
 
       if (message.comments && message.comments.length > 0) {
-        message.comments = this.processComments(message.comments, userNameMap);
+        message.comments = this.processComments(message.comments, nickNameMap);
 
         // 为每条评论添加展开收起状态
         message.comments.forEach(comment => {
@@ -142,47 +138,33 @@ Page({
       }
     });
 
-    const total = res.result.data.total;
-    const hasMore = messageList.length < total;
+    // 按时间排序
+    messageList.sort((a, b) => new Date(b.createTime) - new Date(a.createTime));
 
     return {
       messageList,
       showEmpty: messageList.length === 0,
-      currentPage: page,
-      totalMessages: total,
-      hasMoreMessages: hasMore,
       isAdmin: res.result.data.isAdmin,
-      userNameMap
+      nickNameMap
     };
   },
 
-  fetchMessageList: function (page = 1) {
+  fetchMessageList: function () {
     wx.showLoading({
       title: '加载中...',
     })
 
     wx.cloud.callFunction({
       name: 'getMessages',
-      data: {
-        page: page,
-        pageSize: this.data.pageSize
-      },
       success: res => {
         wx.hideLoading()
         if (res.result.code === 0) {
-          const processedData = this.processMessageListData(res, page);
+          const processedData = this.processMessageListData(res);
           this.setData(processedData);
         } else {
-          const messageList = page === 1 ? res.result.data.list : [...this.data.messageList, ...res.result.data.list];
-          const total = res.result.data.total;
-          const hasMore = messageList.length < total;
-
           this.setData({
-            messageList: messageList,
-            showEmpty: messageList.length === 0,
-            currentPage: page,
-            totalMessages: total,
-            hasMoreMessages: hasMore,
+            messageList: res.result.data.list || [],
+            showEmpty: res.result.data.list.length === 0,
             isAdmin: res.result.data.isAdmin
           });
         }
@@ -317,13 +299,13 @@ Page({
 
     // 获取被回复评论的用户名
     const commentId = e.currentTarget.dataset.commentId;
-    // 直接从userNameMap中获取用户名
-    const replyToUserName = this.data.userNameMap[commentId] || '用户';
+    // 直接从nickNameMap中获取用户名
+    const replyToNickName = this.data.nickNameMap[commentId] || '用户';
 
     this.setData({
       commentingMessageId: e.currentTarget.dataset.id,
       replyingCommentId: commentId,
-      replyToUserName: replyToUserName,
+      replyToNickName: replyToNickName,
       showCommentInput: true,
       newCommentContent: ''
     });
@@ -367,7 +349,7 @@ Page({
         messageId: commentingMessageId,
         content: newCommentContent,
         parentId: replyingCommentId,
-        replyToUserName: this.data.replyToUserName || '用户'  // 添加这一行
+        replyToNickName: this.data.replyToNickName || '用户'  // 添加这一行
       },
       success: res => {
         wx.hideLoading()
@@ -528,8 +510,8 @@ Page({
     if (!commentId || commentId.trim() === '') {
       return '未知用户';
     }
-    const replyToUserName = this.data.userNameMap[commentId] || '未知用户';
-    return replyToUserName;
+    const replyToNickName = this.data.nickNameMap[commentId] || '未知用户';
+    return replyToNickName;
   },
 })
 
