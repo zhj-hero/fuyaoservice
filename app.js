@@ -49,7 +49,7 @@ App({
   logout: function () {
     // 只清除token，保留用户信息
     wx.removeStorageSync('token')
-    wx.removeStorageSync('userInfo')
+    // wx.removeStorageSync('userInfo')
     // 保留userInfo，不再清除
 
     // 标记为未登录状态
