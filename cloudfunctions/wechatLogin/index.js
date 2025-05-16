@@ -37,7 +37,10 @@ exports.main = async (event, context) => {
                 const newUser = await userCollection.add({
                     data: {
                         openid: openid,
-                        userInfo: userInfo,
+                        userInfo: {
+                            nickName: userInfo.nickName || '',
+                            avatarUrl: userInfo.avatarUrl || ''
+                        },
                         createTime: db.serverDate(),
                         isAdmin: false
                     }

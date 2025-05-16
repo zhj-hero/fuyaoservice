@@ -30,6 +30,16 @@ Page({
     onShow: function () {
         // 每次显示页面时从本地存储获取最新用户信息
         const userInfo = wx.getStorageSync('userInfo') || null;
+
+        // 添加空值检查，确保userInfo不为null
+        if (!userInfo) {
+            console.log('用户信息为空，重定向到登录页面');
+            wx.redirectTo({
+                url: '/pages/login/login',
+            });
+            return;
+        }
+
         const isAdmin = userInfo && userInfo.isAdmin ? true : false;
         app.globalData.userInfo = userInfo;
         app.globalData.isAdmin = isAdmin;
@@ -40,14 +50,18 @@ Page({
             this.setData({
                 activeTab: parseInt(userActiveTab),
                 userInfo: userInfo,
-                isAdmin: isAdmin
+                isAdmin: isAdmin,
+                // 确保正确设置头像URL，添加空值检查
+                'userInfo.avatarUrl': userInfo.userInfo ? (userInfo.userInfo.avatarUrl || '') : (userInfo.avatarUrl || '')
             });
             // 使用后清除，避免影响下次进入
             wx.removeStorageSync('userActiveTab');
         } else {
             this.setData({
                 userInfo: userInfo,
-                isAdmin: isAdmin
+                isAdmin: isAdmin,
+                // 修正嵌套的avatarUrl路径，添加空值检查
+                'userInfo.avatarUrl': userInfo.userInfo ? (userInfo.userInfo.avatarUrl || '') : (userInfo.avatarUrl || '')
             });
         }
 
