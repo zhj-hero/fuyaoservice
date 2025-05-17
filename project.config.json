@@ -2,7 +2,7 @@
   "miniprogramRoot": "./",
   "cloudfunctionRoot": "cloudfunctions/",
   "compileType": "miniprogram",
-  "libVersion": "3.8.3",
+  "libVersion": "3.8.4",
   "packOptions": {
     "ignore": [],
     "include": []
