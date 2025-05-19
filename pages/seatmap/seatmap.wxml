@@ -1,6 +1,18 @@
 <!--pages/seatmap/seatmap.wxml-->
 <view class="seatmap-header">座位实时状态地图</view>
 
+<view class="zoom-controls" >
+  <button bindtap="zoomIn" size="mini" class="zoom-btn" >
+    <image src="../../static/images/zoom_in.png" mode="aspectFit" class="zoom-icon"></image>
+  </button>
+  <button bindtap="zoomOut" size="mini" class="zoom-btn" >
+    <image src="../../static/images/zoom_out.png" mode="aspectFit" class="zoom-icon"></image>
+  </button>
+  <button bindtap="resetView" size="mini" class="zoom-btn" >
+    <image src="../../static/images/reset_view.png" mode="aspectFit" class="zoom-icon"></image>
+  </button>
+</view>
+
 <view class="seatmap-legend">
   <view class="legend-item">
     <view class="legend-color available"></view>

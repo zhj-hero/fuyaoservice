@@ -14,7 +14,43 @@ Page({
         femaleToiletIconPath: './femaletoilet.svg', // 女厕所图标路径
         reciteRoomIconPath: './reciteroom.svg', // 背书室图标路径
         restroomIconPath: './restroom.svg', // 茶水间图标路径
-        stairIconPath: './stair.svg' // 楼道图标路径
+        stairIconPath: './stair.svg', // 楼道图标路径
+        // 座位状态数据：0-空闲(绿色)，1-已预订(黄色)，2-已占用(红色)
+        seatStatus: {
+            'C1': 0, // C1座位状态为已预订
+            'C2': 0,
+            'C3': 0,
+            'C4': 0,
+            'C5': 0,
+            'C6': 0,
+            'C7': 0,
+            'C8': 0,
+            'C9': 2,
+            'A1': 0,
+            'A2': 0,
+            'A3': 0,
+            'A4': 0,
+            'A5': 0,
+            'A6': 0,
+            'A7': 0,
+            'A8': 0,
+            'A9': 0,
+            'A10': 0,
+            'A11': 0,
+            'A12': 0,
+            'A13': 0,
+            'A14': 0,
+            'A15': 0,
+            'A16': 0,
+            'D1': 0,
+            'D2': 0,
+            'D3': 0,
+            'D4': 0,
+            'D5': 0,
+            'D6': 0,
+            'D7': 0
+        },
+        currentSeat: '' // 当前选中的座位
     },
     onLoad: function () {
         // 添加页面加载完成监听
@@ -214,93 +250,188 @@ Page({
         // 绘制长方形(x, y, width, height)
         ctx.beginPath();
         ctx.rect(12, 25, 105, 115); // C区
+        ctx.stroke();
+
         // 绘制C区座位按钮
-        ctx.rect(12, 55, 25, 20); // C1
-        ctx.rect(37, 55, 25, 20); // C2
-        ctx.rect(37, 75, 25, 20); // C3
-        ctx.rect(12, 75, 25, 20); // C4
-        ctx.rect(12, 115, 25, 25); // C5
-        ctx.rect(37, 115, 25, 25); // C6
-        ctx.rect(62, 115, 25, 25); // C7
-        ctx.rect(97, 25, 20, 38); // C8
-        ctx.rect(97, 63, 20, 38); // C9
-        ctx.stroke();
-        // 绘制C区座位编号
-        ctx.font = '10px sans-serif';
-        ctx.fillText('C1', 17, 70);
-        ctx.fillText('C2', 42, 70);
-        ctx.fillText('C3', 42, 90);
-        ctx.fillText('C4', 17, 90);
-        ctx.fillText('C5', 19, 135);
-        ctx.fillText('C6', 44, 135);
-        ctx.fillText('C7', 69, 135);
-        ctx.fillText('C8', 100, 50);
-        ctx.fillText('C9', 100, 88);
-        ctx.stroke();
+        // 定义座位区域坐标，方便后续点击检测
+        this.seatAreas = {
+            'C1': { x: 12, y: 55, width: 25, height: 20 },
+            'C2': { x: 37, y: 55, width: 25, height: 20 },
+            'C3': { x: 37, y: 75, width: 25, height: 20 },
+            'C4': { x: 12, y: 75, width: 25, height: 20 },
+            'C5': { x: 12, y: 115, width: 25, height: 25 },
+            'C6': { x: 37, y: 115, width: 25, height: 25 },
+            'C7': { x: 62, y: 115, width: 25, height: 25 },
+            'C8': { x: 97, y: 25, width: 20, height: 38 },
+            'C9': { x: 97, y: 63, width: 20, height: 38 }
+        };
+
+        // 根据座位状态设置不同的填充颜色
+        const statusColors = ['#4CAF50', '#FFC107', '#F44336']; // 绿色-空闲，黄色-已预订，红色-已占用
+
+        // 绘制C区座位
+        Object.keys(this.seatAreas).forEach(seatId => {
+            const area = this.seatAreas[seatId];
+            const status = this.data.seatStatus[seatId] || 0;
+
+            ctx.beginPath();
+            ctx.rect(area.x, area.y, area.width, area.height);
+            ctx.stroke();
+
+            // 根据状态填充颜色
+            ctx.fillStyle = statusColors[status];
+            ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
+
+            // 高亮显示当前选中的座位
+            if (this.data.currentSeat === seatId) {
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(area.x, area.y, area.width, area.height);
+                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = '#000000';
+            }
+
+            // 绘制座位编号
+            ctx.fillStyle = '#000000';
+            ctx.font = '10px sans-serif';
+
+            // 根据座位ID设置文本位置
+            let textX, textY;
+            switch (seatId) {
+                case 'C1': textX = 17; textY = 70; break;
+                case 'C2': textX = 42; textY = 70; break;
+                case 'C3': textX = 42; textY = 90; break;
+                case 'C4': textX = 17; textY = 90; break;
+                case 'C5': textX = 19; textY = 135; break;
+                case 'C6': textX = 44; textY = 135; break;
+                case 'C7': textX = 69; textY = 135; break;
+                case 'C8': textX = 100; textY = 50; break;
+                case 'C9': textX = 100; textY = 88; break;
+            }
+
+            ctx.fillText(seatId, textX, textY);
+        });
 
         // D区
         ctx.beginPath();
         ctx.rect(12, 210, 105, 115); // D区
-        // 绘制D区座位按钮
-        ctx.rect(12, 250, 25, 20); // D1
-        ctx.rect(37, 250, 25, 20); // D2
-        ctx.rect(37, 270, 25, 20); // D3    
-        ctx.rect(12, 270, 25, 20); // D4
-        ctx.rect(97, 210, 20, 39); // D5
-        ctx.rect(97, 249, 20, 38); // D6
-        ctx.rect(97, 287, 20, 38); // D7
         ctx.stroke();
-        // 绘制D区座位编号
-        ctx.font = '10px sans-serif';
-        ctx.fillText('D1', 17, 265);
-        ctx.fillText('D2', 42, 265);
-        ctx.fillText('D3', 42, 285);
-        ctx.fillText('D4', 17, 285);
-        ctx.fillText('D5', 100, 234);
-        ctx.fillText('D6', 100, 272);
-        ctx.fillText('D7', 100, 310);
-        ctx.stroke();
+        // 定义D区座位区域坐标
+        this.seatAreas['D1'] = { x: 12, y: 250, width: 25, height: 20 };
+        this.seatAreas['D2'] = { x: 37, y: 250, width: 25, height: 20 };
+        this.seatAreas['D3'] = { x: 37, y: 270, width: 25, height: 20 };
+        this.seatAreas['D4'] = { x: 12, y: 270, width: 25, height: 20 };
+        this.seatAreas['D5'] = { x: 97, y: 210, width: 20, height: 39 };
+        this.seatAreas['D6'] = { x: 97, y: 249, width: 20, height: 38 };
+        this.seatAreas['D7'] = { x: 97, y: 287, width: 20, height: 38 };
+
+        // 绘制D区座位
+        ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'].forEach(seatId => {
+            const area = this.seatAreas[seatId];
+            const status = this.data.seatStatus[seatId] || 0;
+
+            ctx.beginPath();
+            ctx.rect(area.x, area.y, area.width, area.height);
+            ctx.stroke();
+
+            // 根据状态填充颜色
+            ctx.fillStyle = statusColors[status];
+            ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
+
+            // 高亮显示当前选中的座位
+            if (this.data.currentSeat === seatId) {
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(area.x, area.y, area.width, area.height);
+                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = '#000000';
+            }
+
+            // 绘制座位编号
+            ctx.fillStyle = '#000000';
+            ctx.font = '10px sans-serif';
+
+            let textX, textY;
+            switch (seatId) {
+                case 'D1': textX = 17; textY = 265; break;
+                case 'D2': textX = 42; textY = 265; break;
+                case 'D3': textX = 42; textY = 285; break;
+                case 'D4': textX = 17; textY = 285; break;
+                case 'D5': textX = 100; textY = 234; break;
+                case 'D6': textX = 100; textY = 272; break;
+                case 'D7': textX = 100; textY = 310; break;
+            }
+            ctx.fillText(seatId, textX, textY);
+        });
 
         // A区
         ctx.beginPath();
         ctx.rect(257, 25, 160, 115); // A区
-        // 绘制A区座位按钮
-        ctx.rect(327, 140, 25, 25); // A1
-        ctx.rect(302, 140, 25, 25); // A2
-        ctx.rect(327, 205, 25, 25); // A3
-        ctx.rect(302, 205, 25, 25); // A4
-        ctx.rect(200, 295, 25, 30); // A5
-        ctx.rect(200, 265, 25, 30); // A6
-        ctx.rect(200, 235, 25, 30); // A7
-        ctx.rect(200, 205, 25, 30); // A8
-        ctx.rect(175, 205, 25, 30); // A9
-        ctx.rect(175, 235, 25, 30); // A10
-        ctx.rect(175, 265, 25, 30); // A11
-        ctx.rect(175, 295, 25, 30); // A12
-        ctx.rect(117, 295, 25, 30); // A13
-        ctx.rect(117, 265, 25, 30); // A14
-        ctx.rect(117, 235, 25, 30); // A15
-        ctx.rect(117, 205, 25, 30); // A16
-        ctx.stroke();
-        // 绘制A区座位编号
-        ctx.font = '10px sans-serif';
-        ctx.fillText('A1', 332, 155);
-        ctx.fillText('A2', 307, 155);
-        ctx.fillText('A3', 332, 220);
-        ctx.fillText('A4', 307, 220);
-        ctx.fillText('A5', 205, 315);
-        ctx.fillText('A6', 205, 285);
-        ctx.fillText('A7', 205, 255);
-        ctx.fillText('A8', 205, 225);
-        ctx.fillText('A9', 181, 225);
-        ctx.fillText('A10', 179, 255);
-        ctx.fillText('A11', 179, 285);
-        ctx.fillText('A12', 179, 315);
-        ctx.fillText('A13', 120, 315);
-        ctx.fillText('A14', 120, 285);
-        ctx.fillText('A15', 120, 255);
-        ctx.fillText('A16', 120, 225);
-        ctx.stroke();
+        // 定义A区座位区域坐标
+        this.seatAreas['A1'] = { x: 327, y: 140, width: 25, height: 25 };
+        this.seatAreas['A2'] = { x: 302, y: 140, width: 25, height: 25 };
+        this.seatAreas['A3'] = { x: 327, y: 205, width: 25, height: 25 };
+        this.seatAreas['A4'] = { x: 302, y: 205, width: 25, height: 25 };
+        this.seatAreas['A5'] = { x: 200, y: 295, width: 25, height: 30 };
+        this.seatAreas['A6'] = { x: 200, y: 265, width: 25, height: 30 };
+        this.seatAreas['A7'] = { x: 200, y: 235, width: 25, height: 30 };
+        this.seatAreas['A8'] = { x: 200, y: 205, width: 25, height: 30 };
+        this.seatAreas['A9'] = { x: 175, y: 205, width: 25, height: 30 };
+        this.seatAreas['A10'] = { x: 175, y: 235, width: 25, height: 30 };
+        this.seatAreas['A11'] = { x: 175, y: 265, width: 25, height: 30 };
+        this.seatAreas['A12'] = { x: 175, y: 295, width: 25, height: 30 };
+        this.seatAreas['A13'] = { x: 117, y: 295, width: 25, height: 30 };
+        this.seatAreas['A14'] = { x: 117, y: 265, width: 25, height: 30 };
+        this.seatAreas['A15'] = { x: 117, y: 235, width: 25, height: 30 };
+        this.seatAreas['A16'] = { x: 117, y: 205, width: 25, height: 30 };
+
+        // 绘制A区座位
+        ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16'].forEach(seatId => {
+            const area = this.seatAreas[seatId];
+            const status = this.data.seatStatus[seatId] || 0;
+
+            ctx.beginPath();
+            ctx.rect(area.x, area.y, area.width, area.height);
+            ctx.stroke();
+
+            // 根据状态填充颜色
+            ctx.fillStyle = statusColors[status];
+            ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
+
+            // 高亮显示当前选中的座位
+            if (this.data.currentSeat === seatId) {
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(area.x, area.y, area.width, area.height);
+                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = '#000000';
+            }
+
+            // 绘制座位编号
+            ctx.fillStyle = '#000000';
+            ctx.font = '10px sans-serif';
+
+            let textX, textY;
+            switch (seatId) {
+                case 'A1': textX = 332; textY = 155; break;
+                case 'A2': textX = 307; textY = 155; break;
+                case 'A3': textX = 332; textY = 220; break;
+                case 'A4': textX = 307; textY = 220; break;
+                case 'A5': textX = 205; textY = 315; break;
+                case 'A6': textX = 205; textY = 285; break;
+                case 'A7': textX = 205; textY = 255; break;
+                case 'A8': textX = 205; textY = 225; break;
+                case 'A9': textX = 181; textY = 225; break;
+                case 'A10': textX = 179; textY = 255; break;
+                case 'A11': textX = 179; textY = 285; break;
+                case 'A12': textX = 179; textY = 315; break;
+                case 'A13': textX = 120; textY = 315; break;
+                case 'A14': textX = 120; textY = 285; break;
+                case 'A15': textX = 120; textY = 255; break;
+                case 'A16': textX = 120; textY = 225; break;
+            }
+            ctx.fillText(seatId, textX, textY);
+        });
 
         // B区
         ctx.beginPath();
@@ -452,55 +583,110 @@ Page({
     },
 
     touchMove: function (e) {
-        if (e.touches.length === 1 && this.data.isMoving) {
-            // 单指拖动逻辑
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
+        if (e.touches.length === 1 && this.data.scale > 1) {
+            // 单指移动 - 仅在放大时允许移动
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - this.data.lastX;
+            const deltaY = touch.clientY - this.data.lastY;
 
-            // 计算偏移量，考虑当前缩放比例
+            // 计算边界限制
+            const canvasWidth = 500;
+            const canvasHeight = 325;
+            const maxOffsetX = (canvasWidth * (this.data.scale - 1)) / 2;
+            const maxOffsetY = (canvasHeight * (this.data.scale - 1)) / 2;
+
+            // 限制移动范围
+            let newOffsetX = this.data.offsetX + deltaX;
+            let newOffsetY = this.data.offsetY + deltaY;
+
+            newOffsetX = Math.max(-maxOffsetX, Math.min(maxOffsetX, newOffsetX));
+            newOffsetY = Math.max(-maxOffsetY, Math.min(maxOffsetY, newOffsetY));
+
             this.setData({
-                offsetX: this.data.offsetX + (currentX - this.data.lastX) / this.data.scale,
-                offsetY: this.data.offsetY + (currentY - this.data.lastY) / this.data.scale,
-                lastX: currentX,
-                lastY: currentY
+                offsetX: newOffsetX,
+                offsetY: newOffsetY,
+                lastX: touch.clientX,
+                lastY: touch.clientY
             });
 
-            // 重绘画布
             this.drawCanvas();
-        } else if (e.touches.length === 2 && this.data.lastDistance > 0) {
-            // 双指缩放逻辑
-            const x1 = e.touches[0].clientX;
-            const y1 = e.touches[0].clientY;
-            const x2 = e.touches[1].clientX;
-            const y2 = e.touches[1].clientY;
+        } else if (e.touches.length === 2) {
+            // 双指缩放
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const distance = Math.sqrt(
+                Math.pow(touch1.clientX - touch2.clientX, 2) +
+                Math.pow(touch1.clientY - touch2.clientY, 2)
+            );
 
-            // 计算新的两指距离
-            const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-
-            // 计算新的缩放比例
-            const newScale = this.data.scale * distance / this.data.lastDistance;
-            const scale = Math.min(Math.max(newScale, 0.5), 3); // 限制缩放范围
-
-            // 计算新的两指中心点
-            const centerX = (x1 + x2) / 2;
-            const centerY = (y1 + y2) / 2;
-
-            // 更新状态
-            this.setData({
-                scale: scale,
-                lastDistance: distance,
-                centerX: centerX,
-                centerY: centerY
-            });
-
-            // 重绘画布
-            this.drawCanvas();
+            if (this.data.lastDistance > 0) {
+                const scale = this.data.scale * (distance / this.data.lastDistance);
+                this.setData({
+                    scale: Math.min(Math.max(scale, 1), 3),
+                    lastDistance: distance
+                });
+                this.drawCanvas();
+            }
+            this.data.lastDistance = distance;
         }
     },
 
-    touchEnd: function () {
+    touchEnd: function (e) {
         this.setData({
             isMoving: false
+        });
+
+        // 如果是单指触摸结束，检查是否点击了座位
+        if (e.changedTouches && e.changedTouches.length === 1) {
+            this.checkSeatClick(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+        }
+    },
+
+    // 检查是否点击了座位
+    checkSeatClick: function (x, y) {
+        if (!this.seatAreas) return;
+
+        // 将点击坐标转换为画布坐标
+        const canvasX = (x - this.data.offsetX) / this.data.scale;
+        const canvasY = (y - this.data.offsetY) / this.data.scale;
+
+        // 检查点击是否在座位区域内
+        for (const seatId in this.seatAreas) {
+            const area = this.seatAreas[seatId];
+            if (canvasX >= area.x && canvasX <= area.x + area.width &&
+                canvasY >= area.y && canvasY <= area.y + area.height) {
+
+                // 更新当前选中的座位
+                this.setData({
+                    currentSeat: seatId
+                });
+
+                // 显示座位信息
+                this.showSeatInfo(seatId);
+
+                // 重绘画布以高亮显示选中的座位
+                this.drawCanvas();
+                return;
+            }
+        }
+    },
+
+    // 显示座位信息
+    showSeatInfo: function (seatId) {
+        const status = this.data.seatStatus[seatId];
+        let statusText = '';
+
+        switch (status) {
+            case 0: statusText = '空闲'; break;
+            case 1: statusText = '已预订'; break;
+            case 2: statusText = '已占用'; break;
+            default: statusText = '未知';
+        }
+
+        wx.showModal({
+            title: '座位信息',
+            content: `座位号: ${seatId}\n状态: ${statusText}`,
+            showCancel: false
         });
     },
 
@@ -522,8 +708,8 @@ Page({
     resetView: function () {
         this.setData({
             scale: 1,
-            offsetX: 0,
-            offsetY: 0
+            offsetX: -1,
+            offsetY: -11
         });
         this.drawCanvas();
     }

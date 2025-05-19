@@ -17,10 +17,25 @@
   justify-content: center;
 }
 
+.zoom-controls {
+  position: relative; 
+  left: 0rpx; 
+  top: 25rpx;
+}
+
+.zoom-btn {
+  width: 20px;
+}
+
+.zoom-icon {
+  width: 20px;
+  height: 20px;
+}
+
 .seatmap-legend {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  margin-top: -20px;
 }
 
 .legend-item {
