@@ -20,7 +20,7 @@
 .zoom-controls {
   position: relative; 
   left: 0rpx; 
-  top: 25rpx;
+  top: 20rpx;
 }
 
 .zoom-btn {
@@ -28,8 +28,8 @@
 }
 
 .zoom-icon {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
 }
 
 .seatmap-legend {
