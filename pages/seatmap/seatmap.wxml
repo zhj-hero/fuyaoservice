@@ -1,5 +1,5 @@
 <!--pages/seatmap/seatmap.wxml-->
-<view class="seatmap-header">座位地图实时状态</view>
+<view class="seatmap-header">座位实时状态地图</view>
 
 <view class="seatmap-legend">
   <view class="legend-item">

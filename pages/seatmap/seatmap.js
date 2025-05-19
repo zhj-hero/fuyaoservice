@@ -29,7 +29,8 @@ Page({
                     this.ctx = this.canvas.getContext('2d');
 
                     // 设置画布的宽高为实际显示大小
-                    const dpr = wx.getSystemInfoSync().pixelRatio;
+                    const windowInfo = wx.getWindowInfo();
+                    const dpr = windowInfo.pixelRatio;
                     this.canvas.width = res[0].width * dpr;
                     this.canvas.height = res[0].height * dpr;
                     this.ctx.scale(dpr, dpr);
@@ -213,39 +214,121 @@ Page({
         // 绘制长方形(x, y, width, height)
         ctx.beginPath();
         ctx.rect(12, 25, 105, 115); // C区
-        ctx.stroke();
         // 绘制C区座位按钮
-        ctx.rect(12, 55, 20, 20); // C1
-        ctx.rect(32, 55, 20, 20); // C2
-        ctx.rect(32, 75, 20, 20); // C3
-        ctx.rect(12, 75, 20, 20); // C4
-        ctx.rect(12, 120, 25, 20); // C5
-        ctx.rect(37, 120, 25, 20); // C6
-        ctx.rect(62, 120, 25, 20); // C7
-        ctx.rect(97, 25, 20, 25); // C8
-        ctx.rect(97, 50, 20, 25); // C9
-
+        ctx.rect(12, 55, 25, 20); // C1
+        ctx.rect(37, 55, 25, 20); // C2
+        ctx.rect(37, 75, 25, 20); // C3
+        ctx.rect(12, 75, 25, 20); // C4
+        ctx.rect(12, 115, 25, 25); // C5
+        ctx.rect(37, 115, 25, 25); // C6
+        ctx.rect(62, 115, 25, 25); // C7
+        ctx.rect(97, 25, 20, 38); // C8
+        ctx.rect(97, 63, 20, 38); // C9
+        ctx.stroke();
         // 绘制C区座位编号
         ctx.font = '10px sans-serif';
-        ctx.fillText('C1', 16, 70);
-        ctx.fillText('C2', 36, 70);
-        ctx.fillText('C4', 16, 90);
-        ctx.fillText('C3', 36, 90);
+        ctx.fillText('C1', 17, 70);
+        ctx.fillText('C2', 42, 70);
+        ctx.fillText('C3', 42, 90);
+        ctx.fillText('C4', 17, 90);
         ctx.fillText('C5', 19, 135);
         ctx.fillText('C6', 44, 135);
         ctx.fillText('C7', 69, 135);
-        ctx.fillText('C8', 100, 40);
-        ctx.fillText('C9', 100, 65);
-
+        ctx.fillText('C8', 100, 50);
+        ctx.fillText('C9', 100, 88);
         ctx.stroke();
+
+        // D区
+        ctx.beginPath();
+        ctx.rect(12, 210, 105, 115); // D区
+        // 绘制D区座位按钮
+        ctx.rect(12, 250, 25, 20); // D1
+        ctx.rect(37, 250, 25, 20); // D2
+        ctx.rect(37, 270, 25, 20); // D3    
+        ctx.rect(12, 270, 25, 20); // D4
+        ctx.rect(97, 210, 20, 39); // D5
+        ctx.rect(97, 249, 20, 38); // D6
+        ctx.rect(97, 287, 20, 38); // D7
+        ctx.stroke();
+        // 绘制D区座位编号
+        ctx.font = '10px sans-serif';
+        ctx.fillText('D1', 17, 265);
+        ctx.fillText('D2', 42, 265);
+        ctx.fillText('D3', 42, 285);
+        ctx.fillText('D4', 17, 285);
+        ctx.fillText('D5', 100, 234);
+        ctx.fillText('D6', 100, 272);
+        ctx.fillText('D7', 100, 310);
+        ctx.stroke();
+
+        // A区
+        ctx.beginPath();
+        ctx.rect(257, 25, 160, 115); // A区
+        // 绘制A区座位按钮
+        ctx.rect(327, 140, 25, 25); // A1
+        ctx.rect(302, 140, 25, 25); // A2
+        ctx.rect(327, 205, 25, 25); // A3
+        ctx.rect(302, 205, 25, 25); // A4
+        ctx.rect(200, 295, 25, 30); // A5
+        ctx.rect(200, 265, 25, 30); // A6
+        ctx.rect(200, 235, 25, 30); // A7
+        ctx.rect(200, 205, 25, 30); // A8
+        ctx.rect(175, 205, 25, 30); // A9
+        ctx.rect(175, 235, 25, 30); // A10
+        ctx.rect(175, 265, 25, 30); // A11
+        ctx.rect(175, 295, 25, 30); // A12
+        ctx.rect(117, 295, 25, 30); // A13
+        ctx.rect(117, 265, 25, 30); // A14
+        ctx.rect(117, 235, 25, 30); // A15
+        ctx.rect(117, 205, 25, 30); // A16
+        ctx.stroke();
+        // 绘制A区座位编号
+        ctx.font = '10px sans-serif';
+        ctx.fillText('A1', 332, 155);
+        ctx.fillText('A2', 307, 155);
+        ctx.fillText('A3', 332, 220);
+        ctx.fillText('A4', 307, 220);
+        ctx.fillText('A5', 205, 315);
+        ctx.fillText('A6', 205, 285);
+        ctx.fillText('A7', 205, 255);
+        ctx.fillText('A8', 205, 225);
+        ctx.fillText('A9', 181, 225);
+        ctx.fillText('A10', 179, 255);
+        ctx.fillText('A11', 179, 285);
+        ctx.fillText('A12', 179, 315);
+        ctx.fillText('A13', 120, 315);
+        ctx.fillText('A14', 120, 285);
+        ctx.fillText('A15', 120, 255);
+        ctx.fillText('A16', 120, 225);
+        ctx.stroke();
+
+        // B区
+        ctx.beginPath();
+        ctx.rect(257, 25, 160, 115); // B区
+        // 绘制B区座位按钮
+        ctx.rect(327, 140, 25, 25); // B1
+        ctx.rect(302, 140, 25, 25); // B2
+        ctx.rect(327, 205, 25, 25); // B3
+        ctx.rect(302, 205, 25, 25); // B4
+        // ctx.rect(200, 295, 25, 30); // B5
+        // ctx.rect(200, 265, 25, 30); // B6   
+        // ctx.rect(200, 235, 25, 30); // B7
+        // ctx.rect(200, 205, 25, 30); // B8
+        // ctx.rect(175, 205, 25, 30); // B9   
+        // ctx.rect(175, 235, 25, 30); // B10
+        // ctx.rect(175, 265, 25, 30); // B11
+        // ctx.rect(175, 295, 25, 30); // B12
+        // ctx.rect(117, 295, 25, 30); // B13
+        // ctx.rect(117, 265, 25, 30); // B14
+        // ctx.rect(117, 235, 25, 30); // B15
+        ctx.stroke();
+
 
 
 
         ctx.rect(117, 25, 50, 55); // 男厕所
         ctx.rect(167, 25, 90, 115); // 背书室
-        ctx.rect(257, 25, 160, 115); // A区
-        ctx.rect(12, 140, 51, 70); // 女厕所
-        ctx.rect(12, 210, 105, 115); // D区
+        ctx.rect(12, 140, 50, 70); // 女厕所
         ctx.rect(352, 140, 65, 90); // 茶水间
         ctx.rect(257, 230, 160, 95); // 楼道
         ctx.stroke(); // 绘制边框
@@ -269,7 +352,7 @@ Page({
             { path: that.data.femaleToiletIconPath, x: 27, y: 160, text: '女厕所', textX: 22, textY: 195 },
             { path: that.data.reciteRoomIconPath, x: 202, y: 65, text: '背书室', textX: 195, textY: 100 },
             { path: that.data.restroomIconPath, x: 377, y: 165, text: '茶水间', textX: 367, textY: 200 },
-            { path: that.data.stairIconPath, x: 337, y: 255, text: '楼道', textX: 332, textY: 290 }
+            { path: that.data.stairIconPath, x: 338, y: 255, text: '楼道', textX: 332, textY: 290 }
         ];
 
         // 先绘制所有文字，确保文字始终可见
