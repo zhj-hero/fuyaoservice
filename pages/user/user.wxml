@@ -7,7 +7,7 @@
     </view>
     <view class="user-basic-info">
       <view class="usernickname">{{userInfo.nickName || '用户'}}</view>
-      <view class="user-role">{{isAdmin ? '管理员' : '普通用户'}}</view>
+      <view class="user-role" style="width: 191rpx; display: inline-block; box-sizing: border-box">{{isAdmin ? '管理员' : '普通用户'}}</view>
     </view>
   </view>
   

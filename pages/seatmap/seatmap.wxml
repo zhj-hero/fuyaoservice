@@ -1,2 +1,19 @@
 <!--pages/seatmap/seatmap.wxml-->
-<image src="cloud://cloud1-7g0ti6rh5d59a178.636c-cloud1-7g0ti6rh5d59a178-1357504257/images/seatmap.png" style="position: relative; left: 19rpx; top: 39rpx"></image>
+<view class="seatmap-header">座位地图实时状态</view>
+
+<view class="seatmap-legend">
+  <view class="legend-item">
+    <view class="legend-color available"></view>
+    <text>空闲</text>
+  </view>
+  <view class="legend-item">
+    <view class="legend-color reserved"></view>
+    <text>已预订</text>
+  </view>
+  <view class="legend-item">
+    <view class="legend-color occupied"></view>
+    <text>已占用</text>
+  </view>
+</view>
+
+<canvas canvas-id="myCanvas" type="2d" id="myCanvas" class="seatmap-canvas" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchEnd"></canvas>

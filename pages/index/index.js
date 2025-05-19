@@ -21,8 +21,8 @@ Page({
     modalTitle: '',
     modalContent: '',
     modalTime: '',
-    buttonTop: 460, // 按钮初始位置
-    buttonLeft: 380
+    buttonTop: 420, // 按钮初始位置
+    buttonLeft: 350
   },
 
   onLoad: function (options) {

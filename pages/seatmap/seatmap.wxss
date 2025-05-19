@@ -1,10 +1,51 @@
 /* pages/seatmap/seatmap.wxss */
-image {
-  width: 95%;
-  margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+.seatmap-header {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.seatmap-canvas {
+  width: 500px;
+  height: 325px;
+  border: 2rpx solid rgb(219, 212, 212);
+  margin: 30rpx auto 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  mode: widthFix;
 }
+
+.seatmap-legend {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 0 8px;
+  font-size: 12px;
+}
+
+.legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 5px;
+}
+
+.available {
+  background-color: #4CAF50;
+}
+
+.reserved {
+  background-color: #FFC107;
+}
+
+.occupied {
+  background-color: #F44336;
+}
+
