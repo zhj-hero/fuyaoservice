@@ -53,7 +53,7 @@
 }
 
 .available {
-  background-color: #4CAF50;
+  background-color: #b9b5b5;
 }
 
 .reserved {
@@ -61,6 +61,6 @@
 }
 
 .occupied {
-  background-color: #F44336;
+  background-color: #4CAF50;
 }
 

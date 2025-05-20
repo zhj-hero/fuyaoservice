@@ -42,6 +42,21 @@ Page({
             'A14': 0,
             'A15': 0,
             'A16': 0,
+            'B1': 0,
+            'B2': 0,
+            'B3': 0,
+            'B4': 0,
+            'B5': 0,
+            'B6': 0,
+            'B7': 0,
+            'B8': 0,
+            'B9': 0,
+            'B10': 0,
+            'B11': 0,
+            'B12': 0,
+            'B13': 0,
+            'B14': 0,
+            'B15': 0,
             'D1': 0,
             'D2': 0,
             'D3': 0,
@@ -247,12 +262,13 @@ Page({
         ctx.strokeStyle = '#000000'; // 边框颜色
         ctx.lineWidth = 0.5; // 边框宽度
 
-        // 绘制长方形(x, y, width, height)
+
+        // 根据座位状态设置不同的填充颜色
+        const statusColors = ['#e5e5e5', '#FFC107', '#F44336']; // 绿色-空闲，黄色-已预订，红色-已占
+        // 绘制C区座位按钮
         ctx.beginPath();
         ctx.rect(12, 25, 105, 115); // C区
         ctx.stroke();
-
-        // 绘制C区座位按钮
         // 定义座位区域坐标，方便后续点击检测
         this.seatAreas = {
             'C1': { x: 12, y: 55, width: 25, height: 20 },
@@ -266,8 +282,7 @@ Page({
             'C9': { x: 97, y: 63, width: 20, height: 38 }
         };
 
-        // 根据座位状态设置不同的填充颜色
-        const statusColors = ['#4CAF50', '#FFC107', '#F44336']; // 绿色-空闲，黄色-已预订，红色-已占用
+
 
         // 绘制C区座位
         Object.keys(this.seatAreas).forEach(seatId => {
@@ -285,7 +300,7 @@ Page({
             // 高亮显示当前选中的座位
             if (this.data.currentSeat === seatId) {
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 0.5;
                 ctx.strokeRect(area.x, area.y, area.width, area.height);
                 ctx.lineWidth = 0.5;
                 ctx.strokeStyle = '#000000';
@@ -436,23 +451,71 @@ Page({
         // B区
         ctx.beginPath();
         ctx.rect(257, 25, 160, 115); // B区
-        // 绘制B区座位按钮
-        ctx.rect(327, 140, 25, 25); // B1
-        ctx.rect(302, 140, 25, 25); // B2
-        ctx.rect(327, 205, 25, 25); // B3
-        ctx.rect(302, 205, 25, 25); // B4
-        // ctx.rect(200, 295, 25, 30); // B5
-        // ctx.rect(200, 265, 25, 30); // B6   
-        // ctx.rect(200, 235, 25, 30); // B7
-        // ctx.rect(200, 205, 25, 30); // B8
-        // ctx.rect(175, 205, 25, 30); // B9   
-        // ctx.rect(175, 235, 25, 30); // B10
-        // ctx.rect(175, 265, 25, 30); // B11
-        // ctx.rect(175, 295, 25, 30); // B12
-        // ctx.rect(117, 295, 25, 30); // B13
-        // ctx.rect(117, 265, 25, 30); // B14
-        // ctx.rect(117, 235, 25, 30); // B15
         ctx.stroke();
+
+        // 定义B区座位区域坐标
+        this.seatAreas['B1'] = { x: 392, y: 50, width: 25, height: 20 };
+        this.seatAreas['B2'] = { x: 367, y: 50, width: 25, height: 20 };
+        this.seatAreas['B3'] = { x: 342, y: 50, width: 25, height: 20 };
+        this.seatAreas['B4'] = { x: 317, y: 50, width: 25, height: 20 };
+        this.seatAreas['B5'] = { x: 317, y: 70, width: 25, height: 20 };
+        this.seatAreas['B6'] = { x: 342, y: 70, width: 25, height: 20 };
+        this.seatAreas['B7'] = { x: 367, y: 70, width: 25, height: 20 };
+        this.seatAreas['B8'] = { x: 392, y: 70, width: 25, height: 20 };
+        this.seatAreas['B9'] = { x: 392, y: 115, width: 25, height: 25 };
+        this.seatAreas['B10'] = { x: 367, y: 115, width: 25, height: 25 };
+        this.seatAreas['B11'] = { x: 342, y: 115, width: 25, height: 25 };
+        this.seatAreas['B12'] = { x: 317, y: 115, width: 25, height: 25 };
+        this.seatAreas['B13'] = { x: 292, y: 115, width: 25, height: 25 };
+        this.seatAreas['B14'] = { x: 257, y: 63, width: 20, height: 38 };
+        this.seatAreas['B15'] = { x: 257, y: 25, width: 20, height: 38 };
+
+        // 绘制B区座位
+        ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15'].forEach(seatId => {
+            const area = this.seatAreas[seatId];
+            const status = this.data.seatStatus[seatId] || 0;
+
+            ctx.beginPath();
+            ctx.rect(area.x, area.y, area.width, area.height);
+            ctx.stroke();
+
+            // 根据状态填充颜色
+            ctx.fillStyle = statusColors[status];
+            ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
+
+            // 高亮显示当前选中的座位
+            if (this.data.currentSeat === seatId) {
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(area.x, area.y, area.width, area.height);
+                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = '#000000';
+            }
+
+            // 绘制座位编号
+            ctx.fillStyle = '#000000';
+            ctx.font = '10px sans-serif';
+
+            let textX, textY;
+            switch (seatId) {
+                case 'B1': textX = 400; textY = 65; break;
+                case 'B2': textX = 375; textY = 65; break;
+                case 'B3': textX = 350; textY = 65; break;
+                case 'B4': textX = 325; textY = 65; break;
+                case 'B5': textX = 325; textY = 85; break;
+                case 'B6': textX = 350; textY = 85; break;
+                case 'B7': textX = 375; textY = 85; break;
+                case 'B8': textX = 400; textY = 85; break;
+                case 'B9': textX = 400; textY = 130; break;
+                case 'B10': textX = 370; textY = 130; break;
+                case 'B11': textX = 345; textY = 130; break;
+                case 'B12': textX = 320; textY = 130; break;
+                case 'B13': textX = 295; textY = 130; break;
+                case 'B14': textX = 258; textY = 88; break;
+                case 'B15': textX = 258; textY = 50; break;
+            }
+            ctx.fillText(seatId, textX, textY);
+        });
 
 
 
@@ -589,18 +652,9 @@ Page({
             const deltaX = touch.clientX - this.data.lastX;
             const deltaY = touch.clientY - this.data.lastY;
 
-            // 计算边界限制
-            const canvasWidth = 500;
-            const canvasHeight = 325;
-            const maxOffsetX = (canvasWidth * (this.data.scale - 1)) / 2;
-            const maxOffsetY = (canvasHeight * (this.data.scale - 1)) / 2;
-
-            // 限制移动范围
+            // 计算新偏移量
             let newOffsetX = this.data.offsetX + deltaX;
             let newOffsetY = this.data.offsetY + deltaY;
-
-            newOffsetX = Math.max(-maxOffsetX, Math.min(maxOffsetX, newOffsetX));
-            newOffsetY = Math.max(-maxOffsetY, Math.min(maxOffsetY, newOffsetY));
 
             this.setData({
                 offsetX: newOffsetX,
@@ -646,15 +700,26 @@ Page({
     checkSeatClick: function (x, y) {
         if (!this.seatAreas) return;
 
-        // 将点击坐标转换为画布坐标
+        // 添加y轴方向的偏移修正值，解决点击位置偏差问题
+        const yCorrection = -100; // y轴修正值，根据实际情况调整
+
+        // 将点击坐标转换为画布坐标，应用修正值
         const canvasX = (x - this.data.offsetX) / this.data.scale;
-        const canvasY = (y - this.data.offsetY) / this.data.scale;
+        const canvasY = (y - this.data.offsetY + yCorrection) / this.data.scale;
+
+        // 开发环境下可以打开此注释查看坐标信息
+        // console.log('点击坐标:', x, y, '转换后坐标:', canvasX, canvasY);
+
+        // 增加点击检测范围，提高点击精度
+        const clickTolerance = 5; // 点击容差值
 
         // 检查点击是否在座位区域内
         for (const seatId in this.seatAreas) {
             const area = this.seatAreas[seatId];
-            if (canvasX >= area.x && canvasX <= area.x + area.width &&
-                canvasY >= area.y && canvasY <= area.y + area.height) {
+            if (canvasX >= (area.x - clickTolerance) &&
+                canvasX <= (area.x + area.width + clickTolerance) &&
+                canvasY >= (area.y - clickTolerance) &&
+                canvasY <= (area.y + area.height + clickTolerance)) {
 
                 // 更新当前选中的座位
                 this.setData({
