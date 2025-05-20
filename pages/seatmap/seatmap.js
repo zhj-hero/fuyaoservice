@@ -199,6 +199,9 @@ Page({
     onShow: function () {
         // 页面显示时重新获取座位状态并绘制
         this.fetchSeats();
+        this.setData({
+            showSeatModal: false
+        });
     },
 
     // 获取所有座位状态
@@ -261,6 +264,56 @@ Page({
                 });
             }
         });
+    },
+
+    // 绘制单个座位
+    drawSeat: function (ctx, seatNumber, area, status) {
+        const statusColors = {
+            'available': '#e5e5e5', // 空闲
+            'reserved': '#FFC107',   // 已预订
+            'occupied': '#F44336'    // 已占用
+        };
+
+        ctx.beginPath();
+        ctx.rect(area.x, area.y, area.width, area.height);
+        ctx.stroke();
+
+        // 根据状态填充颜色
+        ctx.fillStyle = statusColors[status] || statusColors['available'];
+        ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
+
+        // 高亮显示当前选中的座位
+        if (this.data.currentSeat === seatNumber) {
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(area.x, area.y, area.width, area.height);
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = '#000000';
+        }
+
+        // 绘制座位编号
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px sans-serif';
+
+        let textX, textY;
+        switch (seatNumber) {
+            case 'B1': textX = 400; textY = 65; break;
+            case 'B2': textX = 375; textY = 65; break;
+            case 'B3': textX = 350; textY = 65; break;
+            case 'B4': textX = 325; textY = 65; break;
+            case 'B5': textX = 325; textY = 85; break;
+            case 'B6': textX = 350; textY = 85; break;
+            case 'B7': textX = 375; textY = 85; break;
+            case 'B8': textX = 400; textY = 85; break;
+            case 'B9': textX = 400; textY = 130; break;
+            case 'B10': textX = 370; textY = 130; break;
+            case 'B11': textX = 345; textY = 130; break;
+            case 'B12': textX = 320; textY = 130; break;
+            case 'B13': textX = 295; textY = 130; break;
+            case 'B14': textX = 258; textY = 88; break;
+            case 'B15': textX = 258; textY = 50; break;
+        }
+        ctx.fillText(seatNumber, textX, textY);
     },
 
     // 抽取绘图逻辑为单独函数，提高代码复用性
@@ -519,47 +572,7 @@ Page({
         ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15'].forEach(seatNumber => {
             const area = this.seatAreas[seatNumber];
             const status = this.data.seatStatus[seatNumber] || 'available';
-
-            ctx.beginPath();
-            ctx.rect(area.x, area.y, area.width, area.height);
-            ctx.stroke();
-
-            // 根据状态填充颜色
-            ctx.fillStyle = statusColors[status] || statusColors['available'];
-            ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
-
-            // 高亮显示当前选中的座位
-            if (this.data.currentSeat === seatNumber) {
-                ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(area.x, area.y, area.width, area.height);
-                ctx.lineWidth = 0.5;
-                ctx.strokeStyle = '#000000';
-            }
-
-            // 绘制座位编号
-            ctx.fillStyle = '#000000';
-            ctx.font = '10px sans-serif';
-
-            let textX, textY;
-            switch (seatNumber) {
-                case 'B1': textX = 400; textY = 65; break;
-                case 'B2': textX = 375; textY = 65; break;
-                case 'B3': textX = 350; textY = 65; break;
-                case 'B4': textX = 325; textY = 65; break;
-                case 'B5': textX = 325; textY = 85; break;
-                case 'B6': textX = 350; textY = 85; break;
-                case 'B7': textX = 375; textY = 85; break;
-                case 'B8': textX = 400; textY = 85; break;
-                case 'B9': textX = 400; textY = 130; break;
-                case 'B10': textX = 370; textY = 130; break;
-                case 'B11': textX = 345; textY = 130; break;
-                case 'B12': textX = 320; textY = 130; break;
-                case 'B13': textX = 295; textY = 130; break;
-                case 'B14': textX = 258; textY = 88; break;
-                case 'B15': textX = 258; textY = 50; break;
-            }
-            ctx.fillText(seatNumber, textX, textY);
+            this.drawSeat(ctx, seatNumber, area, status);
         });
 
         ctx.rect(117, 25, 50, 55); // 男厕所
@@ -777,7 +790,7 @@ Page({
                 });
 
                 // 显示座位信息
-                this.showSeatDetail(seatId);
+                this.showSeatDetail(seatNumber);
 
                 // 重绘画布以高亮显示选中的座位
                 this.drawCanvas();
@@ -786,16 +799,16 @@ Page({
         }
     },
 
-    showSeatDetail: function (seatId) {
+    showSeatDetail: function (seatNumber) {
         wx.cloud.callFunction({
-            name: 'getSeatById',
+            name: 'getSeatByNumber',
             data: {
-                seatId: seatId
+                seatNumber: seatNumber
             },
             success: res => {
                 wx.hideLoading();
                 if (res.result.code === 0) {
-                    const seat = res.result.data;                  
+                    const seat = res.result.data;
                     this.setData({
                         selectedSeat: seat,
                         showSeatDetail: true
@@ -841,6 +854,9 @@ Page({
 
         wx.navigateTo({
             url: `/pages/reserve/reserve?seatId=${selectedSeat._id}`,
+        })
+        this.setData({
+            showSeatModal: false
         })
     },
 
