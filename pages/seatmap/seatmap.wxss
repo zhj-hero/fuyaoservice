@@ -42,7 +42,7 @@
   display: flex;
   align-items: center;
   margin: 0 8px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .legend-color {
@@ -53,14 +53,14 @@
 }
 
 .available {
-  background-color: #b9b5b5;
+  background-color: #D3D3D3;
 }
 
 .reserved {
-  background-color: #FFC107;
+  background-color: #FFD700;
 }
 
 .occupied {
-  background-color: #4CAF50;
+  background-color: #FF4444;
 }
 

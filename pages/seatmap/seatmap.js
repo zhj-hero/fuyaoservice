@@ -1,6 +1,7 @@
 // pages/seatmap/seatmap.js
 Page({
     data: {
+        isAdmin: false,
         scale: 1,
         offsetX: -1,
         offsetY: -11, // 调整offsetY使画布向上移动
@@ -10,64 +11,24 @@ Page({
         lastDistance: 0,
         centerX: 200, // 画布中心点X坐标
         centerY: 150,  // 画布中心点Y坐标
-        toiletIconPath: './maletoilet.svg', // 男厕所图标路径
-        femaleToiletIconPath: './femaletoilet.svg', // 女厕所图标路径
-        reciteRoomIconPath: './reciteroom.svg', // 背书室图标路径
-        restroomIconPath: './restroom.svg', // 茶水间图标路径
-        stairIconPath: './stair.svg', // 楼道图标路径
-        // 座位状态数据：0-空闲(绿色)，1-已预订(黄色)，2-已占用(红色)
-        seatStatus: {
-            'C1': 0, // C1座位状态为已预订
-            'C2': 0,
-            'C3': 0,
-            'C4': 0,
-            'C5': 0,
-            'C6': 0,
-            'C7': 0,
-            'C8': 0,
-            'C9': 2,
-            'A1': 0,
-            'A2': 0,
-            'A3': 0,
-            'A4': 0,
-            'A5': 0,
-            'A6': 0,
-            'A7': 0,
-            'A8': 0,
-            'A9': 0,
-            'A10': 0,
-            'A11': 0,
-            'A12': 0,
-            'A13': 0,
-            'A14': 0,
-            'A15': 0,
-            'A16': 0,
-            'B1': 0,
-            'B2': 0,
-            'B3': 0,
-            'B4': 0,
-            'B5': 0,
-            'B6': 0,
-            'B7': 0,
-            'B8': 0,
-            'B9': 0,
-            'B10': 0,
-            'B11': 0,
-            'B12': 0,
-            'B13': 0,
-            'B14': 0,
-            'B15': 0,
-            'D1': 0,
-            'D2': 0,
-            'D3': 0,
-            'D4': 0,
-            'D5': 0,
-            'D6': 0,
-            'D7': 0
-        },
-        currentSeat: '' // 当前选中的座位
+        toiletIconPath: '../../static/images/seatmapicons/maletoilet.svg', // 男厕所图标路径
+        femaleToiletIconPath: '../../static/images/seatmapicons/femaletoilet.svg', // 女厕所图标路径
+        reciteRoomIconPath: '../../static/images/seatmapicons/reciteroom.svg', // 背书室图标路径
+        restroomIconPath: '../../static/images/seatmapicons/restroom.svg', // 茶水间图标路径
+        stairIconPath: '../../static/images/seatmapicons/stair.svg', // 楼道图标路径
+        isLoading: true, // 是否正在加载座位数据
+        loadError: false, // 加载是否出错
+        currentSeat: '', // 当前选中的座位
+        showSeatModal: false, // 是否显示座位详情弹窗
+        selectedSeat: {} // 当前选中的座位详情
     },
     onLoad: function () {
+        // 检查管理员状态
+        const app = getApp();
+        this.setData({
+            isAdmin: app.globalData.isAdmin
+        });
+
         // 添加页面加载完成监听
         wx.nextTick(() => {
             const query = wx.createSelectorQuery();
@@ -86,13 +47,11 @@ Page({
                     this.canvas.height = res[0].height * dpr;
                     this.ctx.scale(dpr, dpr);
 
+                    // 获取座位数据
+                    this.fetchSeats();
+
                     // 预加载图标资源
-                    this.loadIcons().then(() => {
-                        // 确保页面完全加载后再绘制画布
-                        setTimeout(() => {
-                            this.drawCanvas();
-                        }, 500);
-                    });
+                    this.loadIcons();
                 });
         });
     },
@@ -111,23 +70,23 @@ Page({
 
                 switch (iconType) {
                     case 'male':
-                        iconPath = './maletoilet.svg';
+                        iconPath = '../../static/images/seatmapicons/maletoilet.svg';
                         iconName = '男厕所';
                         break;
                     case 'female':
-                        iconPath = './femaletoilet.svg';
+                        iconPath = '../../static/images/seatmapicons/femaletoilet.svg';
                         iconName = '女厕所';
                         break;
                     case 'reciteRoom':
-                        iconPath = './reciteroom.svg';
+                        iconPath = '../../static/images/seatmapicons/reciteroom.svg';
                         iconName = '背书室';
                         break;
                     case 'restroom':
-                        iconPath = './restroom.svg';
+                        iconPath = '../../static/images/seatmapicons/restroom.svg';
                         iconName = '茶水间';
                         break;
                     case 'stair':
-                        iconPath = './stair.svg';
+                        iconPath = '../../static/images/seatmapicons/stair.svg';
                         iconName = '楼道';
                         break;
                 }
@@ -238,8 +197,70 @@ Page({
         ]);
     },
     onShow: function () {
-        // 页面显示时重新绘制
-        this.drawCanvas();
+        // 页面显示时重新获取座位状态并绘制
+        this.fetchSeats();
+    },
+
+    // 获取所有座位状态
+    fetchSeats: function () {
+        // 显示加载中
+        this.setData({
+            isLoading: true,
+            loadError: false
+        });
+
+        // 一次性获取所有座位状态
+        wx.cloud.callFunction({
+            name: 'getSeats',
+            success: res => {
+                if (res.result && res.result.code === 0) {
+                    // 获取成功，处理返回的座位数据
+                    const seats = res.result.data;
+                    const seatStatus = {};
+                    seats.forEach(seat => {
+                        seatStatus[seat.seatNumber] = seat.status;
+                    });
+                    this.setData({
+                        seatStatus: seatStatus,
+                        isLoading: false
+                    }, () => {
+                        this.drawCanvas();
+                    });
+
+                } else {
+                    this.setData({
+                        isLoading: false,
+                        loadError: true
+                    }, () => {
+                        // 即使出错也尝试绘制画布（使用默认状态）
+                        this.drawCanvas();
+                        // 显示错误提示
+                        wx.showToast({
+                            title: '获取座位状态失败',
+                            icon: 'none',
+                            duration: 2000
+                        });
+                    });
+                }
+            },
+            fail: err => {
+                console.error('调用获取座位云函数失败:', err);
+                this.setData({
+                    isLoading: false,
+                    loadError: true
+                }, () => {
+                    // 即使出错也尝试绘制画布（使用默认状态）
+                    this.drawCanvas();
+
+                    // 显示错误提示
+                    wx.showToast({
+                        title: '获取座位状态失败',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                });
+            }
+        });
     },
 
     // 抽取绘图逻辑为单独函数，提高代码复用性
@@ -251,6 +272,26 @@ Page({
 
         // 清除画布
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // 如果正在加载数据，显示加载提示
+        if (this.data.isLoading) {
+            ctx.save();
+            ctx.fillStyle = '#333333';
+            ctx.font = '14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('正在加载座位数据...', this.canvas.width / 4, this.canvas.height / 4);
+            ctx.restore();
+        }
+
+        // 如果加载出错，显示错误提示
+        if (this.data.loadError) {
+            ctx.save();
+            ctx.fillStyle = '#FF0000';
+            ctx.font = '14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('加载座位数据失败，显示默认状态', this.canvas.width / 4, this.canvas.height / 4 + 20);
+            ctx.restore();
+        }
 
         // 保存初始状态
         ctx.save();
@@ -264,7 +305,11 @@ Page({
 
 
         // 根据座位状态设置不同的填充颜色
-        const statusColors = ['#e5e5e5', '#FFC107', '#F44336']; // 绿色-空闲，黄色-已预订，红色-已占
+        const statusColors = {
+            'available': '#e5e5e5', // 空闲
+            'reserved': '#FFC107',   // 已预订
+            'occupied': '#F44336'    // 已占用
+        };
         // 绘制C区座位按钮
         ctx.beginPath();
         ctx.rect(12, 25, 105, 115); // C区
@@ -285,22 +330,22 @@ Page({
 
 
         // 绘制C区座位
-        Object.keys(this.seatAreas).forEach(seatId => {
-            const area = this.seatAreas[seatId];
-            const status = this.data.seatStatus[seatId] || 0;
+        Object.keys(this.seatAreas).forEach(seatNumber => {
+            const area = this.seatAreas[seatNumber];
+            const status = this.data.seatStatus[seatNumber] || 'available';
 
             ctx.beginPath();
             ctx.rect(area.x, area.y, area.width, area.height);
             ctx.stroke();
 
             // 根据状态填充颜色
-            ctx.fillStyle = statusColors[status];
+            ctx.fillStyle = statusColors[status] || statusColors['available'];
             ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
 
             // 高亮显示当前选中的座位
-            if (this.data.currentSeat === seatId) {
+            if (this.data.currentSeat === seatNumber) {
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 0.5;
+                ctx.lineWidth = 1;
                 ctx.strokeRect(area.x, area.y, area.width, area.height);
                 ctx.lineWidth = 0.5;
                 ctx.strokeStyle = '#000000';
@@ -312,7 +357,7 @@ Page({
 
             // 根据座位ID设置文本位置
             let textX, textY;
-            switch (seatId) {
+            switch (seatNumber) {
                 case 'C1': textX = 17; textY = 70; break;
                 case 'C2': textX = 42; textY = 70; break;
                 case 'C3': textX = 42; textY = 90; break;
@@ -324,7 +369,7 @@ Page({
                 case 'C9': textX = 100; textY = 88; break;
             }
 
-            ctx.fillText(seatId, textX, textY);
+            ctx.fillText(seatNumber, textX, textY);
         });
 
         // D区
@@ -341,22 +386,22 @@ Page({
         this.seatAreas['D7'] = { x: 97, y: 287, width: 20, height: 38 };
 
         // 绘制D区座位
-        ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'].forEach(seatId => {
-            const area = this.seatAreas[seatId];
-            const status = this.data.seatStatus[seatId] || 0;
+        ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'].forEach(seatNumber => {
+            const area = this.seatAreas[seatNumber];
+            const status = this.data.seatStatus[seatNumber] || 'available';
 
             ctx.beginPath();
             ctx.rect(area.x, area.y, area.width, area.height);
             ctx.stroke();
 
             // 根据状态填充颜色
-            ctx.fillStyle = statusColors[status];
+            ctx.fillStyle = statusColors[status] || statusColors['available'];
             ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
 
             // 高亮显示当前选中的座位
-            if (this.data.currentSeat === seatId) {
+            if (this.data.currentSeat === seatNumber) {
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1;
                 ctx.strokeRect(area.x, area.y, area.width, area.height);
                 ctx.lineWidth = 0.5;
                 ctx.strokeStyle = '#000000';
@@ -367,7 +412,7 @@ Page({
             ctx.font = '10px sans-serif';
 
             let textX, textY;
-            switch (seatId) {
+            switch (seatNumber) {
                 case 'D1': textX = 17; textY = 265; break;
                 case 'D2': textX = 42; textY = 265; break;
                 case 'D3': textX = 42; textY = 285; break;
@@ -376,7 +421,7 @@ Page({
                 case 'D6': textX = 100; textY = 272; break;
                 case 'D7': textX = 100; textY = 310; break;
             }
-            ctx.fillText(seatId, textX, textY);
+            ctx.fillText(seatNumber, textX, textY);
         });
 
         // A区
@@ -401,22 +446,22 @@ Page({
         this.seatAreas['A16'] = { x: 117, y: 205, width: 25, height: 30 };
 
         // 绘制A区座位
-        ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16'].forEach(seatId => {
-            const area = this.seatAreas[seatId];
-            const status = this.data.seatStatus[seatId] || 0;
+        ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16'].forEach(seatNumber => {
+            const area = this.seatAreas[seatNumber];
+            const status = this.data.seatStatus[seatNumber] || 'available';
 
             ctx.beginPath();
             ctx.rect(area.x, area.y, area.width, area.height);
             ctx.stroke();
 
             // 根据状态填充颜色
-            ctx.fillStyle = statusColors[status];
+            ctx.fillStyle = statusColors[status] || statusColors['available'];
             ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
 
             // 高亮显示当前选中的座位
-            if (this.data.currentSeat === seatId) {
+            if (this.data.currentSeat === seatNumber) {
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1;
                 ctx.strokeRect(area.x, area.y, area.width, area.height);
                 ctx.lineWidth = 0.5;
                 ctx.strokeStyle = '#000000';
@@ -427,7 +472,7 @@ Page({
             ctx.font = '10px sans-serif';
 
             let textX, textY;
-            switch (seatId) {
+            switch (seatNumber) {
                 case 'A1': textX = 332; textY = 155; break;
                 case 'A2': textX = 307; textY = 155; break;
                 case 'A3': textX = 332; textY = 220; break;
@@ -445,7 +490,7 @@ Page({
                 case 'A15': textX = 120; textY = 255; break;
                 case 'A16': textX = 120; textY = 225; break;
             }
-            ctx.fillText(seatId, textX, textY);
+            ctx.fillText(seatNumber, textX, textY);
         });
 
         // B区
@@ -471,22 +516,22 @@ Page({
         this.seatAreas['B15'] = { x: 257, y: 25, width: 20, height: 38 };
 
         // 绘制B区座位
-        ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15'].forEach(seatId => {
-            const area = this.seatAreas[seatId];
-            const status = this.data.seatStatus[seatId] || 0;
+        ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15'].forEach(seatNumber => {
+            const area = this.seatAreas[seatNumber];
+            const status = this.data.seatStatus[seatNumber] || 'available';
 
             ctx.beginPath();
             ctx.rect(area.x, area.y, area.width, area.height);
             ctx.stroke();
 
             // 根据状态填充颜色
-            ctx.fillStyle = statusColors[status];
+            ctx.fillStyle = statusColors[status] || statusColors['available'];
             ctx.fillRect(area.x + 1, area.y + 1, area.width - 2, area.height - 2);
 
             // 高亮显示当前选中的座位
-            if (this.data.currentSeat === seatId) {
+            if (this.data.currentSeat === seatNumber) {
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1;
                 ctx.strokeRect(area.x, area.y, area.width, area.height);
                 ctx.lineWidth = 0.5;
                 ctx.strokeStyle = '#000000';
@@ -497,7 +542,7 @@ Page({
             ctx.font = '10px sans-serif';
 
             let textX, textY;
-            switch (seatId) {
+            switch (seatNumber) {
                 case 'B1': textX = 400; textY = 65; break;
                 case 'B2': textX = 375; textY = 65; break;
                 case 'B3': textX = 350; textY = 65; break;
@@ -514,11 +559,8 @@ Page({
                 case 'B14': textX = 258; textY = 88; break;
                 case 'B15': textX = 258; textY = 50; break;
             }
-            ctx.fillText(seatId, textX, textY);
+            ctx.fillText(seatNumber, textX, textY);
         });
-
-
-
 
         ctx.rect(117, 25, 50, 55); // 男厕所
         ctx.rect(167, 25, 90, 115); // 背书室
@@ -532,6 +574,14 @@ Page({
         ctx.moveTo(117, 325);
         ctx.lineTo(257, 325);
         ctx.stroke(); // 绘制边框
+        // 绘制连接线
+        // 设置虚线样式
+        ctx.setLineDash([3, 3]); // 5像素实线，3像素空白
+        ctx.beginPath();
+        ctx.moveTo(117, 140);
+        ctx.lineTo(167, 140);
+        ctx.stroke(); // 绘制虚线
+        ctx.setLineDash([]); // 恢复默认实线样式
 
         // 添加文字标签
         ctx.font = '12px sans-serif';
@@ -714,8 +764,8 @@ Page({
         const clickTolerance = 5; // 点击容差值
 
         // 检查点击是否在座位区域内
-        for (const seatId in this.seatAreas) {
-            const area = this.seatAreas[seatId];
+        for (const seatNumber in this.seatAreas) {
+            const area = this.seatAreas[seatNumber];
             if (canvasX >= (area.x - clickTolerance) &&
                 canvasX <= (area.x + area.width + clickTolerance) &&
                 canvasY >= (area.y - clickTolerance) &&
@@ -723,11 +773,11 @@ Page({
 
                 // 更新当前选中的座位
                 this.setData({
-                    currentSeat: seatId
+                    currentSeat: seatNumber
                 });
 
                 // 显示座位信息
-                this.showSeatInfo(seatId);
+                this.showSeatDetail(seatId);
 
                 // 重绘画布以高亮显示选中的座位
                 this.drawCanvas();
@@ -736,25 +786,73 @@ Page({
         }
     },
 
-    // 显示座位信息
-    showSeatInfo: function (seatId) {
-        const status = this.data.seatStatus[seatId];
-        let statusText = '';
-
-        switch (status) {
-            case 0: statusText = '空闲'; break;
-            case 1: statusText = '已预订'; break;
-            case 2: statusText = '已占用'; break;
-            default: statusText = '未知';
-        }
-
-        wx.showModal({
-            title: '座位信息',
-            content: `座位号: ${seatId}\n状态: ${statusText}`,
-            showCancel: false
+    showSeatDetail: function (seatId) {
+        wx.cloud.callFunction({
+            name: 'getSeatById',
+            data: {
+                seatId: seatId
+            },
+            success: res => {
+                wx.hideLoading();
+                if (res.result.code === 0) {
+                    const seat = res.result.data;                  
+                    this.setData({
+                        selectedSeat: seat,
+                        showSeatDetail: true
+                    });
+                } else {
+                    wx.showToast({
+                        title: res.result.message || '获取座位信息失败',
+                        icon: 'none'
+                    });
+                }
+            },
+            fail: err => {
+                wx.hideLoading();
+                console.error('获取座位信息失败', err);
+                wx.showToast({
+                    title: '获取座位信息失败，请稍后再试',
+                    icon: 'none'
+                });
+            }
         });
     },
 
+    // 关闭座位详情
+    closeSeatDetail: function () {
+        this.setData({
+            showSeatDetail: false
+        })
+    },
+
+    // 预订座位
+    reserveSeat: function () {
+        const { selectedSeat } = this.data
+        if (!selectedSeat) return
+
+        // 只有空闲的座位可以预订
+        if (selectedSeat.status !== 'available') {
+            wx.showToast({
+                title: '只能预订空闲座位',
+                icon: 'none'
+            })
+            return
+        }
+
+        wx.navigateTo({
+            url: `/pages/reserve/reserve?seatId=${selectedSeat._id}`,
+        })
+    },
+
+    // 管理座位
+    manageSeat: function () {
+        const { selectedSeat } = this.data
+        if (!selectedSeat) return
+
+        wx.navigateTo({
+            url: `/pages/admin/seat-edit/seat-edit?seatId=${selectedSeat._id}`,
+        })
+    },
     // 放大按钮事件处理
     zoomIn: function () {
         const newScale = Math.min(this.data.scale * 1.2, 3); // 增加20%，最大3倍
@@ -777,5 +875,9 @@ Page({
             offsetY: -11
         });
         this.drawCanvas();
-    }
+    },
 })
+
+
+
+

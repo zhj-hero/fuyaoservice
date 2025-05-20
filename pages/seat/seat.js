@@ -176,8 +176,7 @@ Page({
                     // 应用筛选
                     this.filterSeats()
 
-                    // // 生成座位地图
-                    // this.generateSeatMap()
+
                 } else {
                     wx.showToast({
                         title: res.result.message || '获取座位失败',

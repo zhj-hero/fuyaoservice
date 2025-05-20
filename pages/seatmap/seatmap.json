@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "扶摇自习室",
-  "usingComponents": {}
+  "usingComponents": {
+    "seat-detail-modal": "/components/seat-detail-modal/seat-detail-modal"
+  }
 }

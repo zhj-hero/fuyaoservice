@@ -3,13 +3,13 @@
 
 <view class="zoom-controls" >
   <button bindtap="zoomIn" size="mini" class="zoom-btn" >
-    <image src="../../static/images/zoom_in.svg" mode="aspectFit" class="zoom-icon"></image>
+    <image src="../../static/images/seatmapicons/zoom_in.svg" mode="aspectFit" class="zoom-icon"></image>
   </button>
   <button bindtap="zoomOut" size="mini" class="zoom-btn" >
-    <image src="../../static/images/zoom_out.svg" mode="aspectFit" class="zoom-icon"></image>
+    <image src="../../static/images/seatmapicons/zoom_out.svg" mode="aspectFit" class="zoom-icon"></image>
   </button>
   <button bindtap="resetView" size="mini" class="zoom-btn" >
-    <image src="../../static/images/reset_view.svg" mode="aspectFit" class="zoom-icon"></image>
+    <image src="../../static/images/seatmapicons/reset_view.svg" mode="aspectFit" class="zoom-icon"></image>
   </button>
 </view>
 
@@ -29,3 +29,13 @@
 </view>
 
 <canvas canvas-id="myCanvas" type="2d" id="myCanvas" class="seatmap-canvas" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd" bindtouchcancel="touchEnd"></canvas>
+
+<seat-detail-modal 
+  show="{{showSeatDetail}}"
+  seat="{{selectedSeat}}"
+  isAdmin="{{isAdmin}}"
+  bind:close="closeSeatDetail"
+  bind:book="reserveSeat"
+  bind:manage="manageSeat"
+/>
+
